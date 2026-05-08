@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Games_evolution",
+    "\\Games_evolution\\Assets",
+    "\\Games_evolution\\Assets\\2D-module",
+    "\\Games_evolution\\Assets\\2D-module\\ScriptableObjects",
+    "\\Games_evolution\\Assets\\2D-module\\Scripts",
+    "\\Games_evolution\\Assets\\2D-module\\Scripts\\Level3",
+    "\\Games_evolution\\Assets\\2D-module\\Scripts\\Quiz",
+    "\\Games_evolution\\Assets\\2D-module\\Scripts\\ReferenceBook",
+    "\\Games_evolution\\Assets\\2D-module\\Scripts\\UI"
+  ],
+  "SelectedNode": "\\Games_evolution\\Assets\\2D-module\\Scripts\\Level1\\CameraScroll.cs",
+  "PreviewInSolutionExplorer": false
+}
