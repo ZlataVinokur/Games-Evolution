@@ -12,7 +12,6 @@ public class InventoryManager : MonoBehaviour
     private List<ItemData> items = new List<ItemData>();
     private List<InventorySlotUI> slots = new List<InventorySlotUI>();
 
-    // Делаем публичное свойство только для чтения
     public ItemData selectedItem { get; private set; }
 
     void Awake()
@@ -30,6 +29,18 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public void RemoveItem(string itemId)
+    {
+        ItemData data = items.Find(it => it.itemId == itemId);
+        if (data != null)
+        {
+            items.Remove(data);
+            if (selectedItem == data)
+                DeselectItem();
+            RebuildUI();
+        }
+    }
+
     public void SelectItem(ItemData item)
     {
         selectedItem = item;
@@ -42,34 +53,24 @@ public class InventoryManager : MonoBehaviour
         CursorManager.Instance?.ResetCursor();
     }
 
-    public bool UseItem(ItemData item, GameObject target)
-    {
-        if (selectedItem == item)
-        {
-            Interactable targetInter = target.GetComponent<Interactable>();
-            if (targetInter != null && targetInter.CanUseItem(selectedItem.itemId))
-            {
-                targetInter.UseItem(selectedItem.itemId);
-                items.Remove(selectedItem);
-                DeselectItem();
-                RebuildUI();
-                return true;
-            }
-        }
-        return false;
-    }
-
     void RebuildUI()
     {
-        foreach (var slot in slots) Destroy(slot.gameObject);
+        foreach (var slot in slots)
+            Destroy(slot.gameObject);
         slots.Clear();
+
         foreach (var item in items)
         {
+            if (slotParent == null || slotPrefab == null)
+            {
+                Debug.LogWarning("InventoryManager: slotParent или slotPrefab не назначены");
+                return;
+            }
             GameObject go = Instantiate(slotPrefab, slotParent);
             InventorySlotUI slotUI = go.GetComponent<InventorySlotUI>();
-            slotUI.Init(item, this);
+            if (slotUI != null)
+                slotUI.Init(item, this);
             slots.Add(slotUI);
         }
-        CursorManager.Instance?.ResetCursor();
     }
 }

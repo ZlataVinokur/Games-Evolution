@@ -2,34 +2,33 @@ using UnityEngine;
 
 public class BushSocket : Interactable
 {
-    public Sprite openedSprite;
-    private SpriteRenderer sr;
+    [Tooltip("Объект розетки, который появится после открытия куста")]
+    public GameObject socketObject;
 
-    void Start()
+    protected override bool PerformAction()
     {
-        sr = GetComponent<SpriteRenderer>();
-        interactionType = InteractionType.Use; // клик = раздвинуть
-    }
-
-    public override void OnInteract()
-    {
-        if (!GameManager.Instance.GetFlag("wire_found"))
+        if (!GameManager.Instance.GetFlag("bush_opened"))
         {
-            DialogueSystem.Instance.ShowDialogue(new[] {
-                "Куст густой, но за ним что-то светится. Нужно что-то, чтобы его раздвинуть."
-            });
-        }
-        else
-        {
-            // Раздвигаем куст
-            sr.sprite = openedSprite;
+            // Устанавливаем флаг
             GameManager.Instance.SetFlag("bush_opened", true);
-            DialogueSystem.Instance.ShowDialogue(new[] {
-                "Вы раздвинули куст и увидели розетку. Теперь можно подключить провод."
+
+            // Показываем диалог
+            DialogueSystem.Instance.ShowDialogue(new[]
+            {
+                "Куст раздвинут. За ним оказалась старая розетка!"
             });
-            // Теперь объект может принимать провод
-            interactionType = InteractionType.UseWithItem;
-            requiredItemId = "wire";
+
+            // Включаем розетку
+            if (socketObject != null)
+                socketObject.SetActive(true);
+
+            // Полностью отключаем куст (коллайдер, спрайт, всё)
+            gameObject.SetActive(false);
+
+            return true;
         }
+
+        // Если куст уже открыт (страховка)
+        return false;
     }
 }

@@ -2,29 +2,58 @@ using UnityEngine;
 
 public class PointClickController : PlayerController
 {
-    // В Level1 персонаж не двигается, управление сводится к скроллу камеры и кликам
+    private Camera cam;
+
+    void Start()
+    {
+        cam = Camera.main;
+        if (cam == null)
+            Debug.LogError("PointClickController: Не найдена камера с тегом MainCamera!");
+    }
+
+    void Update()
+    {
+        HandleInput();
+    }
+
     public override void HandleInput()
     {
-        // Камера двигается отдельным скриптом, здесь обрабатываем клики по интерактивным объектам
+        if (cam == null) return;
+
+        // Правая кнопка — осмотр (рейкаст только в момент нажатия)
+        if (Input.GetMouseButtonDown(1))
+        {
+            Vector2 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+            Interactable interactable = (hit.collider != null) ? hit.collider.GetComponent<Interactable>() : null;
+            if (interactable != null)
+            {
+                interactable.Inspect();
+            }
+        }
+
+        // Левая кнопка при клике на пустое место — сброс предмета
         if (Input.GetMouseButtonDown(0))
         {
-            // Рейкаст для 2D
-            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-            if (hit.collider != null)
+            // Проверяем, есть ли предмет в руке
+            if (InventoryManager.Instance != null && InventoryManager.Instance.selectedItem != null)
             {
-                Interactable interactable = hit.collider.GetComponent<Interactable>();
-                if (interactable != null)
+                Vector2 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+                // Если не попали ни в какой объект с Interactable, сбрасываем предмет
+                if (hit.collider == null || hit.collider.GetComponent<Interactable>() == null)
                 {
-                    interactable.OnInteract();
+                    InventoryManager.Instance.DeselectItem();
                 }
             }
         }
-        // Отмена выбора предмета по ПКМ
-        if (Input.GetMouseButtonDown(1))
+
+        // Escape — сброс предмета
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             InventoryManager.Instance?.DeselectItem();
         }
     }
 
-    public override void Move() { } // персонаж статичен
+    public override void Move() { }
 }

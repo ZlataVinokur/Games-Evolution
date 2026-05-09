@@ -4,26 +4,24 @@ public class DigitalLock : Interactable
 {
     public Sprite unlockedSprite;
     public GameObject exitPortal;
-    private SpriteRenderer sr;   
+    private SpriteRenderer sr;
 
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        interactionType = InteractionType.UseWithItem;
-        requiredItemId = "digital_key";
+        capabilities = InteractionCapabilities.UseWithItem | InteractionCapabilities.Look;
+        useableItemIds.Add("digital_key");
+        dialogueOnLook = new string[] { "Цифровой замок блокирует проход. Нужен ключ." };
     }
 
-    public override void UseItem(string usedItemId)
+    protected override bool PerformAction()
     {
-        if (usedItemId == "digital_key")
-        {
-            sr.sprite = unlockedSprite;
-            GameManager.Instance.SetFlag("lock_opened", true);
-            GameManager.Instance.CompleteLevel("Level1");
-            DialogueSystem.Instance.ShowDialogue(new[] {
-                "Замок открыт! Проход в следующий уровень свободен."
-            });
-            exitPortal.SetActive(true);
-        }
+        sr.sprite = unlockedSprite;
+        GameManager.Instance.SetFlag("lock_opened", true);
+        GameManager.Instance.CompleteLevel("Level1");
+        DialogueSystem.Instance.ShowDialogue(new[] { "Замок открыт! Путь свободен." });
+        exitPortal.SetActive(true);
+        capabilities = InteractionCapabilities.Look;
+        return true;
     }
 }

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7354140158856282467}
   - component: {fileID: 6011113582663779450}
   - component: {fileID: 6173030211363054653}
-  - component: {fileID: 741085851141038431}
   m_Layer: 0
   m_Name: MarioOff
   m_TagString: Untagged
@@ -206,20 +205,3 @@ PolygonCollider2D:
       - {x: 0.07884759, y: 0.08595181}
       - {x: 0.5916681, y: 0.59877235}
   m_UseDelaunayMesh: 1
---- !u!114 &741085851141038431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7300451253954740594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ff50fce1420b834fa07f341c9dce332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  interactionType: 0
-  itemId: 
-  requiredItemId: 
-  dialogueOnLook: []
-  flagToSetOnAction: 

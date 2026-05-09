@@ -105,10 +105,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff50fce1420b834fa07f341c9dce332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  interactionType: 1
-  itemId: mushroom
-  requiredItemId: 
-  dialogueOnLook: []
+  capabilities: 1
+  useableItemIds: []
+  dialogueOnLook:
+  - "\u0413\u0440\u0438\u0431. \u042F \u0442\u0430\u043A\u043E\u0435 \u043D\u0435
+    \u043B\u044E\u0431\u043B\u044E, \u043D\u043E \u0432\u044B\u0433\u043B\u044F\u0434\u0438\u0442
+    \u0432\u043F\u043E\u043B\u043D\u0435 \u0441\u044A\u0435\u0434\u043E\u0431\u043D\u043E"
+  itemIdToPickUp: 
   flagToSetOnAction: 
 --- !u!60 &-3177366178727813800
 PolygonCollider2D:

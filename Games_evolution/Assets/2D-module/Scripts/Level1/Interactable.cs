@@ -1,72 +1,144 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public enum InteractionType { Look, PickUp, Use, UseWithItem }
+[System.Flags]
+public enum InteractionCapabilities
+{
+    None = 0,
+    Look = 1,
+    PickUp = 2,
+    Use = 4,
+    UseWithItem = 8
+}
 
 public class Interactable : MonoBehaviour
 {
-    public InteractionType interactionType;
-    public string itemId;
-    public string requiredItemId;
+    [Header("Возможности объекта")]
+    public InteractionCapabilities capabilities = InteractionCapabilities.Look;
+
+    [Tooltip("ID предметов, которые можно применить к объекту")]
+    public List<string> useableItemIds = new List<string>();
+
+    [Header("Осмотр")]
     public string[] dialogueOnLook;
+
+    [Header("Подбор")]
+    public string itemIdToPickUp;
+
+    [Header("Неудачное применение предмета")]
+    public string[] failDialogue = new string[] { "Ой, не подходит... Надо поискать куда ещё это можно применить." };
+
+    [Header("Прочее")]
     public string flagToSetOnAction;
-    protected bool isActive = true;
 
-    void OnMouseEnter() => CursorManager.Instance?.SetCursor(interactionType switch
-    {
-        InteractionType.Look => CursorType.Look,
-        InteractionType.PickUp => CursorType.Hand,
-        InteractionType.Use => CursorType.Hand,
-        InteractionType.UseWithItem => CursorType.Use,
-        _ => CursorType.Default
-    });
-
-    void OnMouseExit() => CursorManager.Instance?.ResetCursor();
-
-    void OnMouseDown()
+    // ---------- ОТОБРАЖЕНИЕ КУРСОРА ----------
+    void OnMouseEnter()
     {
         if (InventoryManager.Instance != null && InventoryManager.Instance.selectedItem != null)
         {
-            if (CanUseItem(InventoryManager.Instance.selectedItem.itemId))
+            // Если в руке предмет — всегда показываем Use
+            CursorManager.Instance?.SetCursor(CursorType.Use);
+        }
+        else
+        {
+            // Иначе стандартный курсор в зависимости от возможностей
+            CursorManager.Instance?.SetCursor(GetCursorType());
+        }
+    }
+
+    void OnMouseExit()
+    {
+        // Если в руке предмет, не сбрасываем курсор (оставим Use)
+        if (InventoryManager.Instance != null && InventoryManager.Instance.selectedItem != null)
+            return;
+        CursorManager.Instance?.ResetCursor();
+    }
+
+    // ---------- ЛЕВАЯ КНОПКА (действие / подбор / применение предмета) ----------
+    void OnMouseDown()
+    {
+        // Если игрок держит предмет в руке — пытаемся использовать его на этом объекте
+        if (InventoryManager.Instance != null && InventoryManager.Instance.selectedItem != null)
+        {
+            ItemData selectedItem = InventoryManager.Instance.selectedItem;
+            if ((capabilities & InteractionCapabilities.UseWithItem) != 0 &&
+                useableItemIds.Contains(selectedItem.itemId))
             {
-                InventoryManager.Instance.UseItem(InventoryManager.Instance.selectedItem, gameObject);
-                return;
+                // Предмет подходит
+                UseItem(selectedItem);
+            }
+            else
+            {
+                // Предмет не подходит — показываем сообщение, предмет остаётся в руке
+                DialogueSystem.Instance.ShowDialogue(failDialogue);
             }
         }
-        OnInteract();
-    }
-
-    public virtual void OnInteract()
-    {
-        switch (interactionType)
+        else
         {
-            case InteractionType.Look:
-                if (dialogueOnLook.Length > 0)
-                    DialogueSystem.Instance.ShowDialogue(dialogueOnLook);
-                break;
-            case InteractionType.PickUp:
-                InventoryManager.Instance.AddItem(itemId);
-                gameObject.SetActive(false);
-                break;
-            case InteractionType.Use:
-                PerformAction();
-                break;
-            case InteractionType.UseWithItem:
-                break;
+            // Нет предмета в руке — выполняем основное действие
+            Interact();
         }
     }
 
-    public virtual bool CanUseItem(string usedItemId) =>
-        interactionType == InteractionType.UseWithItem && usedItemId == requiredItemId;
-
-    public virtual void UseItem(string usedItemId)
+    // ---------- ПУБЛИЧНЫЕ МЕТОДЫ (используются контроллером для правой кнопки и т.д.) ----------
+    /// <summary> Основное действие (активация, подбор или осмотр). </summary>
+    public virtual void Interact()
     {
-        if (usedItemId == requiredItemId)
-            PerformAction();
+        if ((capabilities & InteractionCapabilities.Use) != 0)
+        {
+            if (PerformAction())
+                return;
+        }
+
+        if ((capabilities & InteractionCapabilities.PickUp) != 0)
+        {
+            InventoryManager.Instance?.AddItem(itemIdToPickUp);
+            gameObject.SetActive(false);
+            return;
+        }
+
+        // Если ничего не вышло — осмотр
+        Inspect();
     }
 
-    protected virtual void PerformAction()
+    /// <summary> Осмотр (показывает диалог). Вызывается по правой кнопке. </summary>
+    public virtual void Inspect()
+    {
+        if ((capabilities & InteractionCapabilities.Look) != 0 && dialogueOnLook.Length > 0)
+        {
+            DialogueSystem.Instance.ShowDialogue(dialogueOnLook);
+        }
+        else
+        {
+            DialogueSystem.Instance.ShowDialogue(new[] { "Ничего примечательного." });
+        }
+    }
+
+    // ---------- ВСПОМОГАТЕЛЬНЫЕ ПЕРЕОПРЕДЕЛЯЕМЫЕ МЕТОДЫ ----------
+    protected virtual void UseItem(ItemData item)
+    {
+        if (useableItemIds.Contains(item.itemId))
+        {
+            PerformAction();
+            InventoryManager.Instance?.RemoveItem(item.itemId); // предмет удаляется после использования
+        }
+    }
+
+    protected virtual bool PerformAction()
     {
         if (!string.IsNullOrEmpty(flagToSetOnAction))
             GameManager.Instance.SetFlag(flagToSetOnAction, true);
+        return true;
+    }
+
+    public CursorType GetCursorType()
+    {
+        if ((capabilities & InteractionCapabilities.PickUp) != 0)
+            return CursorType.Hand;
+        if ((capabilities & InteractionCapabilities.Use) != 0)
+            return CursorType.Hand;
+        if ((capabilities & InteractionCapabilities.Look) != 0)
+            return CursorType.Look;
+        return CursorType.Default;
     }
 }

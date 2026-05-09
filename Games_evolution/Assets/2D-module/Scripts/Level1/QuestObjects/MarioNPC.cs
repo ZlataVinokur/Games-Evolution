@@ -3,27 +3,25 @@ using UnityEngine;
 public class MarioNPC : Interactable
 {
     public Sprite aliveSprite;
-    public GameObject mushroomPrefab;
     private SpriteRenderer sr;
 
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        interactionType = InteractionType.UseWithItem;
-        requiredItemId = "coin";
+        capabilities = InteractionCapabilities.UseWithItem | InteractionCapabilities.Look;
+        useableItemIds.Add("coin");
+        dialogueOnLook = new string[] { "Марио выглядит обесточенным. Ему не хватает монетки." };
     }
 
-    public override void UseItem(string usedItemId)
+    protected override bool PerformAction()
     {
-        if (usedItemId == "coin")
-        {
-            sr.sprite = aliveSprite;
-            DialogueSystem.Instance.ShowDialogue(new[] {
-                "Марио ожил! 'Спасибо! Возьми этот гриб.'"
-            });
-            // Спавним гриб в мире или сразу в инвентарь
-            InventoryManager.Instance.AddItem("mushroom");
-            GameManager.Instance.SetFlag("mario_helped", true);
-        }
+        sr.sprite = aliveSprite;
+        InventoryManager.Instance.AddItem("mushroom");
+        GameManager.Instance.SetFlag("mario_helped", true);
+        DialogueSystem.Instance.ShowDialogue(new[] { "Марио ожил! 'Спасибо! Возьми этот гриб.'" });
+        // После оживления можно только смотреть
+        capabilities = InteractionCapabilities.Look;
+        dialogueOnLook = new string[] { "Марио весело подмигивает." };
+        return true;
     }
 }
