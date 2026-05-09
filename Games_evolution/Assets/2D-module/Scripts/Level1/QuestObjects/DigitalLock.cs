@@ -19,9 +19,14 @@ public class DigitalLock : Interactable
         sr.sprite = unlockedSprite;
         GameManager.Instance.SetFlag("lock_opened", true);
         GameManager.Instance.CompleteLevel("Level1");
-        DialogueSystem.Instance.ShowDialogue(new[] { "Замок открыт! Путь свободен." });
+        DialogueSystem.Instance.ShowDialogue(new[]
+            { "Замок открыт! Путь свободен." },
+            speaker: "encyclopedia", emotion: "happy");
+
         exitPortal.SetActive(true);
         capabilities = InteractionCapabilities.Look;
+
+        EncyclopediaManager.Instance?.UnlockArticle("article_pixel_evolution");
         return true;
     }
 }

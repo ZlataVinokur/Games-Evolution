@@ -807,7 +807,7 @@ MonoBehaviour:
   dialogueText: {fileID: 613198063}
   nextButton: {fileID: 332440202}
   portraitImage: {fileID: 1685454484}
-  encyclopediaEmotions: {fileID: 0}
+  encyclopediaEmotions: {fileID: 1848529479}
   defaultEncyclopediaEmotion: neutral
 --- !u!1 &265036713 stripped
 GameObject:
@@ -1232,7 +1232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2414,13 +2414,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterExpression
   emotions:
   - emotionName: neutral
-    sprite: {fileID: -752826942, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+    sprite: {fileID: 1047628607, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
   - emotionName: curious
-    sprite: {fileID: 2022741877, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+    sprite: {fileID: 116073629, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
   - emotionName: sad
-    sprite: {fileID: 1842606922, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+    sprite: {fileID: -1116846367, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
   - emotionName: happy
-    sprite: {fileID: -1006313133, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+    sprite: {fileID: 238834451, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
 --- !u!4 &1480731822
 Transform:
   m_ObjectHideFlags: 0
@@ -2430,9 +2430,9 @@ Transform:
   m_GameObject: {fileID: 1480731820}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.3, y: 0.19999999, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 2.95, y: 0.19999994, z: 0}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2960,17 +2960,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1685454482}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.1276596, y: 2.1276596, z: 2.1276596}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1887606435}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -548.55054, y: -114.98616}
-  m_SizeDelta: {x: 110.2765, y: 277.397}
+  m_AnchoredPosition: {x: -567.38696, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1685454484
 MonoBehaviour:
@@ -2992,7 +2992,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -752826942, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+  m_Sprite: {fileID: -1491141727, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3000,7 +3000,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
-  m_UseSpriteMesh: 0
+  m_UseSpriteMesh: 1
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1685454485
 CanvasRenderer:
@@ -3110,13 +3110,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaExpression
   emotions:
   - emotionName: neutral
-    sprite: {fileID: -752826942, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+    sprite: {fileID: -1491141727, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
   - emotionName: explain
-    sprite: {fileID: -1625986387, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+    sprite: {fileID: 324886886, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
   - emotionName: happy
-    sprite: {fileID: -1006313133, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+    sprite: {fileID: 864610845, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
   - emotionName: surprised
-    sprite: {fileID: 2022741877, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+    sprite: {fileID: 23891835, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
 --- !u!114 &1848529480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3129,10 +3129,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afca21678ab54684e920fd4a87bd8505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaManager
-  allArticles: []
-  notificationPanel: {fileID: 906297582}
-  notificationText: {fileID: 394458281}
-  notificationDuration: 4
+  allArticles:
+  - {fileID: 11400000, guid: b3343791e81106649a8f9654d553ec9b, type: 2}
+  - {fileID: 11400000, guid: 6d5b53f4dcdbc104eb0610b8ef6b4db0, type: 2}
+  - {fileID: 11400000, guid: 83eda736478e792418a3b2ffac6f1d84, type: 2}
+  - {fileID: 11400000, guid: 15fb9c1221598044db8c5088ec45f342, type: 2}
+  - {fileID: 11400000, guid: 14a91dfc14fb0a14a86048224be52ff2, type: 2}
 --- !u!1 &1887606434
 GameObject:
   m_ObjectHideFlags: 0
@@ -3186,7 +3188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.69411767}
+  m_Color: {r: 0.10588236, g: 0.21960786, b: 0.26666668, a: 0.87058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3197,10 +3199,10 @@ MonoBehaviour:
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 2
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1887606437

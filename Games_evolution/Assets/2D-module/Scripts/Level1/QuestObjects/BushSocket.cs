@@ -9,26 +9,22 @@ public class BushSocket : Interactable
     {
         if (!GameManager.Instance.GetFlag("bush_opened"))
         {
-            // Устанавливаем флаг
             GameManager.Instance.SetFlag("bush_opened", true);
 
-            // Показываем диалог
             DialogueSystem.Instance.ShowDialogue(new[]
             {
                 "Куст раздвинут. За ним оказалась старая розетка!"
-            });
+            }, speaker: "encyclopedia", emotion: "surprised");
 
-            // Включаем розетку
             if (socketObject != null)
                 socketObject.SetActive(true);
 
-            // Полностью отключаем куст (коллайдер, спрайт, всё)
-            gameObject.SetActive(false);
+            // Открываем статью о логических цепочках
+            EncyclopediaManager.Instance?.UnlockArticle("article_puzzles");
 
+            gameObject.SetActive(false);
             return true;
         }
-
-        // Если куст уже открыт (страховка)
         return false;
     }
 }

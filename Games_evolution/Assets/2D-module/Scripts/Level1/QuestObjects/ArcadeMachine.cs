@@ -5,14 +5,13 @@ public class ArcadeMachine : MonoBehaviour
     public Sprite brokenSprite;
     public Sprite fixedSprite;
     private SpriteRenderer sr;
-    public GameObject coinPrefab; // монетка для спавна
+    public GameObject coinPrefab;
     public Transform coinSpawnPoint;
 
     void Start() => sr = GetComponent<SpriteRenderer>();
 
     void Update()
     {
-        // Проверяем условия фиксации
         if (!GameManager.Instance.GetFlag("arcade_fixed") &&
             GameManager.Instance.GetFlag("bush_opened") &&
             GameManager.Instance.GetFlag("wire_plugged"))
@@ -27,8 +26,9 @@ public class ArcadeMachine : MonoBehaviour
         GameManager.Instance.SetFlag("arcade_fixed", true);
         DialogueSystem.Instance.ShowDialogue(new[] {
             "Аркадный автомат запустился! Из монетоприёмника выпала монетка."
-        });
+        }, speaker: "encyclopedia", emotion: "happy");
+
         Instantiate(coinPrefab, coinSpawnPoint.position, Quaternion.identity);
-        // Можно сразу добавить монету в инвентарь или сделать её интерактивным объектом
+        EncyclopediaManager.Instance?.UnlockArticle("article_arcade");
     }
 }

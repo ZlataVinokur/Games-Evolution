@@ -17,9 +17,18 @@ public class Socket : Interactable
     {
         if (GameManager.Instance.GetFlag("wire_plugged"))
             return false;
+
         GameManager.Instance.SetFlag("wire_plugged", true);
         if (poweredSprite != null) sr.sprite = poweredSprite;
-        DialogueSystem.Instance.ShowDialogue(new[] { "Провод вставлен! Автомат запитан." });
+
+        DialogueSystem.Instance.ShowDialogue(new[]
+            { "Провод вставлен! Автомат запитан." },
+            speaker: "encyclopedia", emotion: "happy");
+
+        // Открываем статьи об аркадах и инвентаре
+        EncyclopediaManager.Instance?.UnlockArticle("article_arcade");
+        EncyclopediaManager.Instance?.UnlockArticle("article_inventory");
+
         capabilities = InteractionCapabilities.Look;
         dialogueOnLook = new string[] { "Розетка под напряжением." };
         return true;

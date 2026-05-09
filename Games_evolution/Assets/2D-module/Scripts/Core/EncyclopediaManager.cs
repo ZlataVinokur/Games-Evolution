@@ -6,40 +6,33 @@ public class EncyclopediaManager : MonoBehaviour
     public static EncyclopediaManager Instance { get; private set; }
 
     [SerializeField] private List<Article> allArticles;
-    public List<Article> AllArticles => allArticles;   // теперь доступен из ArticleViewer
+    public List<Article> AllArticles => allArticles;
 
-    [SerializeField] private GameObject notificationPanel;
-    [SerializeField] private TMPro.TextMeshProUGUI notificationText; // или обычный Text
-    [SerializeField] private float notificationDuration = 4f;
+    // Больше не нужны панель и duration
+    // [SerializeField] private GameObject notificationPanel;
+    // [SerializeField] private Text notificationText;
+    // [SerializeField] private float notificationDuration;
 
     void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        notificationPanel.SetActive(false);
     }
 
-    /// <summary>
-    /// Вызывается, когда статья должна открыться.
-    /// </summary>
     public void UnlockArticle(string articleId)
     {
         Article article = allArticles.Find(a => a.articleId == articleId);
         if (article == null) return;
 
         GameManager.Instance.UnlockArticle(articleId);
-        ShowNotification(article.shortAnnotation);
-    }
 
-    private void ShowNotification(string message)
-    {
-        notificationText.text = message;
-        notificationPanel.SetActive(true);
-        CancelInvoke(nameof(HideNotification));
-        Invoke(nameof(HideNotification), notificationDuration);
+        // Показываем диалог Справочника с краткой аннотацией
+        DialogueSystem.Instance.ShowDialogue(
+            new[] { article.shortAnnotation },
+            speaker: "encyclopedia",
+            emotion: "explain"   // или "neutral", "happy"
+        );
     }
-
-    private void HideNotification() => notificationPanel.SetActive(false);
 
     public string GetArticleText(string articleId)
     {
