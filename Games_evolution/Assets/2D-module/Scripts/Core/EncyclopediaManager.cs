@@ -1,47 +1,51 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 public class EncyclopediaManager : MonoBehaviour
 {
     public static EncyclopediaManager Instance { get; private set; }
 
-    [SerializeField] private List<Article> allArticles;   // заполняется в инспекторе
-    [SerializeField] private GameObject notificationPanel; // UI панель уведомлений
-    [SerializeField] private TMPro.TextMeshProUGUI notificationText;
+    [SerializeField] private List<Article> allArticles;
+    public List<Article> AllArticles => allArticles;   // теперь доступен из ArticleViewer
+
+    [SerializeField] private GameObject notificationPanel;
+    [SerializeField] private TMPro.TextMeshProUGUI notificationText; // или обычный Text
+    [SerializeField] private float notificationDuration = 4f;
 
     void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
-    }
-
-    /// <summary>
-    /// Показать уведомление при первом открытии статьи.
-    /// </summary>
-    public void ShowNotification(string articleId)
-    {
-        Article article = allArticles.Find(a => a.id == articleId);
-        if (article != null)
-        {
-            notificationText.text = article.title + "\n" + article.content.Substring(0, Mathf.Min(80, article.content.Length)) + "...";
-            notificationPanel.SetActive(true);
-            StartCoroutine(HideNotification(3f));
-        }
-    }
-
-    System.Collections.IEnumerator HideNotification(float delay)
-    {
-        yield return new WaitForSeconds(delay);
         notificationPanel.SetActive(false);
     }
 
     /// <summary>
-    /// Запуск итогового квиза (вызывается после Level3).
+    /// Вызывается, когда статья должна открыться.
     /// </summary>
-    public void StartQuiz()
+    public void UnlockArticle(string articleId)
     {
-        // Загружает сцену квиза или активирует UI
-        UnityEngine.SceneManagement.SceneManager.LoadScene("QuizScene");
+        Article article = allArticles.Find(a => a.articleId == articleId);
+        if (article == null) return;
+
+        GameManager.Instance.UnlockArticle(articleId);
+        ShowNotification(article.shortAnnotation);
+    }
+
+    private void ShowNotification(string message)
+    {
+        notificationText.text = message;
+        notificationPanel.SetActive(true);
+        CancelInvoke(nameof(HideNotification));
+        Invoke(nameof(HideNotification), notificationDuration);
+    }
+
+    private void HideNotification() => notificationPanel.SetActive(false);
+
+    public string GetArticleText(string articleId)
+    {
+        if (!GameManager.Instance.unlockedArticles.ContainsKey(articleId))
+            return "Статья заблокирована.";
+        Article article = allArticles.Find(a => a.articleId == articleId);
+        return article != null ? article.fullText : "Статья не найдена.";
     }
 }

@@ -5,10 +5,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    // Прогресс уровней
     public List<string> unlockedLevels = new List<string>();
     public Dictionary<string, bool> unlockedArticles = new Dictionary<string, bool>();
-    // Игровые флаги (используются для квестовой логики)
     public Dictionary<string, bool> flags = new Dictionary<string, bool>();
 
     void Awake()
@@ -17,7 +15,6 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            // Начальный уровень всегда разблокирован
             if (!unlockedLevels.Contains("Level1"))
                 unlockedLevels.Add("Level1");
         }
@@ -38,7 +35,8 @@ public class GameManager : MonoBehaviour
         if (!unlockedArticles.ContainsKey(articleId))
         {
             unlockedArticles[articleId] = true;
-            EncyclopediaManager.Instance?.ShowNotification(articleId);
+            // Уведомление будет показано в EncyclopediaManager,
+            // который сам вызывает этот метод при необходимости.
         }
     }
 

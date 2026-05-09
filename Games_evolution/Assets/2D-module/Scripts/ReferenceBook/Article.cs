@@ -1,11 +1,11 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewArticle", menuName = "Reference Book/Article")]
+[CreateAssetMenu(menuName = "Reference Book/Article")]
 public class Article : ScriptableObject
 {
-    public string id;
+    public string articleId;
     public string title;
     [TextArea(5, 20)]
-    public string content;
-    public string triggerId; // Идентификатор игрового события для автооткрытия
+    public string fullText;      // полный текст для справочника
+    public string shortAnnotation; // 1-2 предложения для всплывающего уведомления
 }

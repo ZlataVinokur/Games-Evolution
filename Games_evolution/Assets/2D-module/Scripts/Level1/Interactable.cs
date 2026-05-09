@@ -11,12 +11,14 @@ public enum InteractionCapabilities
     UseWithItem = 8
 }
 
+public enum Speaker { Player, Encyclopedia }
+
 public class Interactable : MonoBehaviour
 {
     [Header("Возможности объекта")]
     public InteractionCapabilities capabilities = InteractionCapabilities.Look;
 
-    [Tooltip("ID предметов, которые можно применить к объекту")]
+    [Tooltip("ID предметов, которые можно применить")]
     public List<string> useableItemIds = new List<string>();
 
     [Header("Осмотр")]
@@ -28,66 +30,63 @@ public class Interactable : MonoBehaviour
     [Header("Неудачное применение предмета")]
     public string[] failDialogue = new string[] { "Ой, не подходит... Надо поискать куда ещё это можно применить." };
 
+    [Header("Статья справочника")]
+    public string articleTriggerId;          // будет разблокирована после успешного действия
+
     [Header("Прочее")]
     public string flagToSetOnAction;
 
-    // ---------- ОТОБРАЖЕНИЕ КУРСОРА ----------
+    [Header("Диалог")]
+    public Speaker speaker = Speaker.Encyclopedia;   // кто говорит (по умолчанию Справочник)
+
+    // ---------- КУРСОР ----------
     void OnMouseEnter()
     {
         if (InventoryManager.Instance != null && InventoryManager.Instance.selectedItem != null)
-        {
-            // Если в руке предмет — всегда показываем Use
             CursorManager.Instance?.SetCursor(CursorType.Use);
-        }
         else
-        {
-            // Иначе стандартный курсор в зависимости от возможностей
             CursorManager.Instance?.SetCursor(GetCursorType());
-        }
     }
 
     void OnMouseExit()
     {
-        // Если в руке предмет, не сбрасываем курсор (оставим Use)
         if (InventoryManager.Instance != null && InventoryManager.Instance.selectedItem != null)
             return;
         CursorManager.Instance?.ResetCursor();
     }
 
-    // ---------- ЛЕВАЯ КНОПКА (действие / подбор / применение предмета) ----------
+    // ---------- ЛЕВАЯ КНОПКА ----------
     void OnMouseDown()
     {
-        // Если игрок держит предмет в руке — пытаемся использовать его на этом объекте
         if (InventoryManager.Instance != null && InventoryManager.Instance.selectedItem != null)
         {
-            ItemData selectedItem = InventoryManager.Instance.selectedItem;
+            ItemData selected = InventoryManager.Instance.selectedItem;
             if ((capabilities & InteractionCapabilities.UseWithItem) != 0 &&
-                useableItemIds.Contains(selectedItem.itemId))
+                useableItemIds.Contains(selected.itemId))
             {
-                // Предмет подходит
-                UseItem(selectedItem);
+                UseItem(selected);
             }
             else
             {
-                // Предмет не подходит — показываем сообщение, предмет остаётся в руке
-                DialogueSystem.Instance.ShowDialogue(failDialogue);
+                DialogueSystem.Instance.ShowDialogue(failDialogue, "curious");
             }
         }
         else
         {
-            // Нет предмета в руке — выполняем основное действие
             Interact();
         }
     }
 
-    // ---------- ПУБЛИЧНЫЕ МЕТОДЫ (используются контроллером для правой кнопки и т.д.) ----------
-    /// <summary> Основное действие (активация, подбор или осмотр). </summary>
+    // ---------- ПУБЛИЧНЫЕ МЕТОДЫ ----------
     public virtual void Interact()
     {
         if ((capabilities & InteractionCapabilities.Use) != 0)
         {
             if (PerformAction())
+            {
+                TryUnlockArticle();
                 return;
+            }
         }
 
         if ((capabilities & InteractionCapabilities.PickUp) != 0)
@@ -97,30 +96,26 @@ public class Interactable : MonoBehaviour
             return;
         }
 
-        // Если ничего не вышло — осмотр
         Inspect();
     }
 
-    /// <summary> Осмотр (показывает диалог). Вызывается по правой кнопке. </summary>
     public virtual void Inspect()
     {
         if ((capabilities & InteractionCapabilities.Look) != 0 && dialogueOnLook.Length > 0)
-        {
-            DialogueSystem.Instance.ShowDialogue(dialogueOnLook);
-        }
+            DialogueSystem.Instance.ShowDialogue(dialogueOnLook, "neutral");
         else
-        {
-            DialogueSystem.Instance.ShowDialogue(new[] { "Ничего примечательного." });
-        }
+            DialogueSystem.Instance.ShowDialogue(new[] { "Ничего примечательного." }, "neutral");
     }
 
-    // ---------- ВСПОМОГАТЕЛЬНЫЕ ПЕРЕОПРЕДЕЛЯЕМЫЕ МЕТОДЫ ----------
     protected virtual void UseItem(ItemData item)
     {
         if (useableItemIds.Contains(item.itemId))
         {
-            PerformAction();
-            InventoryManager.Instance?.RemoveItem(item.itemId); // предмет удаляется после использования
+            if (PerformAction())
+            {
+                InventoryManager.Instance?.RemoveItem(item.itemId);
+                TryUnlockArticle();
+            }
         }
     }
 
@@ -131,14 +126,17 @@ public class Interactable : MonoBehaviour
         return true;
     }
 
+    private void TryUnlockArticle()
+    {
+        if (!string.IsNullOrEmpty(articleTriggerId))
+            EncyclopediaManager.Instance?.UnlockArticle(articleTriggerId);
+    }
+
     public CursorType GetCursorType()
     {
-        if ((capabilities & InteractionCapabilities.PickUp) != 0)
-            return CursorType.Hand;
-        if ((capabilities & InteractionCapabilities.Use) != 0)
-            return CursorType.Hand;
-        if ((capabilities & InteractionCapabilities.Look) != 0)
-            return CursorType.Look;
+        if ((capabilities & InteractionCapabilities.PickUp) != 0) return CursorType.Hand;
+        if ((capabilities & InteractionCapabilities.Use) != 0) return CursorType.Hand;
+        if ((capabilities & InteractionCapabilities.Look) != 0) return CursorType.Look;
         return CursorType.Default;
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,9 +9,14 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private Text dialogueText;
     [SerializeField] private Button nextButton;
+    [SerializeField] private Image portraitImage;                 // UI Image для портрета
+
+    // Новые поля
+    [SerializeField] private EncyclopediaExpression encyclopediaEmotions;
+    [Tooltip("Эмоция Справочника по умолчанию, если не передана")]
+    [SerializeField] private string defaultEncyclopediaEmotion = "neutral";
 
     private Queue<string> phrases = new Queue<string>();
-    private System.Action onDialogueEnd;
 
     void Awake()
     {
@@ -22,12 +26,29 @@ public class DialogueSystem : MonoBehaviour
         nextButton.onClick.AddListener(NextPhrase);
     }
 
-    public void ShowDialogue(string[] lines, System.Action onEnd = null)
+    public void ShowDialogue(string[] lines, string speaker = "player", string emotion = "neutral")
     {
+        // Включаем панель
+        dialoguePanel.SetActive(true);
+
+        // Показываем портрет, если есть
+        if (portraitImage != null)
+        {
+            portraitImage.gameObject.SetActive(true);
+
+            if (speaker == "encyclopedia" && encyclopediaEmotions != null)
+            {
+                portraitImage.sprite = encyclopediaEmotions.GetSprite(emotion);
+            }
+            else // player или другие
+            {
+                if (CharacterExpression.Instance != null)
+                    portraitImage.sprite = CharacterExpression.Instance.GetSprite(emotion);
+            }
+        }
+
         phrases.Clear();
         foreach (var line in lines) phrases.Enqueue(line);
-        onDialogueEnd = onEnd;
-        dialoguePanel.SetActive(true);
         NextPhrase();
     }
 
@@ -40,7 +61,8 @@ public class DialogueSystem : MonoBehaviour
         else
         {
             dialoguePanel.SetActive(false);
-            onDialogueEnd?.Invoke();
+            if (portraitImage != null)
+                portraitImage.gameObject.SetActive(false);
         }
     }
 }
