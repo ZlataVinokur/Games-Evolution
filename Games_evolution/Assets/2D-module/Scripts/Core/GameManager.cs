@@ -35,8 +35,6 @@ public class GameManager : MonoBehaviour
         if (!unlockedArticles.ContainsKey(articleId))
         {
             unlockedArticles[articleId] = true;
-            // Уведомление будет показано в EncyclopediaManager,
-            // который сам вызывает этот метод при необходимости.
         }
     }
 

@@ -8,11 +8,6 @@ public class EncyclopediaManager : MonoBehaviour
     [SerializeField] private List<Article> allArticles;
     public List<Article> AllArticles => allArticles;
 
-    // Больше не нужны панель и duration
-    // [SerializeField] private GameObject notificationPanel;
-    // [SerializeField] private Text notificationText;
-    // [SerializeField] private float notificationDuration;
-
     void Awake()
     {
         Instance = this;
@@ -30,7 +25,7 @@ public class EncyclopediaManager : MonoBehaviour
         DialogueSystem.Instance.ShowDialogue(
             new[] { article.shortAnnotation },
             speaker: "encyclopedia",
-            emotion: "explain"   // или "neutral", "happy"
+            emotion: "happy"   
         );
     }
 
