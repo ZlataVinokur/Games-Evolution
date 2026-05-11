@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 8158943428159901407}
   - component: {fileID: 8023085680685371485}
   - component: {fileID: 4449728638563213710}
-  - component: {fileID: -8582584211776465545}
+  - component: {fileID: -579747582191256541}
   m_Layer: 21
   m_Name: Platform_Normal
-  m_TagString: Platform
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,7 +127,7 @@ BoxCollider2D:
   m_UsedByEffector: 1
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.16}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -137,9 +137,9 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.05, y: 0.3}
+  m_Size: {x: 1.46, y: 0.06}
   m_EdgeRadius: 0
---- !u!251 &-8582584211776465545
+--- !u!251 &-579747582191256541
 PlatformEffector2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,11 +150,11 @@ PlatformEffector2D:
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2097152
   m_RotationalOffset: 0
   m_UseOneWay: 1
   m_UseOneWayGrouping: 0
-  m_SurfaceArc: 180
+  m_SurfaceArc: 90
   m_UseSideFriction: 0
   m_UseSideBounce: 0
-  m_SideArc: 1
+  m_SideArc: 0

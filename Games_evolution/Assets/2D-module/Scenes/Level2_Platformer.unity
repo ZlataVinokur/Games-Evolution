@@ -166,7 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   unlockedLevels:
   - Level1_Quest
-  - Level2_Platformer_2
+  - Level2_Platformer
 --- !u!114 &33586726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,7 +204,7 @@ Transform:
   m_GameObject: {fileID: 118391621}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: -1.0600001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -670,8 +670,9 @@ GameObject:
   - component: {fileID: 446185119}
   - component: {fileID: 446185120}
   - component: {fileID: 446185121}
-  - component: {fileID: 446185123}
   - component: {fileID: 446185122}
+  - component: {fileID: 446185124}
+  - component: {fileID: 446185125}
   m_Layer: 20
   m_Name: Player
   m_TagString: Player
@@ -719,9 +720,11 @@ MonoBehaviour:
   weaponYThreshold: 50
   bulletPrefab: {fileID: 6048820060507780363, guid: dc130ff9ae443b048931f4dd79b97d1f, type: 3}
   firePoint: {fileID: 1111419354}
-  fireRate: 0.3
+  fireRate: 2
   maxHealth: 5
-  invincibilityDuration: 1
+  knockbackForce: 8
+  knockbackUpForce: 5
+  invincibilityDuration: 3
 --- !u!212 &446185121
 SpriteRenderer:
   serializedVersion: 2
@@ -806,10 +809,32 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
---- !u!70 &446185123
-CapsuleCollider2D:
+--- !u!95 &446185124
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446185118}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 02d71d1754fae1a4da81578aa326fe69, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!61 &446185125
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -843,8 +868,17 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.784, y: 2.044}
+    newSize: {x: 0.196, y: 0.511}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   m_Size: {x: 0.784, y: 2.044}
-  m_Direction: 0
+  m_EdgeRadius: 0
 --- !u!1 &714338979
 GameObject:
   m_ObjectHideFlags: 0
@@ -1527,7 +1561,7 @@ Transform:
   m_GameObject: {fileID: 1111419353}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.32, y: -0.16, z: 0}
+  m_LocalPosition: {x: 0.32, y: -0.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1792,7 +1826,7 @@ Transform:
   m_GameObject: {fileID: 1299875722}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.08, z: 0}
+  m_LocalPosition: {x: 0, y: -7.83, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1855,7 +1889,7 @@ MonoBehaviour:
   - {fileID: 962284476797504731, guid: b8b3fcafb866ac84aa581b4b2322222e, type: 3}
   - {fileID: 7927768152492960537, guid: 34efb90e6a20b71478a98490dc20e18c, type: 3}
   spawnInterval: 5
-  spawnHeightOffset: 2
+  spawnHeightOffset: 4
   minX: -5
   maxX: 5
 --- !u!4 &1484082366
@@ -1867,7 +1901,7 @@ Transform:
   m_GameObject: {fileID: 1484082364}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.43947998, y: -2.6673598, z: -2.34774}
+  m_LocalPosition: {x: -0.43947998, y: 5.65264, z: -2.34774}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2803,10 +2837,6 @@ PrefabInstance:
     - target: {fileID: 5562928301480079090, guid: 7589ff732ef87e14a914c86331a72d0a, type: 3}
       propertyPath: m_Name
       value: Platform_Bounce
-      objectReference: {fileID: 0}
-    - target: {fileID: 5562928301480079090, guid: 7589ff732ef87e14a914c86331a72d0a, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5893815480811094522, guid: 7589ff732ef87e14a914c86331a72d0a, type: 3}
       propertyPath: m_LocalPosition.x

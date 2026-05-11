@@ -2,14 +2,18 @@ using UnityEngine;
 
 public class BouncePlatform : MonoBehaviour
 {
-    [SerializeField] private float extraJumpForce = 15f;
-    void OnCollisionEnter2D(Collision2D collision)
+    [SerializeField] private float bounceForce = 20f; // Сила подброса
+
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+            Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
             if (rb != null)
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, extraJumpForce);
+            {
+                // Жёстко задаём скорость вверх, сохраняя горизонтальную
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
+            }
         }
     }
 }

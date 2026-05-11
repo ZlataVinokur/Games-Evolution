@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 8235621390664330952}
   - component: {fileID: 2976364871538684612}
   - component: {fileID: 7970658200161912274}
-  - component: {fileID: 8458065141891801656}
+  - component: {fileID: 8812928250511481274}
+  - component: {fileID: 1047451287173402203}
   m_Layer: 21
   m_Name: Platform_Slippery
-  m_TagString: Platform
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,7 +128,7 @@ BoxCollider2D:
   m_UsedByEffector: 1
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -137,9 +138,9 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.03, y: 0.29}
+  m_Size: {x: 1.45, y: 0.09}
   m_EdgeRadius: 0
---- !u!251 &8458065141891801656
+--- !u!251 &8812928250511481274
 PlatformEffector2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,7 +155,21 @@ PlatformEffector2D:
   m_RotationalOffset: 0
   m_UseOneWay: 1
   m_UseOneWayGrouping: 0
-  m_SurfaceArc: 180
+  m_SurfaceArc: 90
   m_UseSideFriction: 0
   m_UseSideBounce: 0
-  m_SideArc: 1
+  m_SideArc: 0
+--- !u!114 &1047451287173402203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697184334100317532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f72999d14824d8549bd5d9f33dc3dc41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisappearingPlatform
+  disappearTime: 0.5
+  respawnTime: 2

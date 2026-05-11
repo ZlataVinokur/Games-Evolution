@@ -29,15 +29,19 @@ public class PlatformerController : PlayerController
     private int currentHealth;
     private int enemiesKilled = 0;
 
-    private Rigidbody2D rb;
-    private bool isGrounded;
-    private float horizontalInput;
-    private bool facingRight = true;
+    [Header("Knockback")]
+    [SerializeField] private float knockbackForce = 8f;
+    [SerializeField] private float knockbackUpForce = 4f;
 
     [Header("Invincibility")]
     [SerializeField] private float invincibilityDuration = 1f;
     private float invincibilityTimer;
     private bool isInvincible;
+
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    private float horizontalInput;
+    private bool facingRight = true;
 
     public int EnemiesKilled => enemiesKilled;
     public int Health => currentHealth;
@@ -53,19 +57,23 @@ public class PlatformerController : PlayerController
     {
         HandleInput();
 
-        // Выдача оружия по высоте
+        // Выдача оружия по достижении высоты
         if (!weaponGiven && transform.position.y >= weaponYThreshold)
         {
             weaponGiven = true;
             GiveWeapon();
         }
 
+        // Таймер неуязвимости
         if (isInvincible)
         {
             invincibilityTimer -= Time.deltaTime;
             if (invincibilityTimer <= 0)
                 isInvincible = false;
         }
+
+        // Обновление аниматора
+        UpdateAnimator();
     }
 
     void FixedUpdate()
@@ -78,6 +86,8 @@ public class PlatformerController : PlayerController
             rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, jumpForce);
         else
             rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+
+        Debug.Log($"isGrounded={isGrounded}, groundCheckPos={groundCheck.position}, radius={groundCheckRadius}");
     }
 
     public override void HandleInput()
@@ -157,26 +167,54 @@ public class PlatformerController : PlayerController
             GameManager.Instance.UnlockArticle("platformer_combat");
     }
 
-    // ФИЗИЧЕСКОЕ столкновение со стенами
+    // Отбрасывание при контакте со стеной или врагом
+    void ApplyKnockback(float sourceX)
+    {
+        float directionX = transform.position.x < sourceX ? -1f : 1f;
+        rb.linearVelocity = new Vector2(directionX * knockbackForce, knockbackUpForce);
+    }
+
+    // Физические столкновения (стены)
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
         {
             TakeDamage(1);
+            ApplyKnockback(collision.transform.position.x);
         }
     }
 
-    // ТРИГГЕРЫ для врагов и зоны смерти
+    // Триггеры (враги, зона смерти)
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
         {
             TakeDamage(1);
+            ApplyKnockback(other.transform.position.x);
         }
         else if (other.CompareTag("Death"))
         {
             Die();
         }
+    }
+
+    // --- АНИМАЦИЯ ---
+    private bool wasGrounded;
+
+    void UpdateAnimator()
+    {
+        Animator anim = GetComponent<Animator>();
+        if (anim == null) return;
+
+        anim.SetFloat("verticalSpeed", rb.linearVelocity.y);
+        anim.SetFloat("horizontalSpeed", Mathf.Abs(horizontalInput));
+
+        if (isGrounded && !wasGrounded)
+        {
+            // Только что коснулись платформы — принудительно проигрываем анимацию отскока с начала
+            anim.Play("Jump", 0, 0f);
+        }
+        wasGrounded = isGrounded;
     }
 
     void OnDrawGizmosSelected()

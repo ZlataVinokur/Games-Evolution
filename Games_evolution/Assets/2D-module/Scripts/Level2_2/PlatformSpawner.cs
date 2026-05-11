@@ -46,7 +46,7 @@ public class PlatformSpawner : MonoBehaviour
 
     void CleanupOldPlatforms()
     {
-        GameObject[] platforms = GameObject.FindGameObjectsWithTag("Platform");
+        GameObject[] platforms = GameObject.FindGameObjectsWithTag("Ground");
         float camY = mainCam.position.y;
         foreach (var p in platforms)
         {
