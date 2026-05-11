@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class DisappearingPlatform : MonoBehaviour
 {
-    [SerializeField] private float disappearTime = 0.1f; // Через сколько исчезнуть после касания
-    [SerializeField] private float respawnTime = 1.5f;   // Через сколько вернуться обратно
+    [SerializeField] private float disappearTime = 0.1f;
+    [SerializeField] private float respawnTime = 1.5f;
+    [SerializeField] private Vector2 checkSize = new Vector2(2f, 0.5f);
+    [SerializeField] private LayerMask playerLayer;
 
     private Collider2D platformCollider;
     private SpriteRenderer spriteRenderer;
+    private bool isVisible = true;
 
     void Start()
     {
@@ -15,32 +18,33 @@ public class DisappearingPlatform : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void FixedUpdate()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (!isVisible) return;
+
+        Collider2D hit = Physics2D.OverlapBox((Vector2)transform.position, checkSize, 0f, playerLayer);
+        if (hit != null && hit.CompareTag("Player"))
         {
-            // Запускаем исчезновение не сразу, а с крошечной задержкой,
-            // чтобы игрок успел оттолкнуться
-            StartCoroutine(TogglePlatform(false, disappearTime));
+            StartCoroutine(Disappear());
         }
     }
 
-    private IEnumerator TogglePlatform(bool state, float delay)
+    IEnumerator Disappear()
     {
-        yield return new WaitForSeconds(delay);
+        isVisible = false;
+        yield return new WaitForSeconds(disappearTime);
+        platformCollider.enabled = false;
+        spriteRenderer.enabled = false;
 
-        // Если выключаем платформу
-        if (!state)
-        {
-            platformCollider.enabled = false;
-            spriteRenderer.enabled = false;
-            // Запускаем обратное включение через заданное время
-            StartCoroutine(TogglePlatform(true, respawnTime));
-        }
-        else // Если включаем платформу
-        {
-            platformCollider.enabled = true;
-            spriteRenderer.enabled = true;
-        }
+        yield return new WaitForSeconds(respawnTime);
+        platformCollider.enabled = true;
+        spriteRenderer.enabled = true;
+        isVisible = true;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, checkSize);
     }
 }

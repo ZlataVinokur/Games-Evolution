@@ -2,18 +2,32 @@ using UnityEngine;
 
 public class BouncePlatform : MonoBehaviour
 {
-    [SerializeField] private float bounceForce = 20f; // Сила подброса
+    [SerializeField] private float bounceForce = 20f;
+    [SerializeField] private Vector2 checkSize = new Vector2(2f, 1f); // размер области (подгони под спрайт)
+    [SerializeField] private LayerMask playerLayer;                    // слой игрока
 
-    void OnTriggerEnter2D(Collider2D other)
+    private Vector2 checkPosition => (Vector2)transform.position;
+    private Rigidbody2D playerRb;
+    private bool playerWasInArea;
+
+    void FixedUpdate()
     {
-        if (other.CompareTag("Player"))
+        Collider2D hit = Physics2D.OverlapBox(checkPosition, checkSize, 0f, playerLayer);
+        bool playerInArea = hit != null && hit.CompareTag("Player");
+
+        if (playerInArea && !playerWasInArea) // игрок только что зашёл
         {
-            Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
+            Rigidbody2D rb = hit.GetComponent<Rigidbody2D>();
             if (rb != null)
-            {
-                // Жёстко задаём скорость вверх, сохраняя горизонтальную
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
-            }
         }
+
+        playerWasInArea = playerInArea;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(transform.position, checkSize);
     }
 }

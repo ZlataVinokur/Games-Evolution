@@ -173,3 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DisappearingPlatform
   disappearTime: 0.5
   respawnTime: 2
+  checkSize: {x: 2, y: 0.5}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 1048576

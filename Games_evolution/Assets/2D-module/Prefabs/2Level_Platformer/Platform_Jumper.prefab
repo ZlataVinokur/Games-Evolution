@@ -101,7 +101,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5562928301480079090}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -153,6 +153,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BouncePlatform
   bounceForce: 20
+  checkSize: {x: 2, y: 1}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 1048576
 --- !u!1 &6801791303457521397
 GameObject:
   m_ObjectHideFlags: 0
