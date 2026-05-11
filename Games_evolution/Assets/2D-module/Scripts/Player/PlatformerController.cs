@@ -2,92 +2,186 @@ using UnityEngine;
 
 public class PlatformerController : PlayerController
 {
+    public static PlatformerController Instance { get; private set; }
+
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 12f;
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private Sprite idleSprite;
-    [SerializeField] private Sprite jumpSprite;
-    [SerializeField] private Sprite leftSprite;
-    [SerializeField] private Sprite rightSprite;
 
+    [Header("Ground Check")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.2f;
+    [SerializeField] private LayerMask groundLayer;
+
+    [Header("Weapon (height‑based)")]
+    [SerializeField] private float weaponYThreshold = 50f;
+    private bool weaponGiven = false;
+
+    [Header("Combat")]
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private float fireRate = 0.3f;
+    private float nextFireTime;
+    private bool hasWeapon = false;
+
+    [Header("Stats")]
+    [SerializeField] private int maxHealth = 5;
+    private int currentHealth;
+    private int enemiesKilled = 0;
+
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    private float horizontalInput;
     private bool facingRight = true;
-    private bool isGrounded = false;
-    private float horizontalInput = 0f;
 
-    private void Start()
+    [Header("Invincibility")]
+    [SerializeField] private float invincibilityDuration = 1f;
+    private float invincibilityTimer;
+    private bool isInvincible;
+
+    public int EnemiesKilled => enemiesKilled;
+    public int Health => currentHealth;
+
+    void Awake()
     {
-        if (rb == null) rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0f;
+        Instance = this;
+        rb = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
     }
 
-    // ���������� ������������ ������ �� �������� ������
-    public override void HandleInput()
+    void Update()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal"); // A/D ��� �������
-        if (horizontalInput > 0) facingRight = true;
-        else if (horizontalInput < 0) facingRight = false;
-    }
+        HandleInput();
 
-    private void Update()
-    {
-        HandleInput();           // �������� ���������� �����
-        UpdateSprite();
-    }
-
-    private void FixedUpdate()
-    {
-        // �������������� ��������
-        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
-
-        // �������������� ������ ��� ������� ���������
-        if (isGrounded)
+        // Выдача оружия по высоте
+        if (!weaponGiven && transform.position.y >= weaponYThreshold)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            isGrounded = false;
+            weaponGiven = true;
+            GiveWeapon();
+        }
+
+        if (isInvincible)
+        {
+            invincibilityTimer -= Time.deltaTime;
+            if (invincibilityTimer <= 0)
+                isInvincible = false;
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void FixedUpdate()
     {
-        if (collision.contacts.Length > 0)
+        Move();
+
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        if (isGrounded)
+            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, jumpForce);
+        else
+            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+    }
+
+    public override void HandleInput()
+    {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+
+        if (hasWeapon && Time.time >= nextFireTime)
         {
-            foreach (ContactPoint2D contact in collision.contacts)
+            if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
             {
-                if (contact.normal.y > 0.5f) // ����������� ������
-                {
-                    isGrounded = true;
-                    break;
-                }
+                Shoot();
+                nextFireTime = Time.time + fireRate;
             }
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    public override void Move()
     {
-        isGrounded = false;
+        if (horizontalInput > 0 && !facingRight) Flip();
+        else if (horizontalInput < 0 && facingRight) Flip();
     }
 
-    private void UpdateSprite()
+    void Flip()
     {
-        if (isGrounded || Mathf.Abs(rb.linearVelocity.y) < 0.1f)
+        facingRight = !facingRight;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
+    }
+
+    void Shoot()
+    {
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        if (bulletScript != null)
+            bulletScript.SetDirection(facingRight ? Vector2.right : Vector2.left);
+    }
+
+    public void GiveWeapon()
+    {
+        if (!hasWeapon)
         {
-            if (horizontalInput > 0) spriteRenderer.sprite = rightSprite;
-            else if (horizontalInput < 0) spriteRenderer.sprite = leftSprite;
-            else spriteRenderer.sprite = idleSprite;
+            hasWeapon = true;
+            GameManager.Instance.UnlockArticle("platformer_weapons");
+            Debug.Log("Оружие получено!");
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (isInvincible) return;
+
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            Die();
         }
         else
         {
-            spriteRenderer.sprite = jumpSprite;
+            isInvincible = true;
+            invincibilityTimer = invincibilityDuration;
+        }
+
+        GameManager.Instance.UnlockArticle("platformer_damage");
+    }
+
+    void Die()
+    {
+        SceneLoader.LoadScene("Level2_Platformer");
+    }
+
+    public void AddKill()
+    {
+        enemiesKilled++;
+        if (enemiesKilled == 1)
+            GameManager.Instance.UnlockArticle("platformer_combat");
+    }
+
+    // ФИЗИЧЕСКОЕ столкновение со стенами
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            TakeDamage(1);
         }
     }
 
-    public void Knockback(Vector2 direction, float force)
+    // ТРИГГЕРЫ для врагов и зоны смерти
+    void OnTriggerEnter2D(Collider2D other)
     {
-        rb.linearVelocity = Vector2.zero;
-        rb.AddForce(direction * force, ForceMode2D.Impulse);
+        if (other.CompareTag("Enemy"))
+        {
+            TakeDamage(1);
+        }
+        else if (other.CompareTag("Death"))
+        {
+            Die();
+        }
     }
 
-    public bool FacingRight => facingRight;
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
 }
