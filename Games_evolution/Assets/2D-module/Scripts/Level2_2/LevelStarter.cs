@@ -16,6 +16,6 @@ public class Level2Starter : MonoBehaviour
         );
 
         // Открываем вводную статью
-        GameManager.Instance.UnlockArticle("platformer_intro");
+        EncyclopediaManager.Instance.UnlockArticle("platformer_intro");
     }
 }

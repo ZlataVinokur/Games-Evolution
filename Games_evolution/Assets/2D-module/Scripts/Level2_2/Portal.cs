@@ -2,20 +2,7 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
-    void Start()
-    {
-        gameObject.SetActive(false);
-    }
 
-    void Update()
-    {
-        if (PlatformerController.Instance.EnemiesKilled >= 5 && !gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-            // Открываем статью
-            GameManager.Instance.UnlockArticle("platformer_portal");
-        }
-    }
 
     void OnTriggerEnter2D(Collider2D other)
     {

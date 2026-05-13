@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 697184334100317532}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25335318, y: -0.95968413, z: 3.8492408}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -171,8 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f72999d14824d8549bd5d9f33dc3dc41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DisappearingPlatform
-  disappearTime: 0.5
-  respawnTime: 2
+  disappearTime: 1
+  respawnTime: 3
   checkSize: {x: 2, y: 0.5}
   playerLayer:
     serializedVersion: 2

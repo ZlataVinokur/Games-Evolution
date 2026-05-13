@@ -94,7 +94,7 @@ public class PlatformerController : PlayerController
         if (isGrounded && !jumpArticleOpened)
         {
             jumpArticleOpened = true;
-            GameManager.Instance.UnlockArticle("platformer_physics");
+            EncyclopediaManager.Instance.UnlockArticle("platformer_physics");
         }
     }
 
@@ -139,7 +139,7 @@ public class PlatformerController : PlayerController
         if (!hasWeapon)
         {
             hasWeapon = true;
-            GameManager.Instance.UnlockArticle("platformer_weapons");
+            EncyclopediaManager.Instance.UnlockArticle("platformer_weapons");
             Debug.Log("Оружие получено!");
         }
     }
@@ -160,7 +160,7 @@ public class PlatformerController : PlayerController
             invincibilityTimer = invincibilityDuration;
         }
 
-        GameManager.Instance.UnlockArticle("platformer_damage");
+        EncyclopediaManager.Instance.UnlockArticle("platformer_damage");
     }
 
     public void Heal(int amount)
@@ -178,7 +178,7 @@ public class PlatformerController : PlayerController
     {
         enemiesKilled++;
         if (enemiesKilled == 1)
-            GameManager.Instance.UnlockArticle("platformer_combat");
+            EncyclopediaManager.Instance.UnlockArticle("platformer_combat");
     }
 
     // Отбрасывание при контакте со стеной или врагом
@@ -216,7 +216,7 @@ public class PlatformerController : PlayerController
                     rb.linearVelocity = new Vector2(rb.linearVelocity.x, 10f); // подпрыгнуть на 10
                     if (!stompArticleOpened)
                     {
-                        GameManager.Instance.UnlockArticle("platformer_enemy_stomp");
+                        EncyclopediaManager.Instance.UnlockArticle("platformer_enemy_stomp");
                         stompArticleOpened = true;
                     }
                 }
