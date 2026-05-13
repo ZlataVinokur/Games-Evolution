@@ -25,7 +25,15 @@ public class DisappearingPlatform : MonoBehaviour
         Collider2D hit = Physics2D.OverlapBox((Vector2)transform.position, checkSize, 0f, playerLayer);
         if (hit != null && hit.CompareTag("Player"))
         {
-            StartCoroutine(Disappear());
+            Rigidbody2D rb = hit.GetComponent<Rigidbody2D>();
+            if (rb != null && rb.linearVelocity.y <= 0f) // игрок падает
+            {
+                // Дополнительная проверка: центр игрока выше центра платформы (значит, он сверху)
+                if (hit.transform.position.y > transform.position.y)
+                {
+                    StartCoroutine(Disappear());
+                }
+            }
         }
     }
 

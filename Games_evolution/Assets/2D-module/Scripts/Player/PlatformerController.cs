@@ -43,6 +43,10 @@ public class PlatformerController : PlayerController
     private float horizontalInput;
     private bool facingRight = true;
 
+    [Header("Article")]
+    private bool stompArticleOpened;
+    private bool jumpArticleOpened;
+
     public int EnemiesKilled => enemiesKilled;
     public int Health => currentHealth;
 
@@ -87,7 +91,11 @@ public class PlatformerController : PlayerController
         else
             rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
 
-        Debug.Log($"isGrounded={isGrounded}, groundCheckPos={groundCheck.position}, radius={groundCheckRadius}");
+        if (isGrounded && !jumpArticleOpened)
+        {
+            jumpArticleOpened = true;
+            GameManager.Instance.UnlockArticle("platformer_physics");
+        }
     }
 
     public override void HandleInput()
@@ -155,6 +163,12 @@ public class PlatformerController : PlayerController
         GameManager.Instance.UnlockArticle("platformer_damage");
     }
 
+    public void Heal(int amount)
+    {
+        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+        // UI обновится автоматически, если HealthUI в Update читает свойство Health
+    }
+
     void Die()
     {
         SceneLoader.LoadScene("Level2_Platformer");
@@ -189,8 +203,30 @@ public class PlatformerController : PlayerController
     {
         if (other.CompareTag("Enemy"))
         {
-            TakeDamage(1);
-            ApplyKnockback(other.transform.position.x);
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            // Условие убийства: падаем (скорость < -0.1f) и находимся выше верхней части врага
+            if (rb != null && rb.linearVelocity.y < -0.1f && transform.position.y > other.transform.position.y + 0.5f)
+            {
+                // Убиваем врага
+                EnemyBase enemy = other.GetComponent<EnemyBase>();
+                if (enemy != null)
+                {
+                    enemy.Die();
+                    // немного подпрыгнуть после убийства (как в Марио)
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 10f); // подпрыгнуть на 10
+                    if (!stompArticleOpened)
+                    {
+                        GameManager.Instance.UnlockArticle("platformer_enemy_stomp");
+                        stompArticleOpened = true;
+                    }
+                }
+            }
+            else
+            {
+                // Врезались во врага сбоку или снизу — получаем урон
+                TakeDamage(1);
+                ApplyKnockback(other.transform.position.x);
+            }
         }
         else if (other.CompareTag("Death"))
         {
