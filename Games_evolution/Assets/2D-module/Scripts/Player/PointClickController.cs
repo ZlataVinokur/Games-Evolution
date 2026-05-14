@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PointClickController : PlayerController
+public class PointClickController : PlayerController_2
 {
     private Camera cam;
 

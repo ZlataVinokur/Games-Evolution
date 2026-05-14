@@ -6,16 +6,16 @@ using TMPro;
 
 public class EncyclopediaManager : MonoBehaviour
 {
-    public static EncyclopediaManager Instance;
+    public static EncyclopediaManager Instance { get; private set; }
 
     [Header("UI Elements")]
     public GameObject infoPanel;
-    public TextMeshProUGUI messageText; // РёР»Рё Text
+    public TextMeshProUGUI messageText; // или Text
     public Button continueButton;
     public Button startGameButton;
 
-    [Header("РќР°СЃС‚СЂРѕР№РєРё")]
-    public string defaultMessage = "РџСЂРёСЃС‚СѓРїР°Р№ Рє РёРіСЂРµ! РЎР»РµРґРё Р·Р° РїРѕРґСЃРєР°Р·РєР°РјРё.";
+    [Header("Настройки")]
+    public string defaultMessage = "Приступай к игре! Следи за подсказками.";
 
     private bool isShowing = false;
     private Queue<string> messageQueue = new Queue<string>();
@@ -38,7 +38,7 @@ public class EncyclopediaManager : MonoBehaviour
         if (startGameButton != null) startGameButton.onClick.AddListener(OnStartGame);
     }
 
-    // РџРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ (РѕР±СѓС‡РµРЅРёРµ) вЂ“ Р±Р»РѕРєРёСЂСѓСЋС‰РёРµ, СЃ РєРЅРѕРїРєРѕР№ Continue
+    // Последовательные сообщения (обучение) – блокирующие, с кнопкой Continue
     public void ShowSequentialMessages(List<string> messages, System.Action onComplete)
     {
         if (isShowing) return;
@@ -58,7 +58,7 @@ public class EncyclopediaManager : MonoBehaviour
         }
         else
         {
-            messageText.text = "Р“РћРўРћР’ РќРђР§РђРўР¬ РР“Р РЈ?";
+            messageText.text = "ГОТОВ НАЧАТЬ ИГРУ?";
             startGameButton.gameObject.SetActive(true);
             continueButton.gameObject.SetActive(false);
         }
@@ -66,24 +66,24 @@ public class EncyclopediaManager : MonoBehaviour
 
     private void OnContinueButton()
     {
-     
+
         ShowNextMessage();
-        
+
     }
 
     private void OnStartGame()
     {
-        // РќРµ Р·Р°РєСЂС‹РІР°РµРј РїР°РЅРµР»СЊ, РїСЂРѕСЃС‚Рѕ СѓР±РёСЂР°РµРј РєРЅРѕРїРєРё Рё СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р±Р°Р·РѕРІС‹Р№ С‚РµРєСЃС‚
+        // Не закрываем панель, просто убираем кнопки и устанавливаем базовый текст
         startGameButton.gameObject.SetActive(false);
         continueButton.gameObject.SetActive(false);
         messageText.text = defaultMessage;
 
-        // Р’С‹Р·С‹РІР°РµРј РєРѕР»Р»Р±СЌРє (Р·Р°РїСѓСЃРє РёРіСЂС‹, СЂР°Р·Р±Р»РѕРєРёСЂРѕРІРєР° СѓРїСЂР°РІР»РµРЅРёСЏ)
+        // Вызываем коллбэк (запуск игры, разблокировка управления)
         onCompleteCallback?.Invoke();
         onCompleteCallback = null;
     }
 
-    // РќРµР±Р»РѕРєРёСЂСѓСЋС‰РµРµ СЃРѕРѕР±С‰РµРЅРёРµ СЃ С‚Р°Р№РјРµСЂРѕРј (Р±РµР· РєРЅРѕРїРєРё)
+    // Неблокирующее сообщение с таймером (без кнопки)
     public void ShowTimedMessage(string message, float displayDuration)
     {
         if (timedMessageCoroutine != null) StopCoroutine(timedMessageCoroutine);
@@ -105,18 +105,46 @@ public class EncyclopediaManager : MonoBehaviour
         if (!infoPanel.activeSelf) infoPanel.SetActive(true);
         messageText.text = message;
         yield return new WaitForSeconds(displayDuration);
-        messageText.text = defaultMessage; // РІРѕР·РІСЂР°С‰Р°РµРј Р±Р°Р·РѕРІС‹Р№ С‚РµРєСЃС‚
+        messageText.text = defaultMessage; // возвращаем базовый текст
     }
     private void SetPlayerControlEnabled(bool enabled)
     {
-    // Р­С‚РѕС‚ РјРµС‚РѕРґ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј, РµСЃР»Рё РІС‹ СѓРїСЂР°РІР»СЏРµС‚Рµ РєРѕРЅС‚СЂРѕР»Р»РµСЂР°РјРё РІ LevelManager.
-    // РћСЃС‚Р°РІСЊС‚Рµ Р·Р°РіР»СѓС€РєСѓ, С‡С‚РѕР±С‹ РєРѕРјРїРёР»СЏС‚РѕСЂ РЅРµ СЂСѓРіР°Р»СЃСЏ.
+        // Этот метод может быть пустым, если вы управляете контроллерами в LevelManager.
+        // Оставьте заглушку, чтобы компилятор не ругался.
     }
 
     private void HidePanelAndResume()
     {
 
-       isShowing = false;
-    // РЈРїСЂР°РІР»РµРЅРёРµ РІРєР»СЋС‡Р°РµРј С‡РµСЂРµР· LevelManager, РїРѕСЌС‚РѕРјСѓ Р·РґРµСЃСЊ РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј.
+        isShowing = false;
+        // Управление включаем через LevelManager, поэтому здесь ничего не делаем.
+    }
+
+    //2d модуль
+
+    [SerializeField] private List<Article> allArticles;
+    public List<Article> AllArticles => allArticles;
+
+    public void UnlockArticle(string articleId)
+    {
+        Article article = allArticles.Find(a => a.articleId == articleId);
+        if (article == null) return;
+
+        GameManager.Instance.UnlockArticle(articleId);
+
+        // Показываем диалог Справочника с краткой аннотацией
+        DialogueSystem.Instance.ShowDialogue(
+            new[] { article.shortAnnotation },
+            speaker: "encyclopedia",
+            emotion: "happy"
+        );
+    }
+
+    public string GetArticleText(string articleId)
+    {
+        if (!GameManager.Instance.unlockedArticles.ContainsKey(articleId))
+            return "Статья заблокирована.";
+        Article article = allArticles.Find(a => a.articleId == articleId);
+        return article != null ? article.fullText : "Статья не найдена.";
     }
 }

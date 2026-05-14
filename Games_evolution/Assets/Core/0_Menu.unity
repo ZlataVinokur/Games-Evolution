@@ -405,7 +405,6 @@ GameObject:
   - component: {fileID: 148473013}
   - component: {fileID: 148473012}
   - component: {fileID: 148473011}
-  - component: {fileID: 148473010}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -433,18 +432,6 @@ RectTransform:
   m_AnchoredPosition: {x: 19, y: 394}
   m_SizeDelta: {x: 824.93, y: 161.51}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &148473010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148473008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ee9f73c8466e042ab429b8c98db517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MenuController
 --- !u!114 &148473011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,14 +476,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 148473010}
+      - m_Target: {fileID: 1940429288}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: StartGame
-        m_Mode: 1
+        m_MethodName: LoadLevel
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -688,7 +675,6 @@ GameObject:
   - component: {fileID: 249433182}
   - component: {fileID: 249433181}
   - component: {fileID: 249433180}
-  - component: {fileID: 249433179}
   m_Layer: 5
   m_Name: SPRAVOCHNIK
   m_TagString: Untagged
@@ -716,18 +702,6 @@ RectTransform:
   m_AnchoredPosition: {x: 19, y: -407}
   m_SizeDelta: {x: 824.9316, y: 159.5448}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &249433179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 249433177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ee9f73c8466e042ab429b8c98db517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MenuController
 --- !u!114 &249433180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -772,14 +746,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 249433179}
+      - m_Target: {fileID: 1940429288}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: StartGame
-        m_Mode: 1
+        m_MethodName: LoadLevel
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 9
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -834,7 +808,6 @@ GameObject:
   - component: {fileID: 632638628}
   - component: {fileID: 632638627}
   - component: {fileID: 632638626}
-  - component: {fileID: 632638625}
   m_Layer: 5
   m_Name: 1_module
   m_TagString: Untagged
@@ -862,18 +835,6 @@ RectTransform:
   m_AnchoredPosition: {x: 19, y: 201.20496}
   m_SizeDelta: {x: 824.9316, y: 159.5448}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &632638625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 632638623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ee9f73c8466e042ab429b8c98db517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MenuController
 --- !u!114 &632638626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -918,14 +879,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 632638625}
+      - m_Target: {fileID: 1940429288}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: StartGame
-        m_Mode: 1
+        m_MethodName: LoadLevel
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1259,7 +1220,6 @@ GameObject:
   - component: {fileID: 832117697}
   - component: {fileID: 832117696}
   - component: {fileID: 832117695}
-  - component: {fileID: 832117694}
   m_Layer: 5
   m_Name: 3_module
   m_TagString: Untagged
@@ -1287,18 +1247,6 @@ RectTransform:
   m_AnchoredPosition: {x: 19, y: -210}
   m_SizeDelta: {x: 824.9316, y: 159.5448}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &832117694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 832117692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ee9f73c8466e042ab429b8c98db517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MenuController
 --- !u!114 &832117695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1343,14 +1291,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 832117694}
+      - m_Target: {fileID: 1940429288}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: StartGame
-        m_Mode: 1
+        m_MethodName: LoadLevel
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 9
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1510,11 +1458,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1029781329}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d7dab877922c534b8fc959dc39202c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 102eb776911e6484e9defb3b36af94d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   totalScore: 0
-  levelsCompleted: 00000000
+  levelsCompleted: 010101
+  unlockedLevels:
+  - 
+  - 
+  - 
 --- !u!4 &1029781331
 Transform:
   m_ObjectHideFlags: 0
@@ -2040,7 +1992,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1940429287}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ee9f73c8466e042ab429b8c98db517, type: 3}
+  m_Script: {fileID: 11500000, guid: 82eb5552b53e62e41a8ed3e52bd05041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuController
 --- !u!114 &1940429289
@@ -2100,7 +2052,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -2143,7 +2095,6 @@ GameObject:
   - component: {fileID: 2027505287}
   - component: {fileID: 2027505286}
   - component: {fileID: 2027505285}
-  - component: {fileID: 2027505284}
   m_Layer: 5
   m_Name: 2_module
   m_TagString: Untagged
@@ -2171,18 +2122,6 @@ RectTransform:
   m_AnchoredPosition: {x: 19, y: -10}
   m_SizeDelta: {x: 824.9316, y: 159.5448}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2027505284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2027505282}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ee9f73c8466e042ab429b8c98db517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MenuController
 --- !u!114 &2027505285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2227,14 +2166,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2027505284}
+      - m_Target: {fileID: 1940429288}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: StartGame
-        m_Mode: 1
+        m_MethodName: LoadLevel
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 6
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

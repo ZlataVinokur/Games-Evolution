@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
-    
+    public static GameManager Instance{ get; private set; }
+
     public int totalScore;
     public bool[] levelsCompleted;
 
@@ -23,7 +24,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     public void CompleteLevel(int levelIndex, int score)
     {
         if (!levelsCompleted[levelIndex])
@@ -33,19 +34,19 @@ public class GameManager : MonoBehaviour
             SaveGame();
         }
     }
-    
+
     public bool IsLevelUnlocked(int levelIndex)
     {
         if (levelIndex == 0) return true;
         return levelsCompleted[levelIndex - 1];
     }
-    
+
     public void AddScore(int points)
     {
         totalScore += points;
         SaveGame();
     }
-    
+
     public void SaveGame()
     {
         PlayerPrefs.SetInt("TotalScore", totalScore);
@@ -54,29 +55,29 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("Level_" + i, levelsCompleted[i] ? 1 : 0);
         }
         PlayerPrefs.Save();
-        Debug.Log("РРіСЂР° СЃРѕС…СЂР°РЅРµРЅР°. РћС‡РєРё: " + totalScore);
+        Debug.Log("Игра сохранена. Очки: " + totalScore);
     }
-    
+
     public void LoadGame()
     {
         totalScore = PlayerPrefs.GetInt("TotalScore", 0);
-        
-        // Р•СЃР»Рё РјР°СЃСЃРёРІ РµС‰Рµ РЅРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ, СЃРѕР·РґР°РµРј РµРіРѕ
+
+        // Если массив еще не инициализирован, создаем его
         if (levelsCompleted == null)
         {
-            // РџРѕРєР° Сѓ РЅР°СЃ 4 СѓСЂРѕРІРЅСЏ, РїРѕС‚РѕРј РёР·РјРµРЅРёРј
+            // Пока у нас 4 уровня, потом изменим
             levelsCompleted = new bool[4];
         }
-        
+
         for (int i = 0; i < levelsCompleted.Length; i++)
         {
             levelsCompleted[i] = PlayerPrefs.GetInt("Level_" + i, 0) == 1;
         }
-        
-        Debug.Log("РРіСЂР° Р·Р°РіСЂСѓР¶РµРЅР°. РћС‡РєРё: " + totalScore);
+
+        Debug.Log("Игра загружена. Очки: " + totalScore);
     }
-    
-    // Р”Р»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ вЂ” СЃР±СЂРѕСЃ РїСЂРѕРіСЂРµСЃСЃР°
+
+    // Для тестирования — сброс прогресса
     public void ResetGame()
     {
         totalScore = 0;
@@ -85,31 +86,31 @@ public class GameManager : MonoBehaviour
             levelsCompleted[i] = false;
         }
         SaveGame();
-        Debug.Log("РџСЂРѕРіСЂРµСЃ СЃР±СЂРѕС€РµРЅ");
+        Debug.Log("Прогрес сброшен");
     }
     public void RegisterBrick()
     {
         totalBricksInCurrentLevel++;
     }
-    
+
     public void BrickDestroyed()
     {
         destroyedBricksCount++;
-        
-        // РџСЂРѕРІРµСЂСЏРµРј, РІСЃРµ Р»Рё РєРёСЂРїРёС‡Рё СЂР°Р·СЂСѓС€РµРЅС‹
+
+        // Проверяем, все ли кирпичи разрушены
         if (destroyedBricksCount >= totalBricksInCurrentLevel)
         {
-            Debug.Log("Р’РЎР• РљРР РџРР§Р Р РђР—Р РЈРЁР•РќР«! Р’С‹Р·С‹РІР°РµРј LevelComplete()");
+            Debug.Log("ВСЕ КИРПИЧИ РАЗРУШЕНЫ! Вызываем LevelComplete()");
             LevelComplete();
         }
     }
-    
+
     public void ResetLevelBrickCounter()
     {
         totalBricksInCurrentLevel = 0;
         destroyedBricksCount = 0;
     }
-    
+
     private void LevelComplete()
     {
 
@@ -125,6 +126,29 @@ public class GameManager : MonoBehaviour
         else
             Debug.LogError("GameOverManager not found on scene!");
     }
+
+
+
+    public List<string> unlockedLevels = new List<string>();
+    public Dictionary<string, bool> unlockedArticles = new Dictionary<string, bool>();
+    public Dictionary<string, bool> flags = new Dictionary<string, bool>();
+
+    public void CompleteLevel(string levelId)
+    {
+        if (!unlockedLevels.Contains(levelId))
+            unlockedLevels.Add(levelId);
+    }
+
+    public void UnlockArticle(string articleId)
+    {
+        if (!unlockedArticles.ContainsKey(articleId))
+        {
+            unlockedArticles[articleId] = true;
+        }
+    }
+
+    public void SetFlag(string key, bool value) => flags[key] = value;
+    public bool GetFlag(string key) => flags.ContainsKey(key) && flags[key];
 }
-    
+
 

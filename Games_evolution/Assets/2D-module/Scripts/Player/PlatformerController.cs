@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlatformerController : PlayerController
+public class PlatformerController : PlayerController_2
 {
     public static PlatformerController Instance { get; private set; }
 
@@ -128,8 +128,8 @@ public class PlatformerController : PlayerController
 
     void Shoot()
     {
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        GameObject bullet_2 = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        Bullet_2 bulletScript = bullet_2.GetComponent<Bullet_2>();
         if (bulletScript != null)
             bulletScript.SetDirection(facingRight ? Vector2.right : Vector2.left);
     }

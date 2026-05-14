@@ -990,7 +990,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -3357,15 +3357,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1297402784}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 975dab982ca42a04e8ca536f07048087, type: 3}
+  m_Script: {fileID: 11500000, guid: afca21678ab54684e920fd4a87bd8505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaManager
   infoPanel: {fileID: 1471365158}
   messageText: {fileID: 338598031}
   continueButton: {fileID: 709104989}
   startGameButton: {fileID: 120706273}
-  defaultMessage: "\u041F\u0420\u0418\u0421\u0422\u0423\u041F\u0410\u0419 \u041A
-    \u0418\u0413\u0420\u0415. \u0421\u041B\u0415\u0414\u0418 \u0417\u0410 \u041F\u041E\u0414\u0421\u041A\u0410\u0417\u041A\u0410\u041C\u0418!."
+  defaultMessage: "\u041F\u0440\u0438\u0441\u0442\u0443\u043F\u0430\u0439 \u043A
+    \u0438\u0433\u0440\u0435! \u0421\u043B\u0435\u0434\u0438 \u0437\u0430 \u043F\u043E\u0434\u0441\u043A\u0430\u0437\u043A\u0430\u043C\u0438."
+  allArticles: []
 --- !u!1 &1325649921
 GameObject:
   m_ObjectHideFlags: 0

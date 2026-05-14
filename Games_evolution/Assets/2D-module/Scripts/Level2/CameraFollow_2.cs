@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class CameraFollow_2 : MonoBehaviour
 {
     [SerializeField] private Transform target;            // игрок
     [SerializeField] private float smoothSpeed = 0.125f;

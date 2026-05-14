@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Portal : MonoBehaviour
+public class Portal_2 : MonoBehaviour
 {
 
 
