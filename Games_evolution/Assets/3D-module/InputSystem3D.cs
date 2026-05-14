@@ -136,6 +136,33 @@ public partial class @InputSystem3D: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""930d5c23-53fb-4739-8e0d-8cdd38e5fea7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""Button"",
+                    ""id"": ""313f44fd-9acb-49ac-b3b5-b7d5cae615ad"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextDialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""db6515a7-53fd-433b-af01-fe2b65ae3ae2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -237,6 +264,39 @@ public partial class @InputSystem3D: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0810ca1-bf37-489c-9095-6be70eb8ca01"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad77c572-43ba-4a0c-8a08-d3daa606b6ff"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d2cfbe9-0446-4195-9090-1c88d5f07b26"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -250,6 +310,9 @@ public partial class @InputSystem3D: IInputActionCollection2, IDisposable
         m_Gameplay3D_SwitchCamera = m_Gameplay3D.FindAction("SwitchCamera", throwIfNotFound: true);
         m_Gameplay3D_Run = m_Gameplay3D.FindAction("Run", throwIfNotFound: true);
         m_Gameplay3D_Jump = m_Gameplay3D.FindAction("Jump", throwIfNotFound: true);
+        m_Gameplay3D_Interact = m_Gameplay3D.FindAction("Interact", throwIfNotFound: true);
+        m_Gameplay3D_Grab = m_Gameplay3D.FindAction("Grab", throwIfNotFound: true);
+        m_Gameplay3D_NextDialogue = m_Gameplay3D.FindAction("NextDialogue", throwIfNotFound: true);
     }
 
     ~@InputSystem3D()
@@ -335,6 +398,9 @@ public partial class @InputSystem3D: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay3D_SwitchCamera;
     private readonly InputAction m_Gameplay3D_Run;
     private readonly InputAction m_Gameplay3D_Jump;
+    private readonly InputAction m_Gameplay3D_Interact;
+    private readonly InputAction m_Gameplay3D_Grab;
+    private readonly InputAction m_Gameplay3D_NextDialogue;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay3D".
     /// </summary>
@@ -366,6 +432,18 @@ public partial class @InputSystem3D: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Gameplay3D/Jump".
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_Gameplay3D_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay3D/Interact".
+        /// </summary>
+        public InputAction @Interact => m_Wrapper.m_Gameplay3D_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay3D/Grab".
+        /// </summary>
+        public InputAction @Grab => m_Wrapper.m_Gameplay3D_Grab;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay3D/NextDialogue".
+        /// </summary>
+        public InputAction @NextDialogue => m_Wrapper.m_Gameplay3D_NextDialogue;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -407,6 +485,15 @@ public partial class @InputSystem3D: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
+            @Grab.started += instance.OnGrab;
+            @Grab.performed += instance.OnGrab;
+            @Grab.canceled += instance.OnGrab;
+            @NextDialogue.started += instance.OnNextDialogue;
+            @NextDialogue.performed += instance.OnNextDialogue;
+            @NextDialogue.canceled += instance.OnNextDialogue;
         }
 
         /// <summary>
@@ -433,6 +520,15 @@ public partial class @InputSystem3D: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
+            @Grab.started -= instance.OnGrab;
+            @Grab.performed -= instance.OnGrab;
+            @Grab.canceled -= instance.OnGrab;
+            @NextDialogue.started -= instance.OnNextDialogue;
+            @NextDialogue.performed -= instance.OnNextDialogue;
+            @NextDialogue.canceled -= instance.OnNextDialogue;
         }
 
         /// <summary>
@@ -508,5 +604,26 @@ public partial class @InputSystem3D: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Grab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnGrab(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "NextDialogue" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNextDialogue(InputAction.CallbackContext context);
     }
 }
