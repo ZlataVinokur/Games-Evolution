@@ -109,8 +109,7 @@ public class EncyclopediaManager : MonoBehaviour
     }
     private void SetPlayerControlEnabled(bool enabled)
     {
-        // Этот метод может быть пустым, если вы управляете контроллерами в LevelManager.
-        // Оставьте заглушку, чтобы компилятор не ругался.
+        // Этот метод может быть пустым, если управление контроллерами в LevelManager.
     }
 
     private void HidePanelAndResume()

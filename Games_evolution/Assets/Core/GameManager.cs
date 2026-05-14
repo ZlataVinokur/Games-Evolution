@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     private int totalBricksInCurrentLevel = 0;
     private int destroyedBricksCount = 0;
+
+    [SerializeField] private int menuSceneName = 0; // сцена меню 
 
     void Awake()
     {
@@ -149,6 +152,23 @@ public class GameManager : MonoBehaviour
 
     public void SetFlag(string key, bool value) => flags[key] = value;
     public bool GetFlag(string key) => flags.ContainsKey(key) && flags[key];
+
+
+    void Update()
+    {
+        // Выход в меню по клавише Escape
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GoToMenu();
+        }
+    }
+    public void GoToMenu()
+    {
+        Debug.Log("Выход в меню по Esc");
+        SaveGame();               // Сохраняем прогресс перед уходом
+        Time.timeScale = 1f;     // Убедимся, что время не заморожено (если была пауза)
+        SceneManager.LoadScene(menuSceneName);
+    }
 }
 
 
