@@ -19,6 +19,7 @@ TagManager:
   - SuperPellet
   - Pellet
   - Wall
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -29,6 +30,8 @@ TagManager:
   - 
   - 
   - Wall
+  - Ground
+  - Interactable
   - 
   - 
   - 
