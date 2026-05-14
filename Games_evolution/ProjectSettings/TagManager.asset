@@ -4,12 +4,21 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - 2Enemy
+  - 2Wall
+  - 2Bullet
+  - 2Pickup
+  - 2Death
+  - 2Ground
+  - Paddle
+  - BottomBoundary
+  - PowerUp
   - Enemy
+  - Ball
+  - Ghost
+  - SuperPellet
+  - Pellet
   - Wall
-  - Bullet
-  - Pickup
-  - Death
-  - Ground
   layers:
   - Default
   - TransparentFX
@@ -19,7 +28,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Wall
   - 
   - 
   - 

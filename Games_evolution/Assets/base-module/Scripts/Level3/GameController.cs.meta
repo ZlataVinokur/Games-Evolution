@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b61dbf846429d1b45a8bb9966ff9ac58
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - pelletPrefab: {fileID: 8255398415621765096, guid: a7be98c35d5b71243a4c6ca748d89f72, type: 3}
+  - superPelletPrefab: {fileID: 370647361177085683, guid: 6f897579f03fb5b429724a59fea6ed7f, type: 3}
+  - mazeParent: {fileID: 6633859421454073714, guid: 92c52f640fd5fd7438ead5bddfd43866, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
