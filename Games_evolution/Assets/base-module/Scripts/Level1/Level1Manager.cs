@@ -11,11 +11,10 @@ public class Level1Manager : MonoBehaviour
     {
        
         if (paddle != null) paddle.SetControlsEnabled(false);
-        if (ball != null) ball.SetGameStarted(false);
-
-    
+       
+       
             ShowTutorial();
-        
+          
     }
 
     private void ShowTutorial()
@@ -38,7 +37,7 @@ public class Level1Manager : MonoBehaviour
     private void StartGame()
     {
         if (paddle != null) paddle.SetControlsEnabled(true);
-        if (ball != null) ball.SetGameStarted(true);
+       
 
         StartCoroutine(TimedHints());
     }

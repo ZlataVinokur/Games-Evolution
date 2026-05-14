@@ -7,36 +7,55 @@ public class BallController : MonoBehaviour
     private bool isLaunched = false;
     private Transform paddle;
     
-    [SerializeField] private float launchSpeed = 5f;
-    private bool gameStarted = false;
+    [SerializeField] private float launchSpeed = 7f;
+    [SerializeField] private float maxSpeed = 15f;
     private float originalSpeed;
     private Coroutine speedCoroutine;
+    
+    private int wallHitCount = 0;
+    private const int maxWallHitsWithoutInteraction = 4;
     
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        paddle = GameObject.FindGameObjectWithTag("Paddle").transform;
-        transform.SetParent(paddle);
-        transform.localPosition = new Vector3(0, 0.5f, 0);
+        rb.freezeRotation = true;
+        
+        GameObject paddleObject = GameObject.FindGameObjectWithTag("Paddle");
+        if (paddleObject != null)
+        {
+            paddle = paddleObject.transform;
+            transform.SetParent(paddle);
+            transform.localPosition = new Vector3(0, 0.5f, 0);
+        }
+        else
+        {
+            Debug.LogError("Paddle not found! Make sure it has tag 'Paddle'");
+        }
+        
         originalSpeed = launchSpeed;
     }
     
     void Update()
     {
-        if (!gameStarted) return;
+        // Запуск по пробелу
         if (!isLaunched && Input.GetKeyDown(KeyCode.Space))
         {
             LaunchBall();
         }
+        
+        // Если не запущен, следуем за платформой
         if (!isLaunched && paddle != null)
         {
             transform.position = new Vector3(paddle.position.x, paddle.position.y + 0.5f, 0);
         }
+        
+        // Ограничение максимальной скорости
+        if (isLaunched && rb.linearVelocity.magnitude > maxSpeed)
+        {
+            rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+        }
     }
-   public void SetGameStarted(bool started)
-   {
-        gameStarted = started;
-    }
+    
     void LaunchBall()
     {
         isLaunched = true;
@@ -50,6 +69,7 @@ public class BallController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Paddle"))
         {
+            wallHitCount = 0;
             float hitPoint = transform.position.x - collision.transform.position.x;
             float paddleWidth = collision.collider.bounds.size.x;
             float normalizedHit = hitPoint / (paddleWidth / 2f);
@@ -57,6 +77,26 @@ public class BallController : MonoBehaviour
             Vector2 newDirection = new Vector2(Mathf.Sin(angle * Mathf.Deg2Rad), Mathf.Cos(angle * Mathf.Deg2Rad)).normalized;
             float currentSpeed = rb.linearVelocity.magnitude;
             rb.linearVelocity = newDirection * currentSpeed;
+        }
+        else if (collision.gameObject.CompareTag("Brick"))
+        {
+            wallHitCount = 0;
+            collision.gameObject.GetComponent<Brick>()?.Hit();
+        }
+        else if (collision.gameObject.CompareTag("Wall"))
+        {
+            wallHitCount++;
+            if (wallHitCount >= maxWallHitsWithoutInteraction)
+            {
+                Vector2 vel = rb.linearVelocity;
+                if (Mathf.Abs(vel.y) < 0.5f)
+                    vel.y = Random.Range(0.5f, 1f);
+                else
+                    vel.y += Random.Range(-0.3f, 0.3f);
+                rb.linearVelocity = vel.normalized * vel.magnitude;
+                wallHitCount = 0;
+                Debug.Log("Коррекция зацикленного полёта мяча");
+            }
         }
     }
     
@@ -73,7 +113,6 @@ public class BallController : MonoBehaviour
         }
     }
     
-    // Метод для бонуса "Ускорение мяча"
     public void IncreaseSpeedTemporarily(float multiplier, float duration)
     {
         if (speedCoroutine != null) StopCoroutine(speedCoroutine);
@@ -84,13 +123,20 @@ public class BallController : MonoBehaviour
         else
             originalSpeed = launchSpeed;
         
-        rb.linearVelocity = rb.linearVelocity.normalized * (originalSpeed * multiplier);
+        Vector2 newVel = rb.linearVelocity.normalized * (originalSpeed * multiplier);
+        if (newVel.magnitude > maxSpeed)
+            newVel = newVel.normalized * maxSpeed;
+        rb.linearVelocity = newVel;
+        
         speedCoroutine = StartCoroutine(ResetSpeedAfterDelay(duration));
     }
     
     private IEnumerator ResetSpeedAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        rb.linearVelocity = rb.linearVelocity.normalized * originalSpeed;
+        if (rb.linearVelocity.magnitude > 0)
+            rb.linearVelocity = rb.linearVelocity.normalized * originalSpeed;
+        else
+            rb.linearVelocity = Vector2.up * originalSpeed;
     }
 }

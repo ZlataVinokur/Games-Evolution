@@ -8,11 +8,11 @@ public class GameManager : MonoBehaviour
 
     public int totalScore;
     public bool[] levelsCompleted;
-
+    private int currentLevelScore = 0;
     private int totalBricksInCurrentLevel = 0;
     private int destroyedBricksCount = 0;
 
-    [SerializeField] private int menuSceneName = 0; // сцена меню 
+    [SerializeField] private int menuSceneName = 0; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ 
 
     void Awake()
     {
@@ -43,11 +43,19 @@ public class GameManager : MonoBehaviour
         if (levelIndex == 0) return true;
         return levelsCompleted[levelIndex - 1];
     }
-
     public void AddScore(int points)
     {
+        currentLevelScore += points;
         totalScore += points;
         SaveGame();
+        Debug.Log($"Р”РѕР±Р°РІР»РµРЅРѕ {points} РѕС‡РєРѕРІ. Р’СЃРµРіРѕ: {totalScore}, Р·Р° СѓСЂРѕРІРµРЅСЊ: {currentLevelScore}");
+    }
+    public void ResetCurrentLevelScore()
+    {
+        totalScore -= currentLevelScore;
+        currentLevelScore = 0;
+        SaveGame();
+        Debug.Log($"РћС‡РєРё Р·Р° СѓСЂРѕРІРµРЅСЊ СЃР±СЂРѕС€РµРЅС‹. РС‚РѕРіРѕ: {totalScore}");
     }
 
     public void SaveGame()
@@ -58,17 +66,17 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("Level_" + i, levelsCompleted[i] ? 1 : 0);
         }
         PlayerPrefs.Save();
-        Debug.Log("Игра сохранена. Очки: " + totalScore);
+        Debug.Log("пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅ: " + totalScore);
     }
 
     public void LoadGame()
     {
         totalScore = PlayerPrefs.GetInt("TotalScore", 0);
 
-        // Если массив еще не инициализирован, создаем его
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
         if (levelsCompleted == null)
         {
-            // Пока у нас 4 уровня, потом изменим
+            // пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ 4 пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             levelsCompleted = new bool[4];
         }
 
@@ -77,10 +85,10 @@ public class GameManager : MonoBehaviour
             levelsCompleted[i] = PlayerPrefs.GetInt("Level_" + i, 0) == 1;
         }
 
-        Debug.Log("Игра загружена. Очки: " + totalScore);
+        Debug.Log("пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅ: " + totalScore);
     }
 
-    // Для тестирования — сброс прогресса
+    // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public void ResetGame()
     {
         totalScore = 0;
@@ -89,7 +97,7 @@ public class GameManager : MonoBehaviour
             levelsCompleted[i] = false;
         }
         SaveGame();
-        Debug.Log("Прогрес сброшен");
+        Debug.Log("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
     }
     public void RegisterBrick()
     {
@@ -100,10 +108,10 @@ public class GameManager : MonoBehaviour
     {
         destroyedBricksCount++;
 
-        // Проверяем, все ли кирпичи разрушены
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (destroyedBricksCount >= totalBricksInCurrentLevel)
         {
-            Debug.Log("ВСЕ КИРПИЧИ РАЗРУШЕНЫ! Вызываем LevelComplete()");
+            Debug.Log("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ! пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ LevelComplete()");
             LevelComplete();
         }
     }
@@ -156,7 +164,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // Выход в меню по клавише Escape
+        // пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Escape
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             GoToMenu();
@@ -164,9 +172,9 @@ public class GameManager : MonoBehaviour
     }
     public void GoToMenu()
     {
-        Debug.Log("Выход в меню по Esc");
-        SaveGame();               // Сохраняем прогресс перед уходом
-        Time.timeScale = 1f;     // Убедимся, что время не заморожено (если была пауза)
+        Debug.Log("пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ Esc");
+        SaveGame();               // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        Time.timeScale = 1f;     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ)
         SceneManager.LoadScene(menuSceneName);
     }
 }

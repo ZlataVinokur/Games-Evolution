@@ -10,35 +10,40 @@ public class EncyclopediaManager : MonoBehaviour
 
     [Header("UI Elements")]
     public GameObject infoPanel;
-    public TextMeshProUGUI messageText; // или Text
+    public TextMeshProUGUI messageText; // пїЅпїЅпїЅ Text
     public Button continueButton;
     public Button startGameButton;
 
-    [Header("Настройки")]
-    public string defaultMessage = "Приступай к игре! Следи за подсказками.";
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+    public string defaultMessage = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ! пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.";
 
     private bool isShowing = false;
     private Queue<string> messageQueue = new Queue<string>();
     private System.Action onCompleteCallback;
     private Coroutine timedMessageCoroutine;
-
+    void Start()
+    {
+        if (continueButton != null)
+            continueButton.onClick.AddListener(OnContinueButton);
+    }
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+        if (continueButton == null) Debug.LogError("continueButton not assigned!");
+        else continueButton.onClick.AddListener(OnContinueButton);
 
         if (continueButton != null) continueButton.onClick.AddListener(OnContinueButton);
         if (startGameButton != null) startGameButton.onClick.AddListener(OnStartGame);
     }
 
-    // Последовательные сообщения (обучение) – блокирующие, с кнопкой Continue
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Continue
     public void ShowSequentialMessages(List<string> messages, System.Action onComplete)
     {
         if (isShowing) return;
@@ -58,7 +63,7 @@ public class EncyclopediaManager : MonoBehaviour
         }
         else
         {
-            messageText.text = "ГОТОВ НАЧАТЬ ИГРУ?";
+            messageText.text = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ?";
             startGameButton.gameObject.SetActive(true);
             continueButton.gameObject.SetActive(false);
         }
@@ -66,24 +71,24 @@ public class EncyclopediaManager : MonoBehaviour
 
     private void OnContinueButton()
     {
-
+        Debug.Log("Continue button clicked");
         ShowNextMessage();
 
     }
 
     private void OnStartGame()
     {
-        // Не закрываем панель, просто убираем кнопки и устанавливаем базовый текст
+        // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         startGameButton.gameObject.SetActive(false);
         continueButton.gameObject.SetActive(false);
         messageText.text = defaultMessage;
 
-        // Вызываем коллбэк (запуск игры, разблокировка управления)
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
         onCompleteCallback?.Invoke();
         onCompleteCallback = null;
     }
 
-    // Неблокирующее сообщение с таймером (без кнопки)
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
     public void ShowTimedMessage(string message, float displayDuration)
     {
         if (timedMessageCoroutine != null) StopCoroutine(timedMessageCoroutine);
@@ -105,23 +110,23 @@ public class EncyclopediaManager : MonoBehaviour
         if (!infoPanel.activeSelf) infoPanel.SetActive(true);
         messageText.text = message;
         yield return new WaitForSeconds(displayDuration);
-        messageText.text = defaultMessage; // возвращаем базовый текст
+        messageText.text = defaultMessage; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     }
     private void SetPlayerControlEnabled(bool enabled)
     {
-        // Этот метод может быть пустым, если управление контроллерами в LevelManager.
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ LevelManager.
     }
 
     private void HidePanelAndResume()
     {
 
         isShowing = false;
-        // Управление включаем через LevelManager, поэтому здесь ничего не делаем.
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ LevelManager, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
     }
 
 
 
-    //2d модуль
+    //2d пїЅпїЅпїЅпїЅпїЅпїЅ
 
     [SerializeField] private List<Article> allArticles;
     public List<Article> AllArticles => allArticles;
@@ -133,7 +138,7 @@ public class EncyclopediaManager : MonoBehaviour
 
         GameManager.Instance.UnlockArticle(articleId);
 
-        // Показываем диалог Справочника с краткой аннотацией
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         DialogueSystem.Instance.ShowDialogue(
             new[] { article.shortAnnotation },
             speaker: "encyclopedia",
@@ -144,14 +149,14 @@ public class EncyclopediaManager : MonoBehaviour
     public string GetArticleText(string articleId)
     {
         if (!GameManager.Instance.unlockedArticles.ContainsKey(articleId))
-            return "Статья заблокирована.";
+            return "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.";
         Article article = allArticles.Find(a => a.articleId == articleId);
-        return article != null ? article.fullText : "Статья не найдена.";
+        return article != null ? article.fullText : "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.";
     }
 
 
 
-    // 3d модуль
+    // 3d пїЅпїЅпїЅпїЅпїЅпїЅ
     public void TellFact(string[] factLines, string emotion = "neutral")
     {
         DialogueSystem.Instance.ShowDialogue(factLines, "encyclopedia", emotion);

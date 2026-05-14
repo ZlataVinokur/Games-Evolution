@@ -66,11 +66,10 @@ public class Enemy : MonoBehaviour
     
     protected virtual void Die()
     {
-        // Добавляем очки через GameManager
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.AddScore(scoreValue);
-        }
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddScore(scoreValue);
+        else
+            Debug.LogWarning("ScoreManager not found! Score not added.");
         
         // Эффект смерти
         if (deathEffectPrefab != null)

@@ -81,18 +81,19 @@ public class Level2Manager : MonoBehaviour
         
         int levelBonus = 1000;
         
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.AddScore(levelBonus);
-            GameManager.Instance.CompleteLevel(levelIndex, levelBonus);
-        }
-        
+        //if (GameManager.Instance != null)
+        //{
+          //  GameManager.Instance.AddScore(levelBonus);
+          //  GameManager.Instance.CompleteLevel(levelIndex, levelBonus);
+       // }
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddScore(levelBonus);
+    
         Debug.Log("Level 2 completed! Score added: " + levelBonus);
-        
+    
+    // Показываем панель завершения
         GameOverManager gameOverManager = FindObjectOfType<GameOverManager>();
         if (gameOverManager != null)
-            gameOverManager.ShowLevelComplete();
-        else
-            Debug.LogWarning("GameOverManager not found");
+             gameOverManager.ShowLevelComplete();
     }
 }
