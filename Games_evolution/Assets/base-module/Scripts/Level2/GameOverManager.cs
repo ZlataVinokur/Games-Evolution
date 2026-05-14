@@ -44,7 +44,8 @@ public class GameOverManager : MonoBehaviour
 
     public void RestartLevel()
     {
-        // Перезагрузить текущую сцену
+        GameManager.Instance.ResetCurrentLevelScore(); // сброс очков уровня
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

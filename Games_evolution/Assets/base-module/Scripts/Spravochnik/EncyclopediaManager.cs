@@ -21,18 +21,23 @@ public class EncyclopediaManager : MonoBehaviour
     private Queue<string> messageQueue = new Queue<string>();
     private System.Action onCompleteCallback;
     private Coroutine timedMessageCoroutine;
-
+    void Start()
+    {
+        if (continueButton != null)
+            continueButton.onClick.AddListener(OnContinueButton);
+    }
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+        if (continueButton == null) Debug.LogError("continueButton not assigned!");
+        else continueButton.onClick.AddListener(OnContinueButton);
 
         if (continueButton != null) continueButton.onClick.AddListener(OnContinueButton);
         if (startGameButton != null) startGameButton.onClick.AddListener(OnStartGame);
@@ -66,7 +71,7 @@ public class EncyclopediaManager : MonoBehaviour
 
     private void OnContinueButton()
     {
-     
+        Debug.Log("Continue button clicked");
         ShowNextMessage();
         
     }

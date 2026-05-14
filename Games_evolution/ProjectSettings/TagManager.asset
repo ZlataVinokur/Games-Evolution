@@ -13,6 +13,7 @@ TagManager:
   - SuperPellet
   - Pellet
   - Wall
+  - Brick
   layers:
   - Default
   - TransparentFX

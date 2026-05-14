@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     
     public int totalScore;
     public bool[] levelsCompleted;
-
+    private int currentLevelScore = 0;
     private int totalBricksInCurrentLevel = 0;
     private int destroyedBricksCount = 0;
 
@@ -39,11 +39,19 @@ public class GameManager : MonoBehaviour
         if (levelIndex == 0) return true;
         return levelsCompleted[levelIndex - 1];
     }
-    
     public void AddScore(int points)
     {
+        currentLevelScore += points;
         totalScore += points;
         SaveGame();
+        Debug.Log($"Добавлено {points} очков. Всего: {totalScore}, за уровень: {currentLevelScore}");
+    }
+    public void ResetCurrentLevelScore()
+    {
+        totalScore -= currentLevelScore;
+        currentLevelScore = 0;
+        SaveGame();
+        Debug.Log($"Очки за уровень сброшены. Итого: {totalScore}");
     }
     
     public void SaveGame()
