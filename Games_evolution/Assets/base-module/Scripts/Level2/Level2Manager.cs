@@ -42,8 +42,8 @@ public class Level2Manager : MonoBehaviour
             "КОГДА УНИЧТОЖИШЬ ВСЕХ ВРАГОВ — НАЧИНАЕТСЯ НОВАЯ ВОЛНА, И ОНА СЛОЖНЕЕ. ЭТО ПРОГРЕССИЯ СЛОЖНОСТИ. С КАЖДОЙ ВОЛНОЙ ВРАГИ УСКОРЯЮТСЯ. ТАК ИГРА НЕ ДАЁТ РАССЛАБИТЬСЯ И ТРЕНИРУЕТ ТВОЮ РЕАКЦИЮ. ЗАПОМНИ ЭТОТ ПРИЁМ — ОН ИСПОЛЬЗУЕТСЯ ВО МНОГИХ ЖАНРАХ.",
             "ЭТИ МЕХАНИКИ — ДВИЖЕНИЕ И СТРЕЛЬБА, ВОЛНЫ, УСКОРЕНИЕ — ИЗМЕНИЛИ ИГРОВУЮ ИНДУСТРИЮ. ОНИ ПЕРЕКОЧЕВАЛИ В ШУТЕРЫ, ЭКШЕНЫ, РОГЛАЙТЫ. ТЫ НЕ ПРОСТО ИГРАЕШЬ — ТЫ ИЗУЧАЕШЬ ИСТОРИЮ. ГОТОВ ПОКАЗАТЬ, ЧЕМУ НАУЧИЛСЯ?"
         };
-        
-        EncyclopediaManager.Instance.ShowSequentialMessages(messages, () => {
+
+        UnifiedInfoSystem.Instance.ShowSequentialMessages(messages, () => {
             PlayerPrefs.SetInt("Level2_TutorialShown", 1);
             PlayerPrefs.Save();
             StartGame();
@@ -65,13 +65,13 @@ public class Level2Manager : MonoBehaviour
     private IEnumerator TimedHints()
     {
         yield return new WaitForSeconds(10f);
-        EncyclopediaManager.Instance.ShowTimedMessage("СТРЕЛЯЙ ПО ВРАГАМ, НО НЕ ЗАСТЫВАЙ НА МЕСТЕ — ПОСТОЯННО ДВИГАЙСЯ, ЧТОБЫ УКЛОНЯТЬСЯ ОТ ПУЛЬ.", 5f);
+        UnifiedInfoSystem.Instance.ShowTimedMessage("СТРЕЛЯЙ ПО ВРАГАМ, НО НЕ ЗАСТЫВАЙ НА МЕСТЕ — ПОСТОЯННО ДВИГАЙСЯ, ЧТОБЫ УКЛОНЯТЬСЯ ОТ ПУЛЬ.", 5f);
         
         yield return new WaitForSeconds(20f);
-        EncyclopediaManager.Instance.ShowTimedMessage("УНИЧТОЖАЙ ВРАГОВ БЫСТРЕЕ — С КАЖДОЙ ВОЛНОЙ ОНИ СТАНОВЯТСЯ ВСЁ БЫСТРЕЕ. ПРОГРЕССИЯ СЛОЖНОСТИ — ЭТО КЛЮЧЕВОЙ ПРИЁМ ГЕЙМДИЗАЙНА.", 5f);
+        UnifiedInfoSystem.Instance.ShowTimedMessage("УНИЧТОЖАЙ ВРАГОВ БЫСТРЕЕ — С КАЖДОЙ ВОЛНОЙ ОНИ СТАНОВЯТСЯ ВСЁ БЫСТРЕЕ. ПРОГРЕССИЯ СЛОЖНОСТИ — ЭТО КЛЮЧЕВОЙ ПРИЁМ ГЕЙМДИЗАЙНА.", 5f);
         
         yield return new WaitForSeconds(30f);
-        EncyclopediaManager.Instance.ShowTimedMessage("СКОРОСТЬ ВРАГОВ ПОСТОЯННО РАСТЁТ. ЭТО ТРЕНИРУЕТ ТВОЮ РЕАКЦИЮ. БЕЗ ЭТОЙ МЕХАНИКИ ИГРЫ БЫЛИ БЫ СЛИШКОМ ЛЁГКИМИ.", 5f);
+        UnifiedInfoSystem.Instance.ShowTimedMessage("СКОРОСТЬ ВРАГОВ ПОСТОЯННО РАСТЁТ. ЭТО ТРЕНИРУЕТ ТВОЮ РЕАКЦИЮ. БЕЗ ЭТОЙ МЕХАНИКИ ИГРЫ БЫЛИ БЫ СЛИШКОМ ЛЁГКИМИ.", 5f);
     }
     
     public void CompleteLevel()

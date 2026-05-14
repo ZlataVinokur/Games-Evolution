@@ -68,7 +68,7 @@ public class Interactable : MonoBehaviour
             }
             else
             {
-                DialogueSystem.Instance.ShowDialogue(failDialogue, "curious");
+                UnifiedInfoSystem.Instance.ShowDialogue(failDialogue, "curious");
             }
         }
         else
@@ -102,9 +102,9 @@ public class Interactable : MonoBehaviour
     public virtual void Inspect()
     {
         if ((capabilities & InteractionCapabilities.Look) != 0 && dialogueOnLook.Length > 0)
-            DialogueSystem.Instance.ShowDialogue(dialogueOnLook, "neutral");
+            UnifiedInfoSystem.Instance.ShowDialogue(dialogueOnLook, "neutral");
         else
-            DialogueSystem.Instance.ShowDialogue(new[] { "Ничего примечательного." }, "neutral");
+            UnifiedInfoSystem.Instance.ShowDialogue(new[] { "Ничего примечательного." }, "neutral");
     }
 
     protected virtual void UseItem(ItemData item)
@@ -129,7 +129,7 @@ public class Interactable : MonoBehaviour
     private void TryUnlockArticle()
     {
         if (!string.IsNullOrEmpty(articleTriggerId))
-            EncyclopediaManager.Instance?.UnlockArticle(articleTriggerId);
+            UnifiedInfoSystem.Instance?.UnlockArticle(articleTriggerId);
     }
 
     public CursorType GetCursorType()

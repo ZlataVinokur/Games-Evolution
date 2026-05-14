@@ -18,6 +18,6 @@ public class EncyclopediaLevelIntro : MonoBehaviour
 
     void ShowIntro()
     {
-        DialogueSystem.Instance.ShowDialogue(introDialogue, "encyclopedia", "explain");
+        UnifiedInfoSystem.Instance.ShowDialogue(introDialogue, "encyclopedia", "explain");
     }
 }

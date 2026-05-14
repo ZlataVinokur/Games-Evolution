@@ -11,16 +11,16 @@ public class BushSocket : Interactable
         {
             GameManager.Instance.SetFlag("bush_opened", true);
 
-            DialogueSystem.Instance.ShowDialogue(new[]
+            UnifiedInfoSystem.Instance.ShowDialogue(new[]
             {
                 "Куст раздвинут. За ним оказалась старая розетка!"
-            }, speaker: "encyclopedia", emotion: "surprised");
+            }, speaker: "encyclopedia", emotion: "confused");
 
             if (socketObject != null)
                 socketObject.SetActive(true);
 
             // Открываем статью о логических цепочках
-            EncyclopediaManager.Instance?.UnlockArticle("article_puzzles");
+            UnifiedInfoSystem.Instance?.UnlockArticle("article_puzzles");
 
             gameObject.SetActive(false);
             return true;

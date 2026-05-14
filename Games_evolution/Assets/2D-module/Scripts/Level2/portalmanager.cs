@@ -12,7 +12,7 @@ public class PortalManager : MonoBehaviour
         {
             portalSpawned = true;
             portalObject.SetActive(true);
-            EncyclopediaManager.Instance.UnlockArticle("platformer_portal");
+            UnifiedInfoSystem.Instance.UnlockArticle("platformer_portal");
         }
     }
 }

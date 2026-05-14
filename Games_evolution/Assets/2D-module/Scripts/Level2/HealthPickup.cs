@@ -12,7 +12,7 @@ public class HealthPickup : MonoBehaviour
             if (player != null && player.Health < 5)   // восстанавливаем только если здоровье не полное
             {
                 player.Heal(healAmount);
-                EncyclopediaManager.Instance.UnlockArticle("platformer_pickups");
+                UnifiedInfoSystem.Instance.UnlockArticle("platformer_pickups");
                 Destroy(gameObject);
             }
         }

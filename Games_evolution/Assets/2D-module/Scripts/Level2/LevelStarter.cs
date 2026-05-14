@@ -5,7 +5,7 @@ public class Level2Starter : MonoBehaviour
     void Start()
     {
         // Вступительное сообщение
-        DialogueSystem.Instance.ShowDialogue(
+        UnifiedInfoSystem.Instance.ShowDialogue(
             new[] {
                 "Приветствую, Пиксель! Это эпоха платформеров.",
                 "Твоя задача — подниматься вверх, избегая стен и врагов.",
@@ -16,6 +16,6 @@ public class Level2Starter : MonoBehaviour
         );
 
         // Открываем вводную статью
-        EncyclopediaManager.Instance.UnlockArticle("platformer_intro");
+        UnifiedInfoSystem.Instance.UnlockArticle("platformer_intro");
     }
 }

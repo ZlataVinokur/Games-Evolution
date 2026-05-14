@@ -1,29 +1,53 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class ArticleViewer : MonoBehaviour
+public class GreatEncyclopediaViewer : MonoBehaviour
 {
-    public Transform articleListParent;
-    public GameObject articleButtonPrefab;
-    public Text fullTextDisplay;
+    [Header("UI Ссылки")]
+    public Transform articleListParent;   // контейнер для кнопок статей
+    public GameObject articleButtonPrefab; // префаб кнопки (Button + Text)
+    public TextMeshProUGUI fullTextView;   // поле для показа полного текста
 
     void Start()
     {
-        var articles = EncyclopediaManager.Instance?.AllArticles;
-        if (articles == null) return;
+        BuildArticleList();
+    }
 
-        foreach (var art in articles)
+    void BuildArticleList()
+    {
+        var infoSys = UnifiedInfoSystem.Instance;
+        if (infoSys == null || infoSys.AllArticles == null)
         {
-            var btnObj = Instantiate(articleButtonPrefab, articleListParent);
-            var btnText = btnObj.GetComponentInChildren<Text>();
-            bool unlocked = GameManager.Instance.unlockedArticles.ContainsKey(art.articleId);
-            btnText.text = unlocked ? art.title : "??? (закрыто)";
-            btnObj.GetComponent<Button>().onClick.AddListener(() =>
+            Debug.LogError("UnifiedInfoSystem не найден или нет статей!");
+            return;
+        }
+
+        foreach (var article in infoSys.AllArticles)
+        {
+            bool unlocked = infoSys.IsArticleUnlocked(article.articleId);
+            GameObject btnObj = Instantiate(articleButtonPrefab, articleListParent);
+            TextMeshProUGUI btnText = btnObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (btnText == null)
+            {
+                // Поддержка обычного Text
+                var legacyText = btnObj.GetComponentInChildren<Text>();
+                if (legacyText != null)
+                    legacyText.text = unlocked ? article.title : "??? (закрыто)";
+            }
+            else
+            {
+                btnText.text = unlocked ? article.title : "??? (закрыто)";
+            }
+
+            Button btn = btnObj.GetComponent<Button>();
+            string id = article.articleId; // локальная копия для замыкания
+            btn.onClick.AddListener(() =>
             {
                 if (unlocked)
-                    fullTextDisplay.text = art.fullText;
+                    fullTextView.text = infoSys.GetArticleText(id);
                 else
-                    fullTextDisplay.text = "Статья ещё не открыта.";
+                    fullTextView.text = "Эта статья ещё не открыта. Пройдите уровни, чтобы разблокировать.";
             });
         }
     }

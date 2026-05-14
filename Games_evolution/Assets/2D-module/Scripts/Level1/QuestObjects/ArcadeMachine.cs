@@ -24,11 +24,11 @@ public class ArcadeMachine : MonoBehaviour
     {
         sr.sprite = fixedSprite;
         GameManager.Instance.SetFlag("arcade_fixed", true);
-        DialogueSystem.Instance.ShowDialogue(new[] {
+        UnifiedInfoSystem.Instance.ShowDialogue(new[] {
             "Аркадный автомат запустился! Из монетоприёмника выпала монетка."
         }, speaker: "encyclopedia", emotion: "happy");
 
         Instantiate(coinPrefab, coinSpawnPoint.position, Quaternion.identity);
-        EncyclopediaManager.Instance?.UnlockArticle("article_arcade");
+        UnifiedInfoSystem.Instance?.UnlockArticle("article_arcade");
     }
 }

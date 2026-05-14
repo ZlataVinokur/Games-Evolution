@@ -9,12 +9,12 @@ public class Level1Manager : MonoBehaviour
 
     void Start()
     {
-       
+
         if (paddle != null) paddle.SetControlsEnabled(false);
-       
-       
-            ShowTutorial();
-          
+
+
+        ShowTutorial();
+
     }
 
     private void ShowTutorial()
@@ -27,30 +27,43 @@ public class Level1Manager : MonoBehaviour
             "ТЫ СПРАВИШЬСЯ, ЕСЛИ БУДЕШЬ ВНИМАТЕЛЕН. ЭТА МЕХАНИКА — ДВИЖЕНИЕ И ОТСКОК — ЛЕЖИТ В ОСНОВЕ МНОГИХ СЛОЖНЫХ ИГР. ПОТОМ ТЫ ВСТРЕТИШЬ СТРЕЛЬБУ, ЛАБИРИНТЫ, ГОЛОВОЛОМКИ… НО ВСЁ НАЧИНАЕТСЯ С ПРОСТОГО УДАРА МЯЧА. ВПЕРЁД!"
         };
 
-        EncyclopediaManager.Instance.ShowSequentialMessages(messages, () => {
-            PlayerPrefs.SetInt("Level1_TutorialShown", 1);
-            PlayerPrefs.Save();
+        // Используем UnifiedInfoSystem напрямую
+        if (UnifiedInfoSystem.Instance != null)
+        {
+            UnifiedInfoSystem.Instance.ShowSequentialMessages(messages, () => {
+                PlayerPrefs.SetInt("Level1_TutorialShown", 1);
+                PlayerPrefs.Save();
+                StartGame();
+            });
+        }
+        else
+        {
+            Debug.LogError("UnifiedInfoSystem.Instance отсутствует! Не удалось показать обучение.");
+            // fallback: сразу запускаем игру
             StartGame();
-        });
+        }
     }
 
     private void StartGame()
     {
         if (paddle != null) paddle.SetControlsEnabled(true);
-       
 
         StartCoroutine(TimedHints());
     }
 
     private IEnumerator TimedHints()
     {
+        // Первая подсказка через 10 секунд
         yield return new WaitForSeconds(10f);
-        EncyclopediaManager.Instance.ShowTimedMessage("ПОДСКАЗКА: УГОЛ ОТСКОКА ЗАВИСИТ ОТ МЕСТА ПОПАДАНИЯ ПО ПЛАТФОРМЕ. ПОПРОБУЙ НАПРАВИТЬ МЯЧ В НУЖНУЮ СТОРОНУ!", 5f);
-        
+        if (UnifiedInfoSystem.Instance != null)
+            UnifiedInfoSystem.Instance.ShowTimedMessage("ПОДСКАЗКА: УГОЛ ОТСКОКА ЗАВИСИТ ОТ МЕСТА ПОПАДАНИЯ ПО ПЛАТФОРМЕ. ПОПРОБУЙ НАПРАВИТЬ МЯЧ В НУЖНУЮ СТОРОНУ!", 5f);
+
         yield return new WaitForSeconds(15f);
-        EncyclopediaManager.Instance.ShowTimedMessage("БОНУСЫ ВЫПАДАЮТ ИЗ НЕКОТОРЫХ БЛОКОВ. ЛОВИ ИХ ПЛАТФОРМОЙ!", 5f);
-        
+        if (UnifiedInfoSystem.Instance != null)
+            UnifiedInfoSystem.Instance.ShowTimedMessage("БОНУСЫ ВЫПАДАЮТ ИЗ НЕКОТОРЫХ БЛОКОВ. ЛОВИ ИХ ПЛАТФОРМОЙ!", 5f);
+
         yield return new WaitForSeconds(15f);
-        EncyclopediaManager.Instance.ShowTimedMessage("ЧЕМ БОЛЬШЕ БЛОКОВ РАЗРУШИШЬ, ТЕМ БЛИЖЕ ПОБЕДА. УДАЧИ, ПИКСЕЛЬ!", 5f);
+        if (UnifiedInfoSystem.Instance != null)
+            UnifiedInfoSystem.Instance.ShowTimedMessage("ЧЕМ БОЛЬШЕ БЛОКОВ РАЗРУШИШЬ, ТЕМ БЛИЖЕ ПОБЕДА. УДАЧИ, ПИКСЕЛЬ!", 5f);
     }
 }

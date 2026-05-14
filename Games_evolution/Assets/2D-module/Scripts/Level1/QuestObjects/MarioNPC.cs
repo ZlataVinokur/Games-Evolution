@@ -18,11 +18,11 @@ public class MarioNPC : Interactable
         sr.sprite = aliveSprite;
         InventoryManager.Instance.AddItem("mushroom");
         GameManager.Instance.SetFlag("mario_helped", true);
-        DialogueSystem.Instance.ShowDialogue(new[]
+        UnifiedInfoSystem.Instance.ShowDialogue(new[]
             { "Марио ожил! 'Спасибо! Возьми этот гриб.'" },
             speaker: "player", emotion: "happy");
 
-        EncyclopediaManager.Instance?.UnlockArticle("article_pointandclick");
+        UnifiedInfoSystem.Instance?.UnlockArticle("article_pointandclick");
 
         capabilities = InteractionCapabilities.Look;
         dialogueOnLook = new string[] { "Марио весело подмигивает." };

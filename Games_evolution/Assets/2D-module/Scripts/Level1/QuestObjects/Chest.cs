@@ -17,12 +17,12 @@ public class Chest : MonoBehaviour
             isOpen = true;
             sr.sprite = openSprite;
             InventoryManager.Instance.AddItem("digital_key");
-            DialogueSystem.Instance.ShowDialogue(new[] {
+            UnifiedInfoSystem.Instance.ShowDialogue(new[] {
                 "В сундуке лежит цифровой ключ!"
-            }, speaker: "encyclopedia", emotion: "surprised");
+            }, speaker: "encyclopedia", emotion: "happy");
 
             // Открываем статью о цифровых ключах
-            EncyclopediaManager.Instance?.UnlockArticle("article_digital_key");
+            UnifiedInfoSystem.Instance?.UnlockArticle("article_digital_key");
         }
     }
 }

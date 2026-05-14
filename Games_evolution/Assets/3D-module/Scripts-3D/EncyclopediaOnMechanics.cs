@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Добавить
+using UnityEngine.InputSystem;
 
 public class EncyclopediaOnMechanics : MonoBehaviour
 {
@@ -63,8 +63,8 @@ public class EncyclopediaOnMechanics : MonoBehaviour
 
     private void OnRightClickOutside(InputAction.CallbackContext context)
     {
-        // Если диалог не открыт - показываем новый факт
-        if (!DialogueSystem.Instance.IsDialogueActive())
+        // Используем IsShowingAnything() вместо несуществующего IsDialogueActive()
+        if (!UnifiedInfoSystem.Instance.IsShowingAnything())
         {
             ShowNextFact();
         }
@@ -75,22 +75,22 @@ public class EncyclopediaOnMechanics : MonoBehaviour
         switch (factIndex)
         {
             case 0:
-                DialogueSystem.Instance.ShowDialogue(movementFact, "encyclopedia", "explain");
+                UnifiedInfoSystem.Instance.ShowDialogue(movementFact, "encyclopedia", "explain");
                 break;
             case 1:
-                DialogueSystem.Instance.ShowDialogue(lightFact, "encyclopedia", "explain");
+                UnifiedInfoSystem.Instance.ShowDialogue(lightFact, "encyclopedia", "happy");
                 break;
             case 2:
-                DialogueSystem.Instance.ShowDialogue(cameraFact, "encyclopedia", "explain");
+                UnifiedInfoSystem.Instance.ShowDialogue(cameraFact, "encyclopedia", "explain");
                 break;
             case 3:
-                DialogueSystem.Instance.ShowDialogue(platformerFact, "encyclopedia", "explain");
+                UnifiedInfoSystem.Instance.ShowDialogue(platformerFact, "encyclopedia", "explain");
                 break;
             case 4:
-                DialogueSystem.Instance.ShowDialogue(endFact, "encyclopedia", "explain");
+                UnifiedInfoSystem.Instance.ShowDialogue(endFact, "encyclopedia", "explain");
                 break;
             default:
-                DialogueSystem.Instance.ShowDialogue(new[] { "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!" }, "encyclopedia", "happy");
+                UnifiedInfoSystem.Instance.ShowDialogue(new[] { "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!" }, "encyclopedia", "happy");
                 break;
         }
         factIndex++;

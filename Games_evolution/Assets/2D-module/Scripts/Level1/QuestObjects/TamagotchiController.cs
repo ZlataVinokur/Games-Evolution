@@ -19,14 +19,14 @@ public class TamagotchiController : Interactable
     {
         sr.sprite = happySprite;
         GameManager.Instance.SetFlag("tamagotchi_fed", true);
-        DialogueSystem.Instance.ShowDialogue(new[]
+        UnifiedInfoSystem.Instance.ShowDialogue(new[]
             { "Тамагочи съедает гриб и посылает искру в сундук!" },
-            speaker: "player", emotion: "happy");
+            speaker: "player");
 
         if (chestObject != null)
             chestObject.GetComponent<Chest>()?.Open();
 
-        EncyclopediaManager.Instance?.UnlockArticle("article_puzzles");
+        UnifiedInfoSystem.Instance?.UnlockArticle("article_puzzles");
 
         capabilities = InteractionCapabilities.Look;
         dialogueOnLook = new string[] { "Тамагочи сыт и доволен." };

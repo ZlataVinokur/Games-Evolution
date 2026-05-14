@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Level4Manager : MonoBehaviour
 {
     [Header("Ссылки на компоненты Tetris")]
-    [SerializeField] private TetrisGameManager tetrisGameManager; // изменён тип
+    [SerializeField] private TetrisGameManager tetrisGameManager;
 
     void Start()
     {
@@ -32,11 +32,20 @@ public class Level4Manager : MonoBehaviour
             "ЭТА ИГРА ИЗМЕНИЛА ПРЕДСТАВЛЕНИЕ О ТОМ, КАКОЙ МОЖЕТ БЫТЬ ИГРА: НИКАКОГО СЮЖЕТА, НИКАКИХ ГЕРОЕВ — ТОЛЬКО ФИГУРЫ, РЯДЫ И УСКОРЕНИЕ. ЭТО ЧИСТАЯ МЕХАНИКА. ДАВАЙ, ПИКСЕЛЬ, ПОКАЖИ, КАК ТЫ УМЕЕШЬ ДУМАТЬ!"
         };
 
-        EncyclopediaManager.Instance.ShowSequentialMessages(messages, () => {
-            PlayerPrefs.SetInt("Level4_TutorialShown", 1);
-            PlayerPrefs.Save();
-            StartGame();
-        });
+        // Прямой вызов UnifiedInfoSystem
+        if (UnifiedInfoSystem.Instance != null)
+        {
+            UnifiedInfoSystem.Instance.ShowSequentialMessages(messages, () => {
+                PlayerPrefs.SetInt("Level4_TutorialShown", 1);
+                PlayerPrefs.Save();
+                StartGame();
+            });
+        }
+        else
+        {
+            Debug.LogError("UnifiedInfoSystem.Instance не найден! Обучение не будет показано.");
+            StartGame(); // fallback
+        }
     }
 
     private void StartGame()
@@ -44,7 +53,7 @@ public class Level4Manager : MonoBehaviour
         if (tetrisGameManager != null)
         {
             tetrisGameManager.SetControlsEnabled(true);
-            tetrisGameManager.StartGame(); // ВАЖНО: запускаем игру (спавн фигуры)
+            tetrisGameManager.StartGame();
         }
 
         StartCoroutine(TimedHints());
@@ -53,12 +62,15 @@ public class Level4Manager : MonoBehaviour
     private IEnumerator TimedHints()
     {
         yield return new WaitForSeconds(15f);
-        EncyclopediaManager.Instance.ShowTimedMessage("СТАРАЙСЯ УКЛАДЫВАТЬ ФИГУРЫ РОВНО, БЕЗ ПУСТОТ. ТАК ЛЕГЧЕ ЗАПОЛНЯТЬ РЯДЫ.", 5f);
+        if (UnifiedInfoSystem.Instance != null)
+            UnifiedInfoSystem.Instance.ShowTimedMessage("СТАРАЙСЯ УКЛАДЫВАТЬ ФИГУРЫ РОВНО, БЕЗ ПУСТОТ. ТАК ЛЕГЧЕ ЗАПОЛНЯТЬ РЯДЫ.", 5f);
 
         yield return new WaitForSeconds(25f);
-        EncyclopediaManager.Instance.ShowTimedMessage("СМОТРИ НА СЛЕДУЮЩУЮ ФИГУРУ В МАЛЕНЬКОМ ОКНЕ. ЭТО ПОМОЖЕТ ПЛАНИРОВАТЬ НАПЕРЁД.", 5f);
+        if (UnifiedInfoSystem.Instance != null)
+            UnifiedInfoSystem.Instance.ShowTimedMessage("СМОТРИ НА СЛЕДУЮЩУЮ ФИГУРУ В МАЛЕНЬКОМ ОКНЕ. ЭТО ПОМОЖЕТ ПЛАНИРОВАТЬ НАПЕРЁД.", 5f);
 
         yield return new WaitForSeconds(35f);
-        EncyclopediaManager.Instance.ShowTimedMessage("ПОВОРАЧИВАЙ ФИГУРЫ ЗАРАНЕЕ — НЕ ЖДИ, ПОКА ОНИ УПАДУТ НИЗКО. СКОРОСТЬ БУДЕТ РАСТИ!", 5f);
+        if (UnifiedInfoSystem.Instance != null)
+            UnifiedInfoSystem.Instance.ShowTimedMessage("ПОВОРАЧИВАЙ ФИГУРЫ ЗАРАНЕЕ — НЕ ЖДИ, ПОКА ОНИ УПАДУТ НИЗКО. СКОРОСТЬ БУДЕТ РАСТИ!", 5f);
     }
 }

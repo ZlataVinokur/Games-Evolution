@@ -20,7 +20,7 @@ public class ExitPortal : Interactable
 
     protected override bool PerformAction()
     {
-        DialogueSystem.Instance.ShowDialogue(portalDialogue, speaker: "encyclopedia");
+        UnifiedInfoSystem.Instance.ShowDialogue(portalDialogue, speaker: "encyclopedia");
         // «агружаем следующий уровень после закрыти€ диалога (можно с задержкой)
         StartCoroutine(LoadAfterDelay(2f));
         return true;
