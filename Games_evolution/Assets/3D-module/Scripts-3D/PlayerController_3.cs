@@ -2,7 +2,7 @@ using UnityEngine;
 using Unity.Cinemachine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour
+public class PlayerController_3 : MonoBehaviour
 {
     [Header("Движение")]
     [SerializeField] private float walkSpeed;

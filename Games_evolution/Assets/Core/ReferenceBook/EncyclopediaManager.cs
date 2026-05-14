@@ -120,6 +120,8 @@ public class EncyclopediaManager : MonoBehaviour
         // Управление включаем через LevelManager, поэтому здесь ничего не делаем.
     }
 
+
+
     //2d модуль
 
     [SerializeField] private List<Article> allArticles;
@@ -146,5 +148,13 @@ public class EncyclopediaManager : MonoBehaviour
             return "Статья заблокирована.";
         Article article = allArticles.Find(a => a.articleId == articleId);
         return article != null ? article.fullText : "Статья не найдена.";
+    }
+
+
+
+    // 3d модуль
+    public void TellFact(string[] factLines, string emotion = "neutral")
+    {
+        DialogueSystem.Instance.ShowDialogue(factLines, "encyclopedia", emotion);
     }
 }

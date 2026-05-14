@@ -13,7 +13,7 @@ EditorBuildSettings:
     guid: b4605357c79aae34a84d2cc9a4118bb2
   - enabled: 1
     path: Assets/base-module/Scenes/1_Level1.unity
-    guid: bcf599ee0e197f1478577e7a526382fc
+    guid: fff2eb4f62394a845893eb759350b88a
   - enabled: 1
     path: Assets/base-module/Scenes/5_Transition.unity
     guid: 5967ed37724c42f428a5f5f30198e6b7
@@ -35,6 +35,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/2D-module/Scenes/Level3_RPG.unity
     guid: 7e29ddb8d81522c4a8bef2f7efb737db
+  - enabled: 1
+    path: Assets/3D-module/3D_moduleScene.unity
+    guid: 39cb9577f70c28c4caeadf28a1e45131
   - enabled: 1
     path: Assets/Core/ReferenceBook.unity
     guid: dbc35625aa0431a408869fb715682cc7

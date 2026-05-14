@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class DialogueSystem : MonoBehaviour
@@ -18,12 +19,42 @@ public class DialogueSystem : MonoBehaviour
 
     private Queue<string> phrases = new Queue<string>();
 
+    // Новый Input Actions
+    private InputSystem3D inputControls;
+
     void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
         dialoguePanel.SetActive(false);
         nextButton.onClick.AddListener(NextPhrase);
+
+        // Инициализация Input System
+        inputControls = new InputSystem3D();
+    }
+
+    void OnEnable()
+    {
+        // Включаем управление
+        inputControls.Enable();
+        // Подписываемся на событие нажатия ПКМ
+        inputControls.Gameplay3D.NextDialogue.performed += OnRightClick;
+    }
+
+    void OnDisable()
+    {
+        // Отписываемся
+        inputControls.Gameplay3D.NextDialogue.performed -= OnRightClick;
+        inputControls.Disable();
+    }
+
+    private void OnRightClick(InputAction.CallbackContext context)
+    {
+        // Если диалог открыт - следующая фраза
+        if (dialoguePanel.activeSelf)
+        {
+            NextPhrase();
+        }
     }
 
     public void ShowDialogue(string[] lines, string speaker = "player", string emotion = "neutral")
@@ -64,5 +95,10 @@ public class DialogueSystem : MonoBehaviour
             if (portraitImage != null)
                 portraitImage.gameObject.SetActive(false);
         }
+    }
+
+    public bool IsDialogueActive()
+    {
+        return dialoguePanel.activeSelf;
     }
 }

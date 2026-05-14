@@ -3479,6 +3479,7 @@ GameObject:
   - component: {fileID: 423603355}
   - component: {fileID: 423603354}
   - component: {fileID: 423603353}
+  - component: {fileID: 423603356}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -3543,6 +3544,19 @@ RectTransform:
   m_AnchoredPosition: {x: -416.9, y: -325.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &423603356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423603352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b7aaedb023cfd43b6bf8d64ba06bc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaExpression
+  emotions: []
 --- !u!1001 &431446612
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7938,7 +7952,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 909379671}
-  - component: {fileID: 909379670}
+  - component: {fileID: 909379672}
   m_Layer: 0
   m_Name: EncyclopediaManager
   m_TagString: Untagged
@@ -7946,18 +7960,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &909379670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 909379669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66116b524bfd1014e814c30b5ff99294, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaManager
 --- !u!4 &909379671
 Transform:
   m_ObjectHideFlags: 0
@@ -7973,6 +7975,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &909379672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909379669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afca21678ab54684e920fd4a87bd8505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaManager
+  infoPanel: {fileID: 0}
+  messageText: {fileID: 0}
+  continueButton: {fileID: 0}
+  startGameButton: {fileID: 0}
+  defaultMessage: "\u041F\u0440\u0438\u0441\u0442\u0443\u043F\u0430\u0439 \u043A
+    \u0438\u0433\u0440\u0435! \u0421\u043B\u0435\u0434\u0438 \u0437\u0430 \u043F\u043E\u0434\u0441\u043A\u0430\u0437\u043A\u0430\u043C\u0438."
+  allArticles:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1001 &911255387
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11582,6 +11608,8 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: 5348805270474962489, guid: 4b0ed37dc885a5a4c883a56e0f2dee7f, type: 3}
         Gain: 10
+        LegacyInput: 
+        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -11593,6 +11621,8 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: 5348805270474962489, guid: 4b0ed37dc885a5a4c883a56e0f2dee7f, type: 3}
         Gain: -10
+        LegacyInput: 
+        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -13815,10 +13845,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1496761686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9dd4e7044a775841ba75e884d0dc6cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 102eb776911e6484e9defb3b36af94d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  levelIndex: 0
+  totalScore: 0
+  levelsCompleted: 
+  unlockedLevels: []
 --- !u!4 &1496761688
 Transform:
   m_ObjectHideFlags: 0
@@ -14867,6 +14899,8 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: 5348805270474962489, guid: 4b0ed37dc885a5a4c883a56e0f2dee7f, type: 3}
         Gain: 14
+        LegacyInput: 
+        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -14878,6 +14912,8 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: 5348805270474962489, guid: 4b0ed37dc885a5a4c883a56e0f2dee7f, type: 3}
         Gain: -14
+        LegacyInput: 
+        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -14889,6 +14925,8 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: 0}
         Gain: -1
+        LegacyInput: 
+        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -17958,13 +17996,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1983967137}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9b69877e42549b47b4b3f8d6b947321, type: 3}
+  m_Script: {fileID: 11500000, guid: fee9e601cedf49749962311e8734527f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSystem
   dialoguePanel: {fileID: 290724510}
   dialogueText: {fileID: 1962571689}
   nextButton: {fileID: 1018714139}
-  portraitImage: {fileID: 423603353}
+  portraitImage: {fileID: 0}
+  encyclopediaEmotions: {fileID: 423603356}
+  defaultEncyclopediaEmotion: neutral
 --- !u!4 &1983967139
 Transform:
   m_ObjectHideFlags: 0
