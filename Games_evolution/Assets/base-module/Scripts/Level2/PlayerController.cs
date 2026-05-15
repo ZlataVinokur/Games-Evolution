@@ -185,9 +185,9 @@ public class PlayerController : MonoBehaviour
 
     public void GameOver()
     {
-        GameOverManager gameOverManager = FindObjectOfType<GameOverManager>();
-        if (gameOverManager != null)
-            gameOverManager.ShowGameOver();
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        if (gameManager != null)
+            gameManager.ShowGameOver();
     }
 
     IEnumerator RestartLevel()

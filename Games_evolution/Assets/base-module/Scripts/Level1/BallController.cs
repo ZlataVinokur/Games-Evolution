@@ -94,7 +94,7 @@ public class BallController : MonoBehaviour
                 else
                     vel.y += Random.Range(-0.3f, 0.3f);
                 rb.linearVelocity = vel.normalized * vel.magnitude;
-                wallHitCount = 0;
+                wallHitCount = 2;
                 Debug.Log("Коррекция зацикленного полёта мяча");
             }
         }

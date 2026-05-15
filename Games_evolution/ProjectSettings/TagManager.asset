@@ -4,12 +4,6 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - 2Enemy
-  - 2Wall
-  - 2Bullet
-  - 2Pickup
-  - 2Death
-  - 2Ground
   - Paddle
   - BottomBoundary
   - PowerUp
@@ -20,6 +14,13 @@ TagManager:
   - Pellet
   - Wall
   - Brick
+  - Death
+  - Bullet
+  - Ground
+  - Pickup
+  - Portal
+  - HealthBonus
+  - ShieldBonus
   layers:
   - Default
   - TransparentFX
@@ -48,8 +49,6 @@ TagManager:
   - Enemy_L2
   - Bullet_L2
   - Wall_L2
-  - 
-  - 
   - 
   - 
   - 

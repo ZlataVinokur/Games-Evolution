@@ -152,7 +152,7 @@ public class PlayerController3 : MonoBehaviour
 
         if (lives <= 0)
         {
-            GameOverManager manager = FindObjectOfType<GameOverManager>();
+            GameManager manager = FindObjectOfType<GameManager>();
             if (manager != null) manager.ShowGameOver();
             else SceneManager.LoadScene(SceneManager.GetActiveScene().name);
              return; 

@@ -1105,7 +1105,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 899252a46170a7d4795e925771c63d35, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.238
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1594,6 +1594,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 102eb776911e6484e9defb3b36af94d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  gameOverPanel: {fileID: 0}
+  pausePanel: {fileID: 0}
+  winPanel: {fileID: 0}
+  gameOverRestartButton: {fileID: 0}
+  gameOverMenuButton: {fileID: 0}
+  pauseContinueButton: {fileID: 0}
+  pauseRestartButton: {fileID: 0}
+  pauseMenuButton: {fileID: 0}
+  winNextButton: {fileID: 0}
   totalScore: 0
   levelsCompleted: 010101
   menuSceneName: 0

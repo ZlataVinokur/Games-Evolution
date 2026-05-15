@@ -115,8 +115,8 @@ public class GameController : MonoBehaviour
     
     void WinLevel()
     {
-        GameOverManager manager = FindObjectOfType<GameOverManager>();
-        if (manager != null) manager.ShowLevelComplete();
+        GameManager manager = FindObjectOfType<GameManager>();
+        if (manager != null) manager.ShowWin();
     // Можно отключить управление игроком или остановить время
     }
 }

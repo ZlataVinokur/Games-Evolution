@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2484270614851895209}
   - component: {fileID: 7681559474748649737}
   - component: {fileID: 2940552610190872259}
-  - component: {fileID: 6118287011706557363}
   - component: {fileID: 7767749555372727939}
-  m_Layer: 22
+  - component: {fileID: 3623753934159876209}
+  m_Layer: 0
   m_Name: JumperEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -130,20 +130,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.24875
---- !u!114 &6118287011706557363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2185963639355284795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c302a29394adb0e45b7ffb48896accf2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JumperEnemy
-  jumpForce: 5
-  moveSpeed: 2
 --- !u!50 &7767749555372727939
 Rigidbody2D:
   serializedVersion: 5
@@ -171,3 +157,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &3623753934159876209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2185963639355284795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73af9565601907c46a9113eb91163bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyJump
+  health: 1
+  jumpForce: 5
+  jumpInterval: 1.5

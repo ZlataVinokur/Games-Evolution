@@ -2,32 +2,23 @@ using UnityEngine;
 
 public class Bullet_2 : MonoBehaviour
 {
-    [SerializeField] private float speed = 10f;
+    public float speed = 10f;
+    public float lifetime = 2f;
     private Vector2 direction;
 
-    public void SetDirection(Vector2 dir)
+    public void Initialize(Vector2 dir)
     {
         direction = dir.normalized;
-        // Повернуть пулю в направлении
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        Destroy(gameObject, lifetime);
     }
 
     void Update()
     {
-        transform.Translate(direction * speed * Time.deltaTime, Space.World);
+        transform.Translate(direction * speed * Time.deltaTime);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnBecameInvisible()
     {
-        if (other.CompareTag("Enemy"))
-        {
-            other.GetComponent<EnemyBase>()?.Die();
-            Destroy(gameObject);
-        }
-        else if (other.CompareTag("Wall") || other.CompareTag("Ground"))
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }

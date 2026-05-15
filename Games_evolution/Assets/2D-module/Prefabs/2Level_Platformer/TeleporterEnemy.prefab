@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 9065700690992920895}
   - component: {fileID: 5215128601890772580}
   - component: {fileID: 2185513834198695732}
-  - component: {fileID: 948741033511318470}
-  m_Layer: 22
+  - component: {fileID: 8498624758297414904}
+  m_Layer: 0
   m_Name: TeleporterEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.27625
---- !u!114 &948741033511318470
+--- !u!114 &8498624758297414904
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,11 +138,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7927768152492960537}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae224e8a8b252354d862645658d30c60, type: 3}
+  m_Script: {fileID: 11500000, guid: 18460042200fa2b42ad182bccaebd5ec, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TeleporterEnemy
-  teleportInterval: 3
-  minY: -2
-  maxY: 2
-  minX: -1
-  maxX: 1
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyTeleport
+  health: 1
+  teleportInterval: 2
+  teleportRadius: 3

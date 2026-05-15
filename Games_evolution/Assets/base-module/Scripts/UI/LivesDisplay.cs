@@ -42,7 +42,7 @@ public class LivesDisplay : MonoBehaviour
 
     void GameOver() 
     {
-        GameOverManager gm = FindObjectOfType<GameOverManager>();
+        GameManager gm = FindObjectOfType<GameManager>();
         if (gm != null) gm.ShowGameOver();
     }
 }

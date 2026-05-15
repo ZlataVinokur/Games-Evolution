@@ -1,18 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance{ get; private set; }
+    public static GameManager Instance { get; private set; }
 
+    [Header("UI Panels")]
+    public GameObject gameOverPanel;
+    public GameObject pausePanel;
+    public GameObject winPanel;
+
+    [Header("Buttons")]
+    public Button gameOverRestartButton;
+    public Button gameOverMenuButton;
+    public Button pauseContinueButton;
+    public Button pauseRestartButton;
+    public Button pauseMenuButton;
+    public Button winNextButton;
+
+    private bool isPaused = false;
+    private bool isGameOver = false;
+    private bool isWin = false;
+
+    // Ваши старые поля (сохраните их из вашего файла!)
     public int totalScore;
     public bool[] levelsCompleted;
     private int currentLevelScore = 0;
     private int totalBricksInCurrentLevel = 0;
     private int destroyedBricksCount = 0;
-
-    [SerializeField] private int menuSceneName = 0; // ����� ���� 
+    [SerializeField] private int menuSceneName = 0;
 
     void Awake()
     {
@@ -20,14 +38,178 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            LoadGame();
+            LoadGame(); // ваш старый метод LoadGame
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
     }
 
+    void Start()
+    {
+        // Подписываемся на загрузку сцен, чтобы перепривязывать UI
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        FindAndBindUI();
+        HideAllPanels();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!isGameOver && !isWin)  // пауза только если не Game Over и не Win
+            {
+                TogglePause();
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Перепривязываем UI при загрузке любой сцены
+        FindAndBindUI();
+        HideAllPanels();
+        isPaused = false;
+        isGameOver = false;
+        isWin = false;
+        Time.timeScale = 1f;
+    }
+
+    private void FindAndBindUI()
+    {
+        // Ищем Canvas (можно задать тег "GameCanvas" или искать первый)
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas == null)
+        {
+            Debug.LogWarning("Canvas не найден в сцене! UI панели не будут работать.");
+            return;
+        }
+
+        // Если панели не назначены в инспекторе, ищем по имени в Canvas
+        if (gameOverPanel == null) gameOverPanel = FindChildByName(canvas.transform, "GameOverPanel");
+        if (pausePanel == null) pausePanel = FindChildByName(canvas.transform, "PausePanel");
+        if (winPanel == null) winPanel = FindChildByName(canvas.transform, "WinPanel");
+
+        // Ищем кнопки внутри панелей
+        if (gameOverPanel != null)
+        {
+            if (gameOverRestartButton == null) gameOverRestartButton = FindButtonInPanel(gameOverPanel, "RestartButton");
+            if (gameOverMenuButton == null) gameOverMenuButton = FindButtonInPanel(gameOverPanel, "MenuButton");
+        }
+        if (pausePanel != null)
+        {
+            if (pauseContinueButton == null) pauseContinueButton = FindButtonInPanel(pausePanel, "ContinueButton");
+            if (pauseRestartButton == null) pauseRestartButton = FindButtonInPanel(pausePanel, "RestartButton");
+            if (pauseMenuButton == null) pauseMenuButton = FindButtonInPanel(pausePanel, "MenuButton");
+        }
+        if (winPanel != null)
+        {
+            if (winNextButton == null) winNextButton = FindButtonInPanel(winPanel, "NextButton");
+        }
+
+        // Подписываем кнопки (удаляем старые подписки, чтобы не было дублей)
+        if (gameOverRestartButton != null) { gameOverRestartButton.onClick.RemoveAllListeners(); gameOverRestartButton.onClick.AddListener(RestartCurrentLevel); }
+        if (gameOverMenuButton != null) { gameOverMenuButton.onClick.RemoveAllListeners(); gameOverMenuButton.onClick.AddListener(GoToMainMenu); }
+        if (pauseContinueButton != null) { pauseContinueButton.onClick.RemoveAllListeners(); pauseContinueButton.onClick.AddListener(TogglePause); }
+        if (pauseRestartButton != null) { pauseRestartButton.onClick.RemoveAllListeners(); pauseRestartButton.onClick.AddListener(RestartCurrentLevel); }
+        if (pauseMenuButton != null) { pauseMenuButton.onClick.RemoveAllListeners(); pauseMenuButton.onClick.AddListener(GoToMainMenu); }
+        if (winNextButton != null) { winNextButton.onClick.RemoveAllListeners(); winNextButton.onClick.AddListener(LoadNextLevel); }
+    }
+
+    private GameObject FindChildByName(Transform parent, string name)
+    {
+        Transform t = parent.Find(name);
+        if (t != null) return t.gameObject;
+        // Рекурсивный поиск, если не нашли прямого потомка
+        foreach (Transform child in parent.GetComponentsInChildren<Transform>(true))
+            if (child.name == name) return child.gameObject;
+        return null;
+    }
+
+    private Button FindButtonInPanel(GameObject panel, string buttonName)
+    {
+        Transform btn = panel.transform.Find(buttonName);
+        return btn != null ? btn.GetComponent<Button>() : null;
+    }
+
+    private void HideAllPanels()
+    {
+        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        if (pausePanel != null) pausePanel.SetActive(false);
+        if (winPanel != null) winPanel.SetActive(false);
+    }
+
+    // ------------------- Публичные методы для вызова из уровней -------------------
+    public void ShowGameOver()
+    {
+        isGameOver = true;
+        isPaused = false;
+        Time.timeScale = 0f;
+        if (gameOverPanel != null) gameOverPanel.SetActive(true);
+        else Debug.LogError("GameOverPanel не найден!");
+        if (pausePanel != null) pausePanel.SetActive(false);
+        if (winPanel != null) winPanel.SetActive(false);
+    }
+
+    public void ShowWin()
+    {
+        isWin = true;
+        isPaused = false;
+        Time.timeScale = 0f;
+        if (winPanel != null) winPanel.SetActive(true);
+        else Debug.LogError("WinPanel не найден!");
+        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        if (pausePanel != null) pausePanel.SetActive(false);
+    }
+
+    public void TogglePause()
+    {
+        if (isGameOver || isWin) return;
+        isPaused = !isPaused;
+        Time.timeScale = isPaused ? 0f : 1f;
+        if (pausePanel != null) pausePanel.SetActive(isPaused);
+    }
+
+    public void RestartCurrentLevel()
+    {
+        isPaused = false;
+        isGameOver = false;
+        isWin = false;
+        Time.timeScale = 1f;
+        HideAllPanels();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void GoToMainMenu()
+    {
+        isPaused = false;
+        isGameOver = false;
+        isWin = false;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(menuSceneName);
+    }
+
+    public void LoadNextLevel()
+    {
+        isPaused = false;
+        isGameOver = false;
+        isWin = false;
+        Time.timeScale = 1f;
+        int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextIndex < SceneManager.sceneCountInBuildSettings)
+            SceneManager.LoadScene(nextIndex);
+        else
+            Debug.Log("Игра пройдена! Все уровни завершены.");
+    }
+
+    // ==================== СТАРЫЕ МЕТОДЫ (без изменений) ====================
     public void CompleteLevel(int levelIndex, int score)
     {
         if (!levelsCompleted[levelIndex])
@@ -43,6 +225,7 @@ public class GameManager : MonoBehaviour
         if (levelIndex == 0) return true;
         return levelsCompleted[levelIndex - 1];
     }
+
     public void AddScore(int points)
     {
         currentLevelScore += points;
@@ -50,6 +233,7 @@ public class GameManager : MonoBehaviour
         SaveGame();
         Debug.Log($"Добавлено {points} очков. Всего: {totalScore}, за уровень: {currentLevelScore}");
     }
+
     public void ResetCurrentLevelScore()
     {
         totalScore -= currentLevelScore;
@@ -62,83 +246,50 @@ public class GameManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("TotalScore", totalScore);
         for (int i = 0; i < levelsCompleted.Length; i++)
-        {
             PlayerPrefs.SetInt("Level_" + i, levelsCompleted[i] ? 1 : 0);
-        }
         PlayerPrefs.Save();
-        Debug.Log("���� ���������. ����: " + totalScore);
+        Debug.Log("Игра сохранена. Очки: " + totalScore);
     }
 
     public void LoadGame()
     {
         totalScore = PlayerPrefs.GetInt("TotalScore", 0);
-
-        // ���� ������ ��� �� ���������������, ������� ���
-        if (levelsCompleted == null)
-        {
-            // ���� � ��� 4 ������, ����� �������
-            levelsCompleted = new bool[4];
-        }
-
+        if (levelsCompleted == null) levelsCompleted = new bool[4];
         for (int i = 0; i < levelsCompleted.Length; i++)
-        {
             levelsCompleted[i] = PlayerPrefs.GetInt("Level_" + i, 0) == 1;
-        }
-
-        Debug.Log("���� ���������. ����: " + totalScore);
+        Debug.Log("Игра загружена. Очки: " + totalScore);
     }
 
-    // ��� ������������ � ����� ���������
     public void ResetGame()
     {
         totalScore = 0;
-        for (int i = 0; i < levelsCompleted.Length; i++)
-        {
-            levelsCompleted[i] = false;
-        }
+        for (int i = 0; i < levelsCompleted.Length; i++) levelsCompleted[i] = false;
         SaveGame();
-        Debug.Log("������� �������");
-    }
-    public void RegisterBrick()
-    {
-        totalBricksInCurrentLevel++;
+        Debug.Log("Прогресс сброшен");
     }
 
+    public void RegisterBrick() { totalBricksInCurrentLevel++; }
     public void BrickDestroyed()
     {
         destroyedBricksCount++;
-
-        // ���������, ��� �� ������� ���������
-        if (destroyedBricksCount >= totalBricksInCurrentLevel)
-        {
-            Debug.Log("��� ������� ���������! �������� LevelComplete()");
-            LevelComplete();
-        }
+        if (destroyedBricksCount >= totalBricksInCurrentLevel) LevelComplete();
     }
-
     public void ResetLevelBrickCounter()
     {
         totalBricksInCurrentLevel = 0;
         destroyedBricksCount = 0;
     }
-
     private void LevelComplete()
     {
-
         if (levelsCompleted != null && levelsCompleted.Length > 0)
         {
             levelsCompleted[0] = true;
             SaveGame();
         }
-
-        GameOverManager gm = FindObjectOfType<GameOverManager>();
-        if (gm != null)
-            gm.ShowLevelComplete();
-        else
-            Debug.LogError("GameOverManager not found on scene!");
+        GameManager gm = FindObjectOfType<GameManager>();
+        if (gm != null) gm.ShowWin();
+        else Debug.LogError("GameOverManager not found on scene!");
     }
-
-
 
     public List<string> unlockedLevels = new List<string>();
     public Dictionary<string, bool> unlockedArticles = new Dictionary<string, bool>();
@@ -146,37 +297,15 @@ public class GameManager : MonoBehaviour
 
     public void CompleteLevel(string levelId)
     {
-        if (!unlockedLevels.Contains(levelId))
-            unlockedLevels.Add(levelId);
+        if (!unlockedLevels.Contains(levelId)) unlockedLevels.Add(levelId);
     }
-
     public void UnlockArticle(string articleId)
     {
-        if (!unlockedArticles.ContainsKey(articleId))
-        {
-            unlockedArticles[articleId] = true;
-        }
+        if (!unlockedArticles.ContainsKey(articleId)) unlockedArticles[articleId] = true;
     }
-
     public void SetFlag(string key, bool value) => flags[key] = value;
     public bool GetFlag(string key) => flags.ContainsKey(key) && flags[key];
 
-
-    void Update()
-    {
-        // ����� � ���� �� ������� Escape
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            GoToMenu();
-        }
-    }
-    public void GoToMenu()
-    {
-        Debug.Log("����� � ���� �� Esc");
-        SaveGame();               // ��������� �������� ����� ������
-        Time.timeScale = 1f;     // ��������, ��� ����� �� ���������� (���� ���� �����)
-        SceneManager.LoadScene(menuSceneName);
-    }
+    // Этот метод вызывается из меню (оставить для совместимости)
+    public void GoToMenu() => GoToMainMenu();
 }
-
-

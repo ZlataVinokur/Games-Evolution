@@ -90,10 +90,10 @@ public class Level2Manager : MonoBehaviour
             ScoreManager.Instance.AddScore(levelBonus);
     
         Debug.Log("Level 2 completed! Score added: " + levelBonus);
-    
-    // Показываем панель завершения
-        GameOverManager gameOverManager = FindObjectOfType<GameOverManager>();
-        if (gameOverManager != null)
-             gameOverManager.ShowLevelComplete();
+
+        // Показываем панель завершения
+        GameManager GameManager = FindObjectOfType<GameManager>();
+        if (GameManager != null)
+            GameManager.ShowWin();
     }
 }

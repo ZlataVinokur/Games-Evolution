@@ -14,7 +14,7 @@ public class TetrisGameManager : MonoBehaviour
     public Animator pixelAnimator;
     public Image flashImage;
     public bool IsGameOver { get; private set; }
-    public GameOverManager gameOverManager; 
+    public GameManager GameManager; 
     private int currentScore = 0;
     private int targetRows = 3;
     private int rowsClearedTotal = 0;
@@ -131,8 +131,8 @@ public class TetrisGameManager : MonoBehaviour
     {
         if (IsGameOver) return;
         IsGameOver = true;
-        if (gameOverManager != null)
-            gameOverManager.ShowGameOver();
+        if (GameManager != null)
+            GameManager.ShowGameOver();
         else if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
     }

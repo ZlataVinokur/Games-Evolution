@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2663580149068731786}
   - component: {fileID: 5401298807198909442}
-  m_Layer: 23
+  m_Layer: 0
   m_Name: PlayerWeapon
-  m_TagString: Pickup
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
