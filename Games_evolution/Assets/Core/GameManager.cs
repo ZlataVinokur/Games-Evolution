@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     private bool isPaused = false;
     private bool isGameOver = false;
     private bool isWin = false;
+    private bool wasCursorLocked;
 
     // Ваши старые поля (сохраните их из вашего файла!)
     public int totalScore;
@@ -169,13 +170,34 @@ public class GameManager : MonoBehaviour
         if (pausePanel != null) pausePanel.SetActive(false);
     }
 
+    public void LoadQuizForCurrentModule(int completedModuleSceneIndex)
+    {
+        Time.timeScale = 1f;
+        // Разблокируем курсор перед загрузкой квиза
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // Сохраняем индекс модуля перед загрузкой сцены квиза
+        PlayerPrefs.SetInt("CompletedModuleIndex", completedModuleSceneIndex);
+        PlayerPrefs.Save();
+
+        // Загружаем сцену квиза
+        SceneManager.LoadScene("Quiz");
+    }
+
     public void TogglePause()
     {
         if (isGameOver || isWin) return;
+
+        if (!isPaused) // перед паузой
+        {
+            wasCursorLocked = (Cursor.lockState == CursorLockMode.Locked);
+        }
+
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0f : 1f;
 
-        if (Cursor.lockState == CursorLockMode.Locked)
+        if (wasCursorLocked)
         {
             Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = isPaused;

@@ -12,13 +12,15 @@ public class Ghost : MonoBehaviour
     private Color originalColor;
     private float changeDirectionTimer;
     private float changeDirectionInterval = 1f;
-    
+    public Vector2 startPosition;
     // Для анимации пульсации
     private float bobSpeed = 2f;
     private float bobHeight = 0.05f; // изменение масштаба
 
     void Start()
     {
+        if (startPosition == Vector2.zero)
+            startPosition = transform.position;
         targetPosition = transform.position;
         direction = GetRandomDirection();
         changeDirectionTimer = changeDirectionInterval;
@@ -147,7 +149,7 @@ public class Ghost : MonoBehaviour
 
     public void Eaten()
     {
-        transform.position = Vector2.zero;
+        transform.position = startPosition;
         
         if (GameController.Instance != null)
             GameController.Instance.score += 200;
@@ -159,7 +161,7 @@ public class Ghost : MonoBehaviour
     void Respawn()
     {
         gameObject.SetActive(true);
-        transform.position = Vector2.zero;
+        transform.position = startPosition;
         direction = GetRandomDirection();
         targetPosition = (Vector2)transform.position + direction;
         

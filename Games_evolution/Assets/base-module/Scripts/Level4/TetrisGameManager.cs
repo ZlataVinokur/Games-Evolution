@@ -122,10 +122,7 @@ public class TetrisGameManager : MonoBehaviour
         if (GameManager.Instance != null)
             GameManager.Instance.CompleteLevel(3, currentScore);
 
-        if (quizManager != null)
-            quizManager.ShowIntroPanel();
-        else
-            Debug.LogWarning("QuizManager not found!");
+        GameManager.Instance.LoadQuizForCurrentModule(5);
     }
     public void GameOver()
     {

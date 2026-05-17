@@ -52,8 +52,13 @@ public class GameController : MonoBehaviour
         
         isPowerUpMode = false;
         UpdateUI();
+        gameStarted = false;
+        Invoke("EnableGame", 0.1f);
     }
-    
+    void EnableGame()
+    {
+        gameStarted = true;
+    }
     void Update()
     {
         if (isPowerUpMode)
@@ -115,6 +120,7 @@ public class GameController : MonoBehaviour
     
     void WinLevel()
     {
+        if (!gameStarted) return;
         GameManager manager = FindObjectOfType<GameManager>();
         if (manager != null) manager.ShowWin();
     // Можно отключить управление игроком или остановить время
