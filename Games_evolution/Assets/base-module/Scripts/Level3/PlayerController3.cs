@@ -20,7 +20,7 @@ public class PlayerController3 : MonoBehaviour
     private bool isInvincible = false;
     private float invincibleTimer = 0f;
     private bool controlsEnabled = true;
-
+    private bool isReady = false;
     public void SetControlsEnabled(bool enabled)
     {
         controlsEnabled = enabled;
@@ -35,8 +35,13 @@ public class PlayerController3 : MonoBehaviour
         // Уведомляем UI о начальном количестве жизней
         if (GameController.Instance != null)
             GameController.Instance.UpdateLives(lives);
+        StartCoroutine(SetReady());
     }
-
+    IEnumerator SetReady()
+    {
+        yield return new WaitForSeconds(0.2f);
+        isReady = true;
+    }
     void Update()
     {
         if (!controlsEnabled) return;
@@ -143,6 +148,7 @@ public class PlayerController3 : MonoBehaviour
 
     void LoseLife()
     {
+        if (!isReady) return;
         if (isInvincible) return; 
 
         lives--;

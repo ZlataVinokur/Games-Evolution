@@ -11,7 +11,7 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private Button restartButton;
     [SerializeField] private Button mainMenuButton;
     [SerializeField] private Button nextLevelButton;
-
+    private bool isLevelCompleted = false;
     private void Start()
     {
         // Подписываем кнопки
@@ -31,6 +31,7 @@ public class GameOverManager : MonoBehaviour
 
     public void ShowGameOver()
     {
+        if (isLevelCompleted) return;
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
         // Остановить игру? Если нужно, можно Time.timeScale = 0;
@@ -38,6 +39,7 @@ public class GameOverManager : MonoBehaviour
 
     public void ShowLevelComplete()
     {
+        isLevelCompleted = true;
         if (levelCompletePanel != null)
             levelCompletePanel.SetActive(true);
     }

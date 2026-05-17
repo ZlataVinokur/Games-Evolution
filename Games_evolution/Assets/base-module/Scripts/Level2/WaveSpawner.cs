@@ -101,7 +101,6 @@ public class WaveSpawner : MonoBehaviour
         }
         
         isSpawning = false;
-        Debug.Log($"Wave {currentWaveIndex + 1} spawning completed");
     }
     
     public void OnEnemyDestroyed()

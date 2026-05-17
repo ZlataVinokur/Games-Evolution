@@ -12,8 +12,9 @@ public class BallController : MonoBehaviour
     private float originalSpeed;
     private Coroutine speedCoroutine;
     
-    private int wallHitCount = 0;
-    private const int maxWallHitsWithoutInteraction = 4;
+    // Таймер для защиты от зацикливания
+    private float timeSinceLastUsefulHit = 0f;
+    private const float maxIdleTime = 3f; // секунд без касания платформы/кирпича
     
     void Start()
     {
@@ -37,22 +38,37 @@ public class BallController : MonoBehaviour
     
     void Update()
     {
-        // Запуск по пробелу
         if (!isLaunched && Input.GetKeyDown(KeyCode.Space))
         {
             LaunchBall();
         }
         
-        // Если не запущен, следуем за платформой
         if (!isLaunched && paddle != null)
         {
             transform.position = new Vector3(paddle.position.x, paddle.position.y + 0.5f, 0);
         }
         
-        // Ограничение максимальной скорости
         if (isLaunched && rb.linearVelocity.magnitude > maxSpeed)
         {
             rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+        }
+        
+        // Защита от зацикливания: если мяч долго не касался платформы/кирпича
+        if (isLaunched)
+        {
+            timeSinceLastUsefulHit += Time.deltaTime;
+            if (timeSinceLastUsefulHit >= maxIdleTime)
+            {
+                // Принудительно изменяем траекторию
+                Vector2 vel = rb.linearVelocity;
+                // Добавляем случайное отклонение по вертикали
+                vel.y += Random.Range(1f, 2f);
+                // Также можно немного изменить по горизонтали
+                vel.x += Random.Range(-0.5f, 0.5f);
+                rb.linearVelocity = vel.normalized * vel.magnitude;
+                timeSinceLastUsefulHit = 0f;
+                Debug.Log("Принудительная коррекция зацикленного полёта мяча");
+            }
         }
     }
     
@@ -63,13 +79,19 @@ public class BallController : MonoBehaviour
         float randomX = Random.Range(-0.5f, 0.5f);
         Vector2 direction = new Vector2(randomX, 1f).normalized;
         rb.linearVelocity = direction * launchSpeed;
+        timeSinceLastUsefulHit = 0f;
     }
     
     void OnCollisionEnter2D(Collision2D collision)
     {
+        // Сброс таймера при полезных столкновениях
+        if (collision.gameObject.CompareTag("Paddle") || collision.gameObject.CompareTag("Brick"))
+        {
+            timeSinceLastUsefulHit = 0f;
+        }
+        
         if (collision.gameObject.CompareTag("Paddle"))
         {
-            wallHitCount = 0;
             float hitPoint = transform.position.x - collision.transform.position.x;
             float paddleWidth = collision.collider.bounds.size.x;
             float normalizedHit = hitPoint / (paddleWidth / 2f);
@@ -80,30 +102,16 @@ public class BallController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Brick"))
         {
-            wallHitCount = 0;
             collision.gameObject.GetComponent<Brick>()?.Hit();
         }
-        else if (collision.gameObject.CompareTag("Wall"))
-        {
-            wallHitCount++;
-            if (wallHitCount >= maxWallHitsWithoutInteraction)
-            {
-                Vector2 vel = rb.linearVelocity;
-                if (Mathf.Abs(vel.y) < 0.5f)
-                    vel.y = Random.Range(0.5f, 1f);
-                else
-                    vel.y += Random.Range(-0.3f, 0.3f);
-                rb.linearVelocity = vel.normalized * vel.magnitude;
-                wallHitCount = 2;
-                Debug.Log("Коррекция зацикленного полёта мяча");
-            }
-        }
+        // Стены не сбрасывают таймер (они не считаются полезными)
     }
     
     public void ResetBall()
     {
         isLaunched = false;
         rb.linearVelocity = Vector2.zero;
+        timeSinceLastUsefulHit = 0f;
         GameObject paddleObject = GameObject.FindGameObjectWithTag("Paddle");
         if (paddleObject != null)
         {
