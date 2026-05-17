@@ -4,13 +4,19 @@ using System.Collections.Generic;
 
 public class InteractableSwitch : MonoBehaviour
 {
+    [Header("Свет")]
+    [SerializeField] private int lightmapSetIndex = -1;
     [SerializeField] private List<Light> lightsToToggle;
+
+    [Header("Взаимодействие")]
     [SerializeField] private float interactionDistance = 3f;
 
     private Transform playerCamera;
     private InputSystem3D input;
+    private LightmapSwitcher lightmapSwitcher;
     private PickupableObject currentHeldObject;
     private bool isHolding = false;
+    private bool isActive = false;
 
     private void Awake()
     {
@@ -20,6 +26,12 @@ public class InteractableSwitch : MonoBehaviour
     private void Start()
     {
         playerCamera = Camera.main.transform;
+        lightmapSwitcher = FindObjectOfType<LightmapSwitcher>();
+
+        if (lightmapSwitcher == null)
+        {
+            Debug.LogWarning(" LightmapSwitcher не найден на сцене!");
+        }
     }
 
     private void OnEnable()
@@ -43,6 +55,7 @@ public class InteractableSwitch : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionDistance))
         {
+            // Проверяем, можно ли поднять предмет
             PickupableObject pickupable = hit.transform.GetComponent<PickupableObject>();
             if (pickupable != null && currentHeldObject == null)
             {
@@ -57,9 +70,10 @@ public class InteractableSwitch : MonoBehaviour
                 return;
             }
 
+            // Если это выключатель
             if (hit.transform == transform)
             {
-                ToggleLights();
+                Toggle();
             }
         }
     }
@@ -69,20 +83,29 @@ public class InteractableSwitch : MonoBehaviour
         if (currentHeldObject != null)
         {
             currentHeldObject.Drop();
-
-            
-
             currentHeldObject = null;
             isHolding = false;
         }
     }
 
-    private void ToggleLights()
+    private void Toggle()
     {
+        isActive = !isActive;
+
+        // Переключаем lightmap
+        if (lightmapSwitcher != null && lightmapSetIndex >= 0)
+        {
+            if (isActive)
+                lightmapSwitcher.LoadLightmapSet(lightmapSetIndex);
+            else
+                lightmapSwitcher.LoadLightmapSet(0);
+        }
+
+        // Переключаем дополнительные realtime источники
         foreach (Light light in lightsToToggle)
         {
             if (light != null)
-                light.enabled = !light.enabled;
+                light.enabled = isActive;
         }
     }
 
@@ -95,6 +118,7 @@ public class InteractableSwitch : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionDistance))
         {
+            // Показываем подсказку для предметов
             PickupableObject pickupable = hit.transform.GetComponent<PickupableObject>();
             if (pickupable != null && currentHeldObject == null)
             {
@@ -103,6 +127,7 @@ public class InteractableSwitch : MonoBehaviour
                 return;
             }
 
+            // Показываем подсказку для выключателя
             if (hit.transform == transform && currentHeldObject == null)
             {
                 GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 20, 200, 30),
@@ -110,6 +135,7 @@ public class InteractableSwitch : MonoBehaviour
             }
         }
 
+        // Показываем подсказку, если держим предмет
         if (currentHeldObject != null)
         {
             GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 20, 200, 30),
