@@ -174,6 +174,13 @@ public class GameManager : MonoBehaviour
         if (isGameOver || isWin) return;
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0f : 1f;
+
+        if (Cursor.lockState == CursorLockMode.Locked)
+        {
+            Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = isPaused;
+        }
+
         if (pausePanel != null) pausePanel.SetActive(isPaused);
     }
 
