@@ -4270,7 +4270,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 103388b32071791498e6224124f0da02, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.307
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -8805,50 +8805,6 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 529254504704175905, guid: 13c3b3fb45b47794bbe41faab5ee2671, type: 3}
   m_PrefabInstance: {fileID: 703350103}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &909379669
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 909379671}
-  - component: {fileID: 909379672}
-  m_Layer: 0
-  m_Name: EncyclopediaManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &909379671
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 909379669}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -85.27674, y: 0, z: 82.69881}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &909379672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 909379669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afca21678ab54684e920fd4a87bd8505, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaManager
 --- !u!1001 &911255387
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20259,50 +20215,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c3e3f4479824bceb3d0cece5ec5697f, type: 3}
---- !u!1 &1983967137
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1983967139}
-  - component: {fileID: 1983967138}
-  m_Layer: 0
-  m_Name: DialogueSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1983967138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1983967137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fee9e601cedf49749962311e8734527f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DialogueSystem
---- !u!4 &1983967139
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1983967137}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -85.27674, y: 0, z: 82.69881}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1987639742
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21891,12 +21803,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1604913375}
     - target: {fileID: 1141131177215105762, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
+      propertyPath: groundMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1141131177215105762, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
       propertyPath: rotationSmoothTime
       value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1141131177215105762, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
       propertyPath: interactableMask.m_Bits
-      value: 128
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1741862099547621192, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
       propertyPath: m_Name
@@ -21984,7 +21900,5 @@ SceneRoots:
   - {fileID: 1619403512}
   - {fileID: 555967698}
   - {fileID: 1496761688}
-  - {fileID: 909379671}
-  - {fileID: 1983967139}
   - {fileID: 2080559493}
   - {fileID: 234658356}
