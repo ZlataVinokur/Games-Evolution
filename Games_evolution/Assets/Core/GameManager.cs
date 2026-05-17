@@ -337,4 +337,15 @@ public class GameManager : MonoBehaviour
 
     // Этот метод вызывается из меню (оставить для совместимости)
     public void GoToMenu() => GoToMainMenu();
+
+
+    // 2 module RPG prefs saving
+
+    private bool[] rpgMeters = new bool[3]; // сохранять в PlayerPrefs или просто в памяти, т.к. сцена перезапускается внутри сессии
+
+    public void SetRPGMeter(int index, bool value)
+    {
+        rpgMeters[index] = value;
+    }
+    public bool[] GetRPGMeters() => rpgMeters;
 }

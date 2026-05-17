@@ -4,6 +4,7 @@ using System.Collections;
 public class BreakablePlatform : MonoBehaviour
 {
     private bool isBroken = false;
+    private bool playerWasOn = false;  // игрок сто€л на платформе
     private SpriteRenderer sr;
     private Collider2D col;
 
@@ -17,7 +18,18 @@ public class BreakablePlatform : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && !isBroken)
         {
+            // »грок коснулс€ платформы Ц помечаем, что он на ней
+            playerWasOn = true;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && playerWasOn && !isBroken)
+        {
+            // »грок покинул платформу Ц запускаем разрушение
             StartCoroutine(BreakAndRespawn());
+            playerWasOn = false; // сброс, чтобы повторно не сломать
         }
     }
 
@@ -32,5 +44,6 @@ public class BreakablePlatform : MonoBehaviour
         if (sr != null) sr.enabled = true;
         if (col != null) col.enabled = true;
         isBroken = false;
+        playerWasOn = false; // на вс€кий случай
     }
 }

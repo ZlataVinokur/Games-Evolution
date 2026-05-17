@@ -1,8 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.UI;
 
 public class TetrisGameManager : MonoBehaviour
 {
@@ -10,25 +10,25 @@ public class TetrisGameManager : MonoBehaviour
     public TetrisSpawner spawner;
     public TMP_Text scoreText;
     public TMP_Text linesText;
-    public GameObject gameOverPanel;
     public Animator pixelAnimator;
     public Image flashImage;
+
     public bool IsGameOver { get; private set; }
-    public GameManager GameManager; 
+
     private int currentScore = 0;
     private int targetRows = 3;
     private int rowsClearedTotal = 0;
-
     private float thinkCooldown = 0f;
     private float thinkInterval = 12f;
     private bool controlsEnabled = true;
     private bool gameStarted = false;
-    public QuizManager quizManager;
+
+    // Индекс этого уровня в сценах (0,1,2,3...). По умолчанию 3 для Level4.
+    [SerializeField] private int levelIndex = 3;
+
     private void Start()
     {
         IsGameOver = false;
-        if (gameOverPanel != null) gameOverPanel.SetActive(false);
-
         if (grid != null)
         {
             grid.OnRowCleared += OnRowClearedHandler;
@@ -39,7 +39,6 @@ public class TetrisGameManager : MonoBehaviour
         thinkCooldown = thinkInterval;
         if (pixelAnimator != null) pixelAnimator.Rebind();
 
-        // Подготовка игры (без запуска геймплея)
         PrepareGame();
     }
 
@@ -50,38 +49,15 @@ public class TetrisGameManager : MonoBehaviour
         IsGameOver = false;
         if (grid != null) grid.ResetGrid();
         UpdateUI();
-        // Не спавним фигуру и не устанавливаем gameStarted = true – ждём вызова StartGame()
     }
 
-    // Вызывается из Level4Manager после обучения
     public void StartGame()
     {
         if (gameStarted) return;
         gameStarted = true;
-        controlsEnabled = true;   // разблокируем управление (фактически его разблокирует Level4Manager)
+        controlsEnabled = true;
         if (spawner != null) spawner.EnableSpawning();
         thinkCooldown = thinkInterval;
-    }
-
-    private void Update()
-    {
-        if (!controlsEnabled) return;
-        if (!gameStarted) return;
-
-        if (!IsGameOver && pixelAnimator != null)
-        {
-            thinkCooldown -= Time.deltaTime;
-            if (thinkCooldown <= 0f)
-            {
-                pixelAnimator.SetTrigger("Think");
-                thinkCooldown = thinkInterval + Random.Range(-2f, 3f);
-            }
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            BackToMenu();
-        }
     }
 
     public void SetControlsEnabled(bool enabled)
@@ -91,11 +67,36 @@ public class TetrisGameManager : MonoBehaviour
         if (piece != null) piece.SetControlsEnabled(enabled);
     }
 
+    private void Update()
+    {
+        if (!controlsEnabled || !gameStarted || IsGameOver) return;
+
+        // Анимация "думает"
+        if (pixelAnimator != null)
+        {
+            thinkCooldown -= Time.deltaTime;
+            if (thinkCooldown <= 0f)
+            {
+                pixelAnimator.SetTrigger("Think");
+                thinkCooldown = thinkInterval + Random.Range(-2f, 3f);
+            }
+        }
+
+        // Обработка паузы через GameManager (Escape)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (GameManager.Instance != null)
+                GameManager.Instance.TogglePause();
+            else
+                Debug.LogWarning("GameManager.Instance не найден, пауза недоступна");
+        }
+    }
+
     private void OnRowClearedHandler(int points)
     {
         StartCoroutine(ShakeCamera(0.1f, 0.1f));
         StartCoroutine(FlashNow());
-        
+
         if (IsGameOver) return;
 
         currentScore += points;
@@ -105,6 +106,7 @@ public class TetrisGameManager : MonoBehaviour
         if (pixelAnimator != null)
             pixelAnimator.SetTrigger("Happy");
 
+        // Увеличение скорости каждые 5 рядов
         if (rowsClearedTotal % 5 == 1)
         {
             TetrisPiece piece = FindObjectOfType<TetrisPiece>();
@@ -114,34 +116,36 @@ public class TetrisGameManager : MonoBehaviour
         if (rowsClearedTotal >= targetRows)
             WinLevel();
     }
-     private void WinLevel()
+
+    private void WinLevel()
     {
         if (IsGameOver) return;
         IsGameOver = true;
-        Debug.Log($"Уровень пройден! Очищено рядов: {rowsClearedTotal}");
-        if (GameManager.Instance != null)
-            GameManager.Instance.CompleteLevel(3, currentScore);
+        Debug.Log($"Уровень пройден! Очищено рядов: {rowsClearedTotal}, очки: {currentScore}");
 
-        GameManager.Instance.LoadQuizForCurrentModule(5);
+        if (GameManager.Instance != null)
+        {
+            // Завершаем уровень через GameManager
+            GameManager.Instance.CompleteLevel(levelIndex, currentScore);
+            // Загружаем квиз для модуля (5-й модуль или индекс сцены квиза)
+            GameManager.Instance.LoadQuizForCurrentModule(1);
+        }
+        else
+        {
+            Debug.LogError("GameManager.Instance отсутствует! Невозможно завершить уровень.");
+        }
     }
+
     public void GameOver()
     {
         if (IsGameOver) return;
         IsGameOver = true;
-        if (GameManager != null)
-            GameManager.ShowGameOver();
-        else if (gameOverPanel != null)
-            gameOverPanel.SetActive(true);
-    }
+        Debug.Log("Game Over в тетрисе");
 
-    public void RestartLevel()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    private void BackToMenu()
-    {
-        SceneManager.LoadScene("0_Menu");
+        if (GameManager.Instance != null)
+            GameManager.Instance.ShowGameOver();
+        else
+            Debug.LogError("GameManager.Instance не найден для показа GameOver");
     }
 
     private void UpdateUI()
@@ -161,6 +165,7 @@ public class TetrisGameManager : MonoBehaviour
 
     private IEnumerator FlashNow()
     {
+        if (flashImage == null) yield break;
         flashImage.color = new Color(1f, 1f, 1f, 0.15f);
         yield return new WaitForSeconds(0.07f);
         flashImage.color = new Color(1f, 1f, 1f, 0f);

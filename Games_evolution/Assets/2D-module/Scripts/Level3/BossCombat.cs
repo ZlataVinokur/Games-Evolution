@@ -9,8 +9,7 @@ public class BossCombat : MonoBehaviour
     public float moveSpeed = 2f;
     private Transform player;
     private bool isDead = false;
-
-    public GameObject deathPortal; // портал для завершения
+    public GameObject deathPortal;
 
     void Start()
     {
@@ -20,46 +19,42 @@ public class BossCombat : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return;
-        // Движение к игроку
+        if (isDead || player == null) return;
         Vector2 direction = (player.position - transform.position).normalized;
         transform.position += (Vector3)direction * moveSpeed * Time.deltaTime;
 
-        // Атака при касании
         if (Vector2.Distance(transform.position, player.position) < 1f && Time.time > lastAttackTime + attackCooldown)
         {
             lastAttackTime = Time.time;
-            player.GetComponent<PlayerHealth>().TakeDamage(10);
+            var playerController = player.GetComponent<IsometricPlayerController>();
+            if (playerController != null)
+                playerController.TakeDamage(10);
         }
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("PlayerProjectile") && !isDead) // предполагаем снаряды от игрока
+        if (col.gameObject.CompareTag("PlayerProjectile") && !isDead)
         {
-            int damage = 10;
-            if (RPGLevelManager.Instance.HasTamagotchiBuff())
-                damage += 5;
-            currentHealth -= damage;
-            UnifiedInfoSystem.Instance.ShowTimedMessage($"Босс получает {damage} урона! Осталось {currentHealth}", 0.5f);
-            if (currentHealth <= 0)
-            {
-                Die();
-            }
+            int damage = 10 + (RPGLevelManager.Instance.HasTamagotchiBuff() ? 5 : 0);
+            TakeDamage(damage);
         }
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        if (currentHealth <= 0) Die();
+        UnifiedInfoSystem.Instance?.ShowTimedMessage($"Босс получает {damage} урона! Осталось {currentHealth}", 0.5f);
+        if (currentHealth <= 0)
+            Die();
     }
 
     void Die()
     {
         isDead = true;
         Destroy(gameObject);
-        Instantiate(deathPortal, transform.position, Quaternion.identity);
+        if (deathPortal != null)
+            Instantiate(deathPortal, transform.position, Quaternion.identity);
         RPGLevelManager.Instance.OnBossDefeated();
     }
 }

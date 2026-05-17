@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class IsometricPlayerController : PlayerController_2
 {
@@ -9,23 +8,25 @@ public class IsometricPlayerController : PlayerController_2
     private Rigidbody2D rb;
     private Animator anim;
 
-    [Header("Grid and Bounds")]
-    public Grid grid;
-    public Tilemap wallsTilemap; // для проверки препятствий
-    private BoundsInt bounds;
+    [Header("Shooting")]
     public GameObject projectilePrefab;
     public Transform firePoint;
     public float projectileSpeed = 10f;
     public float fireRate = 0.5f;
     private float nextFireTime = 0f;
 
+    [Header("Health")]
+    public int maxHealth = 100;
+    private int currentHealth;
+    public GameObject[] heartIcons; // ссылки на иконки сердец (UI Image)
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (rb == null) Debug.LogError("Нет Rigidbody2D на игроке!");
         anim = GetComponent<Animator>();
-        if (grid == null) grid = FindObjectOfType<Grid>();
-        // Определяем границы тайловой карты (опционально)
+        currentHealth = maxHealth;
+        UpdateHealthUI();
     }
 
     public override void HandleInput()
@@ -37,7 +38,8 @@ public class IsometricPlayerController : PlayerController_2
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && Time.time >= nextFireTime)
+        HandleInput();
+        if (Input.GetKeyDown(KeyCode.F) && Time.time >= nextFireTime)
         {
             nextFireTime = Time.time + fireRate;
             Shoot();
@@ -46,52 +48,64 @@ public class IsometricPlayerController : PlayerController_2
 
     void Shoot()
     {
+        if (projectilePrefab == null || firePoint == null) return;
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
-        Vector2 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - firePoint.position;
-        direction.Normalize();
-        proj.GetComponent<Rigidbody2D>().linearVelocity = direction * projectileSpeed;
-        // Уничтожить снаряд через 2 секунды
+        Rigidbody2D rbProj = proj.GetComponent<Rigidbody2D>();
+        if (rbProj == null) { Debug.LogError("У снаряда нет Rigidbody2D!"); Destroy(proj); return; }
+
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos.z = 0;
+        Vector2 direction = (mouseWorldPos - firePoint.position).normalized;
+        rbProj.linearVelocity = direction * projectileSpeed;
+
         Destroy(proj, 2f);
     }
 
     public override void Move()
     {
+        if (rb == null) return;
         Vector3 newPos = transform.position + moveDirection * moveSpeed * Time.deltaTime;
-        // Проверка коллизии с тайлами (можно через Tilemap Collider, но Rigidbody2D уже будет работать)
-        // Для изометрии: перемещаем в мировых координатах, физика сама обработает коллизии.
         rb.MovePosition(newPos);
 
-        // Анимация: вычисляем направление (основные 8 направлений)
-        if (moveDirection != Vector3.zero)
+        if (anim != null)
         {
-            float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
-            string dir = GetDirectionFromAngle(angle);
-            anim.SetFloat("MoveX", moveDirection.x);
-            anim.SetFloat("MoveY", moveDirection.y);
-            anim.SetBool("IsMoving", true);
+            if (moveDirection != Vector3.zero)
+            {
+                anim.SetFloat("MoveX", moveDirection.x);
+                anim.SetFloat("MoveY", moveDirection.y);
+                anim.SetBool("IsMoving", true);
+            }
+            else
+                anim.SetBool("IsMoving", false);
         }
-        else
-        {
-            anim.SetBool("IsMoving", false);
-        }
-    }
-
-    private string GetDirectionFromAngle(float angle)
-    {
-        // Для изометрии направления: East = 0°, NorthEast = 45°, North = 90° и т.д.
-        if (angle >= -22.5f && angle < 22.5f) return "E";
-        if (angle >= 22.5f && angle < 67.5f) return "NE";
-        if (angle >= 67.5f && angle < 112.5f) return "N";
-        if (angle >= 112.5f && angle < 157.5f) return "NW";
-        if (angle >= -157.5f && angle < -112.5f) return "SW";
-        if (angle >= -112.5f && angle < -67.5f) return "S";
-        if (angle >= -67.5f && angle < -22.5f) return "SE";
-        return "W";
     }
 
     void FixedUpdate()
     {
-        HandleInput();
         Move();
+    }
+
+    // --- Health methods ---
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        UpdateHealthUI();
+        if (currentHealth <= 0)
+            Die();
+    }
+
+    void UpdateHealthUI()
+    {
+        int hearts = Mathf.CeilToInt((float)currentHealth / maxHealth * heartIcons.Length);
+        for (int i = 0; i < heartIcons.Length; i++)
+            heartIcons[i].SetActive(i < hearts);
+    }
+
+    void Die()
+    {
+        if (GameManager.Instance != null)
+            GameManager.Instance.ShowGameOver();
+        else
+            Debug.Log("Игрок умер");
     }
 }
