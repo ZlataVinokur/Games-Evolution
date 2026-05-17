@@ -21,6 +21,7 @@ TagManager:
   - Portal
   - HealthBonus
   - ShieldBonus
+  - PlayerProjectile
   layers:
   - Default
   - TransparentFX
