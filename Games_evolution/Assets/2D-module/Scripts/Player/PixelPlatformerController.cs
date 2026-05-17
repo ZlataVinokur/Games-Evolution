@@ -130,7 +130,8 @@ public class PixelPlatformerController : PlayerController_2
         // Активация портала
         if (!portalActive && enemiesKilled >= neededKills)
         {
-            ActivatePortal();
+            GameManager manager = FindObjectOfType<GameManager>();
+            if (manager != null) manager.ShowWin();
         }
     }
 

@@ -29,6 +29,7 @@ public class ExitPortal : Interactable
     System.Collections.IEnumerator LoadAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(nextSceneName);
+        GameManager manager = FindObjectOfType<GameManager>();
+        if (manager != null) manager.ShowWin();
     }
 }

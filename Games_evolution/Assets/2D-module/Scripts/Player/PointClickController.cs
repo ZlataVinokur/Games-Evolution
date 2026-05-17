@@ -28,15 +28,9 @@ public class PointClickController : PlayerController_2
             Interactable obj = (hit.collider != null) ? hit.collider.GetComponent<Interactable>() : null;
             if (obj != null)
                 obj.Inspect();
-        }
 
-        // Левая кнопка – сброс предмета при клике мимо всех Interactable
-        if (Input.GetMouseButtonDown(0))
-        {
             if (InventoryManager.Instance != null && InventoryManager.Instance.selectedItem != null)
             {
-                Vector2 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
                 if (hit.collider == null || hit.collider.GetComponent<Interactable>() == null)
                 {
                     InventoryManager.Instance.DeselectItem();
