@@ -8,60 +8,111 @@ using UnityEngine.SceneManagement;
 public class QuizManager : MonoBehaviour
 {
     [System.Serializable]
+    public class ModuleQuiz
+    {
+        public int moduleSceneIndex;
+        public List<QuizQuestion> questions;
+    }
+
+    [System.Serializable]
     public class QuizQuestion
     {
         public string questionText;
         public string[] answers = new string[3];
-        public int correctAnswerIndex; // 0, 1 или 2
+        public int correctAnswerIndex;
     }
 
-    [Header("UI элементы")]
+    public static QuizManager Instance { get; private set; }
+
+    [Header("UI")]
     public GameObject quizPanel;
     public TMP_Text questionText;
-    public Button[] answerButtons; // 3 кнопки
+    public Button[] answerButtons;
     public GameObject finalPanel;
     public Button mainMenuButton;
     public Button nextModuleButton;
-
-    [Header("Вопросы")]
-    public List<QuizQuestion> questions = new List<QuizQuestion>();
-
-    private int currentQuestion = 0;
-    private int score = 0;
-    [Header("Визуальная обратная связь")]
-    public Image flashImage;          // панель для вспышки (разместите поверх всего)
+    public GameObject introPanel;
+    public Button startQuizButton;
+    public Image flashImage;
     public float flashDuration = 0.3f;
 
-    private bool isWaiting = false;   // блокировка повторных кликов
-    public GameObject introPanel;          // новая панель с поздравлением
-    public Button startQuizButton;
-    void Start()
-    {
-        quizPanel.SetActive(false);
-        finalPanel.SetActive(false);
-        introPanel.SetActive(false);
+    [Header("Настройка модулей")]
+    public List<ModuleQuiz> modules = new List<ModuleQuiz>();
 
-        // Привязываем кнопки финальной панели
-        if (mainMenuButton != null)
-            mainMenuButton.onClick.AddListener(GoToMainMenu);
-        if (nextModuleButton != null)
-            nextModuleButton.onClick.AddListener(GoToNextModule);
-        if (startQuizButton != null)
-            startQuizButton.onClick.AddListener(StartQuiz);
-        if (flashImage != null)
+    private int currentModuleIndex = -1;
+    private int currentQuestion = 0;
+    private int score = 0;
+    private bool isWaiting = false;
+
+    void Awake()
+    {
+        if (Instance == null)
         {
-            flashImage.gameObject.SetActive(true);
-            flashImage.color = new Color(0, 0, 0, 0);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            // Инициализация UI
+            quizPanel.SetActive(false);
+            finalPanel.SetActive(false);
+            introPanel.SetActive(false);
+
+            if (mainMenuButton != null)
+                mainMenuButton.onClick.AddListener(GoToMainMenu);
+            if (nextModuleButton != null)
+                nextModuleButton.onClick.AddListener(GoToNextModule);
+            if (startQuizButton != null)
+                startQuizButton.onClick.AddListener(StartQuiz);
+            if (flashImage != null)
+            {
+                flashImage.gameObject.SetActive(true);
+                flashImage.color = new Color(0, 0, 0, 0);
+            }
+
+            // Загружаем сохраненный индекс модуля
+            if (PlayerPrefs.HasKey("CompletedModuleIndex"))
+            {
+                int moduleIndex = PlayerPrefs.GetInt("CompletedModuleIndex");
+                LoadQuizForModule(moduleIndex);
+                PlayerPrefs.DeleteKey("CompletedModuleIndex");
+            }
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
+
+    void OnEnable()
+    {
+        // Убеждаемся, что время нормальное при активации квиза
+        Time.timeScale = 1f;
+    }
+
+    public void LoadQuizForModule(int completedModuleSceneIndex)
+    {
+        for (int i = 0; i < modules.Count; i++)
+        {
+            if (modules[i].moduleSceneIndex == completedModuleSceneIndex)
+            {
+                currentModuleIndex = i;
+                ShowIntroPanel();
+                return;
+            }
+        }
+        Debug.LogError("Квиз для модуля " + completedModuleSceneIndex + " не найден");
+    }
+
     public void ShowIntroPanel()
     {
         introPanel.SetActive(true);
         quizPanel.SetActive(false);
         finalPanel.SetActive(false);
     }
+
     public void StartQuiz()
     {
+        if (currentModuleIndex == -1) return;
+
         introPanel.SetActive(false);
         currentQuestion = 0;
         score = 0;
@@ -69,48 +120,16 @@ public class QuizManager : MonoBehaviour
         finalPanel.SetActive(false);
         ShowQuestion();
     }
-    void Awake()
-    {
-        questions = new List<QuizQuestion>
-        {
-            new QuizQuestion
-            {
-                questionText = "КАКАЯ МЕХАНИКА ПОЯВИЛАСЬ В ARKANOID?",
-                answers = new string[] { "СТРЕЛЬБА", "ДВИЖЕНИЕ И ОТСКОК", "СБОР ПРЕДМЕТОВ" },
-                correctAnswerIndex = 1
-            },
-            new QuizQuestion
-            {
-                questionText = "ЧТО ТАКОЕ ПРОГРЕССИЯ СЛОЖНОСТИ В SPACE INVADERS?",
-                answers = new string[] { "УВЕЛИЧЕНИЕ ЖИЗНЕЙ", "УСКОРЕНИЕ ВРАГОВ", "ПОЯВЛЕНИЕ БОССА" },
-                correctAnswerIndex = 1
-            },
-            new QuizQuestion
-            {
-                questionText = "ЧТО ДАЮТ СУПЕР-ТОЧКИ В PAC-MAN?",
-                answers = new string[] { "ДОП. ЖИЗНЬ", "УЯЗВИМОСТЬ ПРИВИДЕНИЙ", "ЗАМЕДЛЕНИЕ" },
-                correctAnswerIndex = 1
-            },
-            new QuizQuestion
-            {
-                questionText = "ОСНОВНАЯ МЕХАНИКА TETRIS?",
-                answers = new string[] { "СБОР МОНЕТ", "УПРАВЛЕНИЕ ФИГУРАМИ И ЗАПОЛНЕНИЕ РЯДОВ", "СТРЕЛЬБА" },
-                correctAnswerIndex = 1
-            },
-            new QuizQuestion
-            {
-                questionText = "В КАКОЙ ИГРЕ ВПЕРВЫЕ ПОЯВИЛИСЬ ВОЛНЫ ВРАГОВ?",
-                answers = new string[] { "ARKANOID", "SPACE INVADERS", "PAC-MAN" },
-               correctAnswerIndex = 1
-            }
-        };
-    }
+
     private void ShowQuestion()
     {
+        var questions = modules[currentModuleIndex].questions;
+
         if (currentQuestion < questions.Count)
         {
             QuizQuestion q = questions[currentQuestion];
             questionText.text = q.questionText;
+
             for (int i = 0; i < answerButtons.Length; i++)
             {
                 if (i < q.answers.Length)
@@ -120,6 +139,7 @@ public class QuizManager : MonoBehaviour
                     answerButtons[i].onClick.RemoveAllListeners();
                     answerButtons[i].onClick.AddListener(() => OnAnswerSelected(answerIndex));
                     answerButtons[i].interactable = true;
+                    answerButtons[i].gameObject.SetActive(true);
                 }
                 else
                 {
@@ -132,13 +152,14 @@ public class QuizManager : MonoBehaviour
             EndQuiz();
         }
     }
+
     private void OnAnswerSelected(int selected)
     {
-        if (isWaiting) return; // уже обрабатывается анимация
+        if (isWaiting) return;
         isWaiting = true;
 
-        QuizQuestion q = questions[currentQuestion];
-        bool isCorrect = (selected == q.correctAnswerIndex);
+        var questions = modules[currentModuleIndex].questions;
+        bool isCorrect = (selected == questions[currentQuestion].correctAnswerIndex);
         if (isCorrect) score++;
 
         StartCoroutine(ShowAnswerFeedback(isCorrect, () =>
@@ -148,21 +169,19 @@ public class QuizManager : MonoBehaviour
             ShowQuestion();
         }));
     }
+
     private IEnumerator ShowAnswerFeedback(bool correct, System.Action onComplete)
     {
-        // Блокируем кнопки
         foreach (var btn in answerButtons)
             if (btn != null) btn.interactable = false;
 
         Color feedbackColor = correct ? Color.green : Color.red;
         feedbackColor.a = 0.6f;
 
-        // Вспышка
         if (flashImage != null)
         {
             flashImage.color = feedbackColor;
             yield return new WaitForSeconds(flashDuration);
-            // Плавное исчезновение
             float elapsed = 0f;
             while (elapsed < flashDuration)
             {
@@ -177,18 +196,25 @@ public class QuizManager : MonoBehaviour
         {
             yield return new WaitForSeconds(flashDuration);
         }
+
         foreach (var btn in answerButtons)
             if (btn != null) btn.interactable = true;
 
         onComplete?.Invoke();
     }
+
     private void EndQuiz()
     {
         quizPanel.SetActive(false);
         finalPanel.SetActive(true);
+
         TMP_Text resultText = finalPanel.GetComponentInChildren<TMP_Text>();
+        var questions = modules[currentModuleIndex].questions;
         if (resultText != null)
             resultText.text = $"Вы ответили правильно на {score} из {questions.Count} вопросов!";
+
+        bool isLastModule = (currentModuleIndex == modules.Count - 1);
+        nextModuleButton.gameObject.SetActive(!isLastModule);
     }
 
     private void GoToMainMenu()
@@ -198,7 +224,9 @@ public class QuizManager : MonoBehaviour
 
     private void GoToNextModule()
     {
-        // Загрузка следующего модуля (2D). Укажите точное имя сцены.
-        SceneManager.LoadScene("2D_Module");
+        if (currentModuleIndex + 1 < modules.Count)
+        {
+            SceneManager.LoadScene(modules[currentModuleIndex + 1].moduleSceneIndex);
+        }
     }
 }
