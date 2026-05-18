@@ -5,22 +5,22 @@ public class LogicPuzzle : MonoBehaviour
     private string[] order = { "wire", "chip", "battery" };
     private int currentIndex = 0;
     private bool solved = false;
+    private Slot[] slots;
 
     void OnEnable()
     {
-        Slot[] slots = FindObjectsOfType<Slot>();
+        slots = FindObjectsByType<Slot>(FindObjectsSortMode.None);
         foreach (Slot slot in slots)
             slot.OnCorrectItemDropped += CheckItem;
     }
 
     void OnDisable()
     {
-        Slot[] slots = FindObjectsOfType<Slot>();
         foreach (Slot slot in slots)
             slot.OnCorrectItemDropped -= CheckItem;
     }
 
-    void CheckItem(string type)
+    void CheckItem(string type, DragAndDropItem item)
     {
         if (solved) return;
         if (type == order[currentIndex])
@@ -30,13 +30,19 @@ public class LogicPuzzle : MonoBehaviour
             {
                 solved = true;
                 RPGLevelManager.Instance.ActivateMeter(1);
+                // Можно удалить все алтари или оставить как есть
                 Destroy(gameObject);
             }
         }
         else
         {
+            // Неправильный порядок: возвращаем ВСЕ предметы в инвентарь и сбрасываем алтари
+            foreach (Slot slot in slots)
+            {
+                slot.ReturnItem();
+            }
             currentIndex = 0;
-            UnifiedInfoSystem.Instance?.ShowTimedMessage("Не тот порядок! Начни сначала.", 1.5f);
+            UnifiedInfoSystem.Instance?.ShowTimedMessage("Не тот порядок! Нужно: сначала провод, потом чип, потом батарея.", 3f);
         }
     }
 }
