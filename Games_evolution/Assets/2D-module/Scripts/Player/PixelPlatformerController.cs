@@ -93,11 +93,11 @@ public class PixelPlatformerController : PlayerController_2
 
         currentExtraJumps = extraJumps;
 
-        // AudioSource, если не назначен
-        if (audioSource == null)
-            audioSource = GetComponent<AudioSource>();
-        if (audioSource == null && (jumpSound != null || damageSound != null))
-            audioSource = gameObject.AddComponent<AudioSource>();
+        //// AudioSource, если не назначен
+        //if (audioSource == null)
+        //    audioSource = GetComponent<AudioSource>();
+        //if (audioSource == null && (jumpSound != null || damageSound != null))
+        //    audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Start()
