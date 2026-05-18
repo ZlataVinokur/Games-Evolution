@@ -10,32 +10,32 @@ public class UnifiedInfoSystem : MonoBehaviour
 {
     public static UnifiedInfoSystem Instance { get; private set; }
 
-    [Header("UI Elements (общая панель)")]
+    [Header("UI Elements (СЃСЃС‹Р»РєРё РЅР° РїР°РЅРµР»СЊ)")]
     public GameObject infoPanel;
     public TextMeshProUGUI messageText;
     public Button continueButton;
     public Button startGameButton;
     public Image portraitImage;
 
-    [Header("Диалоговый режим")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё РїРµСЂСЃРѕРЅР°Р¶РµР№")]
     [SerializeField] private EncyclopediaExpression encyclopediaEmotions;
     [SerializeField] private string defaultEncyclopediaEmotion = "neutral";
     [SerializeField] private CharacterExpression characterExpression;
 
     [Header("Dynamic UI Binding")]
-    [SerializeField] private string canvasName = "InfoCanvas"; // имя Canvas или оставить пустым для любого
+    [SerializeField] private string canvasName = "InfoCanvas";
     [SerializeField] private string panelName = "InfoPanel";
     [SerializeField] private string messageTextName = "MessageText";
     [SerializeField] private string continueButtonName = "ContinueButton";
     [SerializeField] private string startGameButtonName = "StartGameButton";
     [SerializeField] private string portraitImageName = "PortraitImage";
 
-    [Header("База статей")]
+    [Header("Р‘Р°Р·Р° СЃС‚Р°С‚РµР№ (ScriptableObject)")]
     [SerializeField] private List<Article> allArticles;
     public List<Article> AllArticles => allArticles;
 
-    [Header("Настройки по умолчанию")]
-    public string defaultMessage = "Приступай к игре! Следи за подсказками.";
+    [Header("РќР°СЃС‚СЂРѕР№РєРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ")]
+    public string defaultMessage = "РџР РРЎРўРЈРџРђР™ Рљ РР“Р Р•! РЎР›Р•Р”Р Р—Рђ РџРћР”РЎРљРђР—РљРђРњР.";
     public float defaultTimedMessageDuration = 3f;
 
     private bool isShowing = false;
@@ -60,7 +60,6 @@ public class UnifiedInfoSystem : MonoBehaviour
             return;
         }
 
-        // Если ссылки не назначены в инспекторе, пробуем найти UI в текущей сцене
         if (infoPanel == null)
             RebindUIElements();
 
@@ -73,18 +72,15 @@ public class UnifiedInfoSystem : MonoBehaviour
 
     private void Update()
     {
-        // Обрабатываем ПКМ только когда информационная панель активна (показывается диалог/обучение)
         if (!isShowing) return;
 
-        // Нажатие правой кнопки мыши
+        // РќР°Р¶Р°С‚РёРµ РїСЂР°РІРѕР№ РєРЅРѕРїРєРё РјС‹С€Рё (РёР»Рё Р»РµРІРѕР№, РїРѕ Р¶РµР»Р°РЅРёСЋ) РґР»СЏ РїСЂРѕРїСѓСЃРєР° РґРёР°Р»РѕРіР°
         if (Input.GetMouseButtonDown(1))
         {
-            // Приоритет: если активна кнопка Continue – нажимаем её
             if (continueButton != null && continueButton.gameObject.activeInHierarchy && continueButton.interactable)
             {
                 OnContinueButton();
             }
-            // Иначе если активна кнопка Start – нажимаем её
             else if (startGameButton != null && startGameButton.gameObject.activeInHierarchy && startGameButton.interactable)
             {
                 OnStartGame();
@@ -104,16 +100,22 @@ public class UnifiedInfoSystem : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // При загрузке новой сцены перепривязываем UI, если старые ссылки уничтожены
-        if (infoPanel == null || messageText == null || continueButton == null)
-        {
-            RebindUIElements();
-        }
+        
+        RebindUIElements();
+        
+        if (continueButton != null) continueButton.gameObject.SetActive(false);
+        if (startGameButton != null) startGameButton.gameObject.SetActive(false);
+        if (messageText != null) messageText.text = defaultMessage;
+        isShowing = false;
+        isDialogueMode = false;
+        messageQueue.Clear();
+        dialoguePhrases.Clear();
+        onCompleteCallback = null;
+        onDialogueComplete = null;
     }
 
     private void RebindUIElements()
     {
-        // Ищем Canvas по имени, если указано, иначе берём первый активный Canvas
         Canvas canvas = null;
         if (!string.IsNullOrEmpty(canvasName))
         {
@@ -126,49 +128,41 @@ public class UnifiedInfoSystem : MonoBehaviour
 
         if (canvas == null)
         {
-            Debug.LogError("Не найден Canvas для привязки UI UnifiedInfoSystem");
+            Debug.LogError("РќРµ РЅР°Р№РґРµРЅ Canvas РґР»СЏ РїСЂРёРІСЏР·РєРё UI UnifiedInfoSystem");
             return;
         }
 
-        // Ищем панель по имени
         Transform panelTransform = canvas.transform.Find(panelName);
         if (panelTransform != null)
             infoPanel = panelTransform.gameObject;
         else
         {
-            Debug.LogError($"Не найден объект {panelName} в Canvas {canvas.name}");
+            Debug.LogError($"РќРµ РЅР°Р№РґРµРЅ GameObject {panelName} РІ Canvas {canvas.name}");
             return;
         }
 
-        // Ищем текстовое поле внутри панели
         messageText = infoPanel.GetComponentInChildren<TextMeshProUGUI>();
         if (messageText == null)
         {
             var legacyText = infoPanel.GetComponentInChildren<Text>();
             if (legacyText != null)
-            {
-                // Если нет TextMeshPro, можно создать заглушку или использовать старый Text
-                Debug.LogWarning("TextMeshProUGUI не найден, используется обычный Text, но могут быть проблемы.");
-            }
+                Debug.LogWarning("РќР°Р№РґРµРЅ РѕР±С‹С‡РЅС‹Р№ Text, РЅРѕ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ TextMeshProUGUI");
         }
-
-        // Ищем кнопки по имени
+        
         Transform continueBtn = infoPanel.transform.Find(continueButtonName);
         if (continueBtn != null)
             continueButton = continueBtn.GetComponent<Button>();
         else
-            continueButton = infoPanel.GetComponentInChildren<Button>(); // fallback
+            continueButton = infoPanel.GetComponentInChildren<Button>();
 
         Transform startBtn = infoPanel.transform.Find(startGameButtonName);
         if (startBtn != null)
             startGameButton = startBtn.GetComponent<Button>();
 
-        // Портрет
         Transform portraitTransform = infoPanel.transform.Find(portraitImageName);
         if (portraitTransform != null)
             portraitImage = portraitTransform.GetComponent<Image>();
 
-        // Переподписываем кнопки, если они изменились
         if (continueButton != null)
             continueButton.onClick.RemoveListener(OnContinueButton);
         if (startGameButton != null)
@@ -180,52 +174,50 @@ public class UnifiedInfoSystem : MonoBehaviour
             startGameButton.onClick.AddListener(OnStartGame);
     }
 
-    // ==================== ПУБЛИЧНЫЕ МЕТОДЫ ====================
+    // ==================== Р РђР‘РћРўРђ РЎРћ РЎРўРђРўР¬РЇРњР (ArticleSO) ====================
+    #region РЎС‚Р°С‚СЊРё
 
-    #region Статьи
     public void UnlockArticle(string articleId)
     {
         if (GameManager.Instance == null)
         {
-            Debug.LogError("GameManager.Instance отсутствует! Статья не может быть разблокирована.");
+            Debug.LogError("GameManager.Instance РЅРµ РЅР°Р№РґРµРЅ! РЎС‚Р°С‚СЊСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЂР°Р·Р±Р»РѕРєРёСЂРѕРІР°РЅР°.");
             return;
         }
-
         var article = allArticles.Find(a => a.articleId == articleId);
         if (article == null)
         {
-            Debug.LogWarning($"Статья с ID {articleId} не найдена в базе.");
+            Debug.LogWarning($"РЎС‚Р°С‚СЊСЏ СЃ ID {articleId} РЅРµ РЅР°Р№РґРµРЅР° РІ Р±Р°Р·Рµ.");
             return;
         }
-
         GameManager.Instance.UnlockArticle(articleId);
+        // РџРѕРєР°Р·Р°С‚СЊ РґРёР°Р»РѕРі СЃ Р°РЅРЅРѕС‚Р°С†РёРµР№
         ShowDialogue(new[] { article.shortAnnotation }, "encyclopedia", "happy");
     }
 
     public string GetArticleText(string articleId)
     {
         if (GameManager.Instance == null)
-            return "Ошибка: менеджер игры не найден.";
-
+            return "РћС€РёР±РєР°: GameManager РЅРµ РЅР°Р№РґРµРЅ.";
         if (!GameManager.Instance.unlockedArticles.ContainsKey(articleId))
-            return "Статья ещё не открыта.";
-
+            return "РЎС‚Р°С‚СЊСЏ РµС‰С‘ РЅРµ РѕС‚РєСЂС‹С‚Р°.";
         var article = allArticles.Find(a => a.articleId == articleId);
-        return article != null ? article.fullText : "Статья не найдена.";
+        return article != null ? article.fullText : "РЎС‚Р°С‚СЊСЏ РЅРµ РЅР°Р№РґРµРЅР°.";
     }
 
     public bool IsArticleUnlocked(string articleId)
     {
         return GameManager.Instance != null && GameManager.Instance.unlockedArticles.ContainsKey(articleId);
     }
+
     #endregion
 
-    #region Диалоги
+    // ==================== Р”РРђР›РћР“Р (СЃ РїРѕСЂС‚СЂРµС‚Р°РјРё) ====================
+    #region Р”РёР°Р»РѕРіРё
+
     public void ShowDialogue(string[] lines, string speaker = "encyclopedia", string emotion = "neutral", Action onComplete = null)
     {
         if (isShowing) return;
-
-        // Убедимся, что UI существует
         if (!EnsureUIReady()) return;
 
         isShowing = true;
@@ -272,9 +264,12 @@ public class UnifiedInfoSystem : MonoBehaviour
         onDialogueComplete = null;
         if (portraitImage != null) portraitImage.gameObject.SetActive(false);
     }
+
     #endregion
 
-    #region Обучение
+    // ==================== РћР‘РЈР§Р•РќРР• (РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ) ====================
+    #region РћР±СѓС‡РµРЅРёРµ
+
     public void ShowSequentialMessages(List<string> messages, Action onComplete)
     {
         if (isShowing) return;
@@ -301,14 +296,17 @@ public class UnifiedInfoSystem : MonoBehaviour
         }
         else
         {
-            messageText.text = "ГОТОВ НАЧАТЬ ИГРУ?";
+            messageText.text = "Р“РћРўРћР’ РќРђР§РђРўР¬ РР“Р РЈ?";
             startGameButton.gameObject.SetActive(true);
             continueButton.gameObject.SetActive(false);
         }
     }
+
     #endregion
 
-    #region Подсказка с паузой
+    // ==================== РџРћР”РЎРљРђР—РљРђ РЎ РџРђРЈР—РћР™ (С‚СЂРµР±СѓРµС‚ РЅР°Р¶Р°С‚РёСЏ) ====================
+    #region РџРѕРґСЃРєР°Р·РєР° СЃ РїР°СѓР·РѕР№
+
     public void ShowHint(string hintText, Action onUnpause = null)
     {
         if (isShowing) return;
@@ -329,9 +327,12 @@ public class UnifiedInfoSystem : MonoBehaviour
             onUnpause?.Invoke();
         };
     }
+
     #endregion
 
-    #region Таймерное сообщение
+    // ==================== Р’РЎРџР›Р«Р’РђР®Р©РР• РџРћР”РЎРљРђР—РљР (С‚Р°Р№РјРµСЂ) ====================
+    #region РўР°Р№РјРµСЂРЅС‹Рµ РїРѕРґСЃРєР°Р·РєРё
+
     public void ShowTimedMessage(string message, float duration = -1)
     {
         if (!EnsureUIReady()) return;
@@ -348,18 +349,22 @@ public class UnifiedInfoSystem : MonoBehaviour
         yield return new WaitForSeconds(duration);
         if (messageText != null) messageText.text = defaultMessage;
     }
+
     #endregion
 
-    #region Утилиты
+    // ==================== Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• РњР•РўРћР”Р« ====================
+    #region Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ
+
     public void TellFact(string[] factLines, string emotion = "neutral")
     {
         ShowDialogue(factLines, "encyclopedia", emotion);
     }
 
     public bool IsShowingAnything() => isShowing || (infoPanel != null && infoPanel.activeSelf);
+
     #endregion
 
-    // ==================== ОБРАБОТЧИКИ КНОПОК ====================
+    // ==================== РћР‘Р РђР‘РћРўР§РРљР РљРќРћРџРћРљ ====================
     private void OnContinueButton()
     {
         if (isDialogueMode)
@@ -392,18 +397,17 @@ public class UnifiedInfoSystem : MonoBehaviour
         callback?.Invoke();
     }
 
-    // ==================== ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ====================
     private bool EnsureUIReady()
     {
         if (infoPanel != null && messageText != null && continueButton != null)
             return true;
 
-        Debug.LogWarning("UI элементы не привязаны, попытка перепривязки...");
+        Debug.LogWarning("UI СЌР»РµРјРµРЅС‚С‹ РЅРµ РїСЂРёРІСЏР·Р°РЅС‹, РїРѕРїС‹С‚РєР° РїРµСЂРµРїСЂРёРІСЏР·РєРё...");
         RebindUIElements();
 
         if (infoPanel == null || messageText == null || continueButton == null)
         {
-            Debug.LogError("Не удалось привязать UI элементы, сообщение не будет показано.");
+            Debug.LogError("РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРёРІСЏР·Р°С‚СЊ UI СЌР»РµРјРµРЅС‚С‹, РґРёР°Р»РѕРі РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїРѕРєР°Р·Р°РЅ.");
             return false;
         }
 
