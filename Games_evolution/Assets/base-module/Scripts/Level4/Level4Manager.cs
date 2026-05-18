@@ -1,16 +1,16 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Level4Manager : MonoBehaviour
 {
-    [Header("Ссылки на компоненты Tetris")]
-    [SerializeField] private TetrisGameManager tetrisGameManager;
+    public Article levelData;          // перетащить Level4_Data
+    public TetrisGameManager tetrisGameManager;
 
-    private void Start()
+    void Start()
     {
-        if (tetrisGameManager != null)
-            tetrisGameManager.SetControlsEnabled(false);
+        if (tetrisGameManager != null) tetrisGameManager.SetControlsEnabled(false);
 
         if (PlayerPrefs.GetInt("Level4_TutorialShown", 0) == 0)
         {
@@ -24,27 +24,17 @@ public class Level4Manager : MonoBehaviour
 
     private void ShowTutorial()
     {
-        List<string> messages = new List<string>
+        if (levelData == null || levelData.tutorialMessages.Count == 0)
         {
-            "ПИКСЕЛЬ, ЭТО ОСОБЕННЫЙ УРОВЕНЬ. ЗДЕСЬ НЕТ ВРАГОВ, НЕТ ВРЕМЕНИ, НО ЕСТЬ ЧИСТОЕ ПРОСТРАНСТВЕННОЕ МЫШЛЕНИЕ. СВЕРХУ ПАДАЮТ ФИГУРЫ. ТЫ МОЖЕШЬ ИХ ВРАЩАТЬ, ДВИГАТЬ И УСКОРЯТЬ. ЗАДАЧА — ЗАПОЛНЯТЬ ГОРИЗОНТАЛЬНЫЕ РЯДЫ. ЗАПОЛНЕННЫЙ РЯД ИСЧЕЗАЕТ — ЭТО ТВОЯ ПОБЕДА.",
-            "ЧЕМ БОЛЬШЕ РЯДОВ ЗА ОДИН РАЗ, ТЕМ БОЛЬШЕ ОЧКОВ. 4 РЯДА СРАЗУ — ГЛАВНЫЙ НАВЫК. СКОРОСТЬ ПАДЕНИЯ РАСТЁТ С ОЧКАМИ. ЭТО МЕХАНИКА НАРАСТАЮЩЕЙ СЛОЖНОСТИ. НУЖНО ВИДЕТЬ НА НЕСКОЛЬКО ХОДОВ ВПЕРЁД.",
-            "ФИГУРЫ ПРИХОДЯТ В СЛУЧАЙНОМ ПОРЯДКЕ — КАЖДАЯ ПАРТИЯ УНИКАЛЬНА. ТЫ УЧИШЬСЯ АДАПТИРОВАТЬСЯ И БЫСТРО ПРИНИМАТЬ РЕШЕНИЯ. ЭТА МЕХАНИКА — ОСНОВА ВСЕХ СОВРЕМЕННЫХ ГОЛОВОЛОМОК.",
-            "ЭТА ИГРА ИЗМЕНИЛА ПРЕДСТАВЛЕНИЕ О ТОМ, КАКОЙ МОЖЕТ БЫТЬ ИГРА: НИКАКОГО СЮЖЕТА, НИКАКИХ ГЕРОЕВ — ТОЛЬКО ФИГУРЫ, РЯДЫ И УСКОРЕНИЕ. ЭТО ЧИСТАЯ МЕХАНИКА. ДАВАЙ, ПИКСЕЛЬ, ПОКАЖИ, КАК ТЫ УМЕЕШЬ ДУМАТЬ!"
-        };
-
-        if (UnifiedInfoSystem.Instance != null)
-        {
-            UnifiedInfoSystem.Instance.ShowSequentialMessages(messages, () => {
-                PlayerPrefs.SetInt("Level4_TutorialShown", 1);
-                PlayerPrefs.Save();
-                StartGame();
-            });
-        }
-        else
-        {
-            Debug.LogError("UnifiedInfoSystem.Instance не найден! Обучение не будет показано.");
             StartGame();
+            return;
         }
+        UnifiedInfoSystem.Instance.ShowSequentialMessages(levelData.tutorialMessages, () =>
+        {
+            PlayerPrefs.SetInt("Level4_TutorialShown", 1);
+            PlayerPrefs.Save();
+            StartGame();
+        });
     }
 
     private void StartGame()
@@ -52,24 +42,18 @@ public class Level4Manager : MonoBehaviour
         if (tetrisGameManager != null)
         {
             tetrisGameManager.SetControlsEnabled(true);
-            tetrisGameManager.StartGame();
+            tetrisGameManager.StartGame(); // запускает игру (спавн фигур)
         }
-
         StartCoroutine(TimedHints());
     }
 
     private IEnumerator TimedHints()
     {
-        yield return new WaitForSeconds(15f);
-        if (UnifiedInfoSystem.Instance != null)
-            UnifiedInfoSystem.Instance.ShowTimedMessage("СТАРАЙСЯ УКЛАДЫВАТЬ ФИГУРЫ РОВНО, БЕЗ ПУСТОТ. ТАК ЛЕГЧЕ ЗАПОЛНЯТЬ РЯДЫ.", 5f);
-
-        yield return new WaitForSeconds(25f);
-        if (UnifiedInfoSystem.Instance != null)
-            UnifiedInfoSystem.Instance.ShowTimedMessage("СМОТРИ НА СЛЕДУЮЩУЮ ФИГУРУ В МАЛЕНЬКОМ ОКНЕ. ЭТО ПОМОЖЕТ ПЛАНИРОВАТЬ НАПЕРЁД.", 5f);
-
-        yield return new WaitForSeconds(35f);
-        if (UnifiedInfoSystem.Instance != null)
-            UnifiedInfoSystem.Instance.ShowTimedMessage("ПОВОРАЧИВАЙ ФИГУРЫ ЗАРАНЕЕ — НЕ ЖДИ, ПОКА ОНИ УПАДУТ НИЗКО. СКОРОСТЬ БУДЕТ РАСТИ!", 5f);
+        if (levelData == null) yield break;
+        foreach (var hint in levelData.timedHints)
+        {
+            yield return new WaitForSeconds(hint.delayAfterStart);
+            UnifiedInfoSystem.Instance.ShowTimedMessage(hint.message, hint.duration);
+        }
     }
 }
