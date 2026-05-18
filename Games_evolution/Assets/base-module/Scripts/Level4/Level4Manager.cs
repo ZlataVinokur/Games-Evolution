@@ -7,7 +7,7 @@ public class Level4Manager : MonoBehaviour
     [Header("Ссылки на компоненты Tetris")]
     [SerializeField] private TetrisGameManager tetrisGameManager;
 
-    void Start()
+    private void Start()
     {
         if (tetrisGameManager != null)
             tetrisGameManager.SetControlsEnabled(false);
@@ -32,7 +32,6 @@ public class Level4Manager : MonoBehaviour
             "ЭТА ИГРА ИЗМЕНИЛА ПРЕДСТАВЛЕНИЕ О ТОМ, КАКОЙ МОЖЕТ БЫТЬ ИГРА: НИКАКОГО СЮЖЕТА, НИКАКИХ ГЕРОЕВ — ТОЛЬКО ФИГУРЫ, РЯДЫ И УСКОРЕНИЕ. ЭТО ЧИСТАЯ МЕХАНИКА. ДАВАЙ, ПИКСЕЛЬ, ПОКАЖИ, КАК ТЫ УМЕЕШЬ ДУМАТЬ!"
         };
 
-        // Прямой вызов UnifiedInfoSystem
         if (UnifiedInfoSystem.Instance != null)
         {
             UnifiedInfoSystem.Instance.ShowSequentialMessages(messages, () => {
@@ -44,7 +43,7 @@ public class Level4Manager : MonoBehaviour
         else
         {
             Debug.LogError("UnifiedInfoSystem.Instance не найден! Обучение не будет показано.");
-            StartGame(); // fallback
+            StartGame();
         }
     }
 

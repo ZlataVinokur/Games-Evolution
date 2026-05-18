@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 92013786396631249}
   - component: {fileID: 4123671836724395259}
   - component: {fileID: 7722255906591703547}
-  - component: {fileID: -877958126962729208}
   m_Layer: 0
   m_Name: "\u0421\u043F\u0440\u0430\u0439\u0442\u044B \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u043E\u0432_37"
   m_TagString: Untagged
@@ -158,20 +157,3 @@ PolygonCollider2D:
       - {x: 3.988005, y: 0.040860914}
       - {x: 4.046613, y: 0.055512927}
   m_UseDelaunayMesh: 1
---- !u!114 &-877958126962729208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4669311373813699177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ff50fce1420b834fa07f341c9dce332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  interactionType: 0
-  itemId: 
-  requiredItemId: 
-  dialogueOnLook: []
-  flagToSetOnAction: 

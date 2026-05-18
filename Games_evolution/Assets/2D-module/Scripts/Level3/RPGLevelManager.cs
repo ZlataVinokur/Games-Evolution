@@ -1,24 +1,22 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RPGLevelManager : MonoBehaviour
 {
     public static RPGLevelManager Instance;
 
     [Header("Meters")]
-    public bool[] metersActivated = new bool[3]; // 0-ритм, 1-логика, 2-мораль
-    public GameObject[] meterIndicatorUI; // иконки на UI
+    public bool[] metersActivated = new bool[3];
+    public GameObject[] meterIndicatorUI;
 
     [Header("Boss Fight")]
     public GameObject bossPrefab;
     public Transform bossSpawnPoint;
-    public GameObject barrierWall; // стена, блокирующая выход до активации
+    public GameObject barrierWall;
 
-    [Header("Moral Choice Buff")]
     private bool hasTamagotchiBuff = false;
-
-    [Header("References")]
-    public UnifiedInfoSystem infoSystem;
-    public GameManager gameManager;
+    private UnifiedInfoSystem infoSystem;
+    private GameManager gameManager;
 
     void Awake()
     {
@@ -27,67 +25,86 @@ public class RPGLevelManager : MonoBehaviour
 
     void Start()
     {
-        infoSystem = UnifiedInfoSystem.Instance;
-        gameManager = GameManager.Instance;
+        // Восстанавливаем состояние из GameManager
+        bool[] savedMeters = GameManager.Instance.GetRPGMeters();
+        if (savedMeters != null)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (savedMeters[i] && !metersActivated[i])
+                {
+                    metersActivated[i] = true;
+                    UpdateMeterUI();
+                    // Если нужно восстановить артефакты (алтари и т.д.) – дополнительно
+                }
+            }
+        }
+
+        infoSystem = UnifiedInfoSystem.Instance ?? FindObjectOfType<UnifiedInfoSystem>();
+        gameManager = GameManager.Instance ?? FindObjectOfType<GameManager>();
         UpdateMeterUI();
         if (barrierWall != null) barrierWall.SetActive(true);
     }
 
     public void ActivateMeter(int index)
     {
+        if (metersActivated[index]) return;
+        metersActivated[index] = true;
+        UpdateMeterUI();
+        GameManager.Instance.SetRPGMeter(index, true); // сохраняем
+
         if (index < 0 || index >= metersActivated.Length) return;
         if (metersActivated[index]) return;
 
         metersActivated[index] = true;
         UpdateMeterUI();
 
-        // Открываем статьи в справочнике через UnifiedInfoSystem
         string[] articleIds = { "rpg_rhythm", "rpg_logic", "rpg_moral" };
-        infoSystem.UnlockArticle(articleIds[index]);
+        if (infoSystem != null) infoSystem.UnlockArticle(articleIds[index]);
 
-        // Проверяем, все ли активированы
         foreach (bool activated in metersActivated)
-        {
             if (!activated) return;
-        }
-        // Все три активированы → запускаем бой
+
         StartBossFight();
     }
 
     void UpdateMeterUI()
     {
         for (int i = 0; i < meterIndicatorUI.Length; i++)
-        {
             if (meterIndicatorUI[i] != null)
                 meterIndicatorUI[i].SetActive(metersActivated[i]);
-        }
     }
 
     void StartBossFight()
     {
-        if (barrierWall != null) barrierWall.SetActive(false); // открываем проход
+        if (barrierWall != null) barrierWall.SetActive(false);
         Instantiate(bossPrefab, bossSpawnPoint.position, Quaternion.identity);
-        infoSystem.ShowDialogue(new string[] { "Портал открыт! Победи мини-босса, чтобы завершить модуль." }, "encyclopedia", "serious");
+        if (infoSystem != null)
+            infoSystem.ShowDialogue(new string[] { "Портал открыт! Победи мини-босса, чтобы завершить модуль." }, "encyclopedia", "serious");
     }
 
     public void SetTamagotchiBuff(bool value)
     {
         hasTamagotchiBuff = value;
-        if (value)
+        if (value && infoSystem != null)
             infoSystem.TellFact(new string[] { "Тамагочи благодарен! В бою он поможет тебе наносить больше урона." }, "happy");
     }
 
     public bool HasTamagotchiBuff() => hasTamagotchiBuff;
 
-    // Вызывается после победы над боссом
     public void OnBossDefeated()
     {
-        gameManager.CompleteLevel("RPG_Module");
-        gameManager.SetFlag("RPG_Completed", true);
-        infoSystem.ShowDialogue(new string[] { "Поздравляю! Ты освоил эволюцию 2D-жанров. Теперь тебя ждёт итоговый квиз." }, "encyclopedia", "celebrate", () =>
+        if (GameManager.Instance != null)
         {
-            // Запускаем квиз через QuizManager (допустим, он есть)
-            //QuizManager.Instance.StartQuiz(2); // 2 = модуль двумерный
-        });
+            GameManager.Instance.CompleteLevel("RPG_Module");
+            GameManager.Instance.SetFlag("RPG_Completed", true);
+        }
+        UnifiedInfoSystem.Instance.ShowDialogue(
+            new string[] { "Поздравляю! Ты освоил эволюцию 2D-жанров. Теперь тебя ждёт итоговый квиз." },
+            "encyclopedia", "celebrate", () =>
+            {
+                GameManager.Instance.LoadQuizForCurrentModule(SceneManager.GetActiveScene().buildIndex);
+            }
+        );
     }
 }

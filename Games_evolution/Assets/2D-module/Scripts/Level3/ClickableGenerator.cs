@@ -1,16 +1,15 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class ClickableGenerator : MonoBehaviour, IPointerClickHandler
+public class ClickableGenerator : MonoBehaviour
 {
     public System.Action OnCollect;
-    public int energyAmount = 1;
+    public bool isActive = true;
 
-    public void OnPointerClick(PointerEventData eventData)
+    void OnMouseDown()
     {
-        OnCollect?.Invoke();
-        // Можно оставить объект, но сделать неактивным на время
-        GetComponent<Collider2D>().enabled = false;
+        if (!isActive) return;
+        isActive = false;
         GetComponent<SpriteRenderer>().color = Color.gray;
+        OnCollect?.Invoke();
     }
 }
