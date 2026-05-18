@@ -327,6 +327,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 52493698}
+  - component: {fileID: 52493699}
   m_Layer: 0
   m_Name: RhythmUi
   m_TagString: Untagged
@@ -350,6 +351,21 @@ Transform:
   - {fileID: 907782573}
   m_Father: {fileID: 1373603985}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &52493699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52493697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28e6eb75837cafe4fb80c1a369a96d8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RhythmVisualizer
+  beatImage: {fileID: 2095696655}
+  metronomeSound: {fileID: 2095696654}
+  beatInterval: 2
 --- !u!1 &53084373
 GameObject:
   m_ObjectHideFlags: 0
@@ -4267,7 +4283,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &289735711
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4471,7 +4487,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &303643167
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6076,7 +6092,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &592921479
 Transform:
   m_ObjectHideFlags: 0
@@ -6222,7 +6238,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -7706,7 +7722,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &957922415
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15757,7 +15773,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1219057453
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26576,7 +26592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df7a950c1ef7187448718264f6a103b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RhythmMiniGame
-  beatInterval: 1
+  beatInterval: 2
   successesNeeded: 3
   maxMistakes: 3
 --- !u!61 &1373603984
@@ -27594,7 +27610,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.426
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -30051,8 +30067,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 454}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!82 &2095696654
 AudioSource:
@@ -30171,7 +30187,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -1869290018219920624, guid: 3421078018dc3934a8c1ab3b7bf89aa0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

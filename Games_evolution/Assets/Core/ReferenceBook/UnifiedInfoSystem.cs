@@ -23,7 +23,7 @@ public class UnifiedInfoSystem : MonoBehaviour
     [SerializeField] private CharacterExpression characterExpression;
 
     [Header("Dynamic UI Binding")]
-    [SerializeField] private string canvasName = "InfoCanvas"; // имя Canvas или оставить пустым для любого
+    [SerializeField] private string canvasName = "InfoCanvas";
     [SerializeField] private string panelName = "InfoPanel";
     [SerializeField] private string messageTextName = "MessageText";
     [SerializeField] private string continueButtonName = "ContinueButton";
@@ -60,7 +60,6 @@ public class UnifiedInfoSystem : MonoBehaviour
             return;
         }
 
-        // Если ссылки не назначены в инспекторе, пробуем найти UI в текущей сцене
         if (infoPanel == null)
             RebindUIElements();
 
@@ -73,18 +72,20 @@ public class UnifiedInfoSystem : MonoBehaviour
 
     private void Update()
     {
-        // Обрабатываем ПКМ только когда информационная панель активна (показывается диалог/обучение)
         if (!isShowing) return;
 
-        // Нажатие правой кнопки мыши
-        if (Input.GetMouseButtonDown(1))
+        // Пропуск на ПКМ, Enter, Пробел
+        bool skipPressed = Input.GetMouseButtonDown(1) ||
+                           Input.GetKeyDown(KeyCode.Return) ||
+                           Input.GetKeyDown(KeyCode.KeypadEnter) ||
+                           Input.GetKeyDown(KeyCode.Space);
+
+        if (skipPressed)
         {
-            // Приоритет: если активна кнопка Continue – нажимаем её
             if (continueButton != null && continueButton.gameObject.activeInHierarchy && continueButton.interactable)
             {
                 OnContinueButton();
             }
-            // Иначе если активна кнопка Start – нажимаем её
             else if (startGameButton != null && startGameButton.gameObject.activeInHierarchy && startGameButton.interactable)
             {
                 OnStartGame();
@@ -104,16 +105,24 @@ public class UnifiedInfoSystem : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // При загрузке новой сцены перепривязываем UI, если старые ссылки уничтожены
+        // Перепривязываем UI и сбрасываем состояние диалога
         if (infoPanel == null || messageText == null || continueButton == null)
-        {
             RebindUIElements();
-        }
+
+        // Сброс всех флагов и очередей при загрузке новой сцены
+        isShowing = false;
+        isDialogueMode = false;
+        messageQueue.Clear();
+        dialoguePhrases.Clear();
+        onCompleteCallback = null;
+        onDialogueComplete = null;
+        if (infoPanel != null) infoPanel.SetActive(false);
+        if (messageText != null) messageText.text = "";
+        // Портрет не отключаем – при следующем диалоге он снова включится
     }
 
     private void RebindUIElements()
     {
-        // Ищем Canvas по имени, если указано, иначе берём первый активный Canvas
         Canvas canvas = null;
         if (!string.IsNullOrEmpty(canvasName))
         {
@@ -130,7 +139,6 @@ public class UnifiedInfoSystem : MonoBehaviour
             return;
         }
 
-        // Ищем панель по имени
         Transform panelTransform = canvas.transform.Find(panelName);
         if (panelTransform != null)
             infoPanel = panelTransform.gameObject;
@@ -140,35 +148,26 @@ public class UnifiedInfoSystem : MonoBehaviour
             return;
         }
 
-        // Ищем текстовое поле внутри панели
         messageText = infoPanel.GetComponentInChildren<TextMeshProUGUI>();
         if (messageText == null)
         {
-            var legacyText = infoPanel.GetComponentInChildren<Text>();
-            if (legacyText != null)
-            {
-                // Если нет TextMeshPro, можно создать заглушку или использовать старый Text
-                Debug.LogWarning("TextMeshProUGUI не найден, используется обычный Text, но могут быть проблемы.");
-            }
+            Debug.LogWarning("TextMeshProUGUI не найден");
         }
 
-        // Ищем кнопки по имени
         Transform continueBtn = infoPanel.transform.Find(continueButtonName);
         if (continueBtn != null)
             continueButton = continueBtn.GetComponent<Button>();
         else
-            continueButton = infoPanel.GetComponentInChildren<Button>(); // fallback
+            continueButton = infoPanel.GetComponentInChildren<Button>();
 
         Transform startBtn = infoPanel.transform.Find(startGameButtonName);
         if (startBtn != null)
             startGameButton = startBtn.GetComponent<Button>();
 
-        // Портрет
         Transform portraitTransform = infoPanel.transform.Find(portraitImageName);
         if (portraitTransform != null)
             portraitImage = portraitTransform.GetComponent<Image>();
 
-        // Переподписываем кнопки, если они изменились
         if (continueButton != null)
             continueButton.onClick.RemoveListener(OnContinueButton);
         if (startGameButton != null)
@@ -224,8 +223,6 @@ public class UnifiedInfoSystem : MonoBehaviour
     public void ShowDialogue(string[] lines, string speaker = "encyclopedia", string emotion = "neutral", Action onComplete = null)
     {
         if (isShowing) return;
-
-        // Убедимся, что UI существует
         if (!EnsureUIReady()) return;
 
         isShowing = true;
@@ -239,6 +236,7 @@ public class UnifiedInfoSystem : MonoBehaviour
         continueButton.gameObject.SetActive(true);
         startGameButton.gameObject.SetActive(false);
 
+        // Всегда показываем портрет
         if (portraitImage != null)
         {
             portraitImage.gameObject.SetActive(true);
@@ -268,13 +266,14 @@ public class UnifiedInfoSystem : MonoBehaviour
         if (infoPanel != null) infoPanel.SetActive(false);
         isShowing = false;
         isDialogueMode = false;
+        if (messageText != null) messageText.text = "";
+        // Портрет не отключаем – при следующем диалоге он снова включится
         onDialogueComplete?.Invoke();
         onDialogueComplete = null;
-        if (portraitImage != null) portraitImage.gameObject.SetActive(false);
     }
     #endregion
 
-    #region Обучение
+    #region Обучение (с кнопкой "Начать игру")
     public void ShowSequentialMessages(List<string> messages, Action onComplete)
     {
         if (isShowing) return;
@@ -290,6 +289,10 @@ public class UnifiedInfoSystem : MonoBehaviour
 
         continueButton.gameObject.SetActive(true);
         startGameButton.gameObject.SetActive(false);
+
+        // Всегда показываем портрет
+        if (portraitImage != null) portraitImage.gameObject.SetActive(true);
+
         ShowNextTrainingMessage();
     }
 
@@ -304,6 +307,7 @@ public class UnifiedInfoSystem : MonoBehaviour
             messageText.text = "ГОТОВ НАЧАТЬ ИГРУ?";
             startGameButton.gameObject.SetActive(true);
             continueButton.gameObject.SetActive(false);
+            // Портрет оставляем – не отключаем
         }
     }
     #endregion
@@ -321,6 +325,9 @@ public class UnifiedInfoSystem : MonoBehaviour
         messageText.text = hintText;
         continueButton.gameObject.SetActive(true);
         startGameButton.gameObject.SetActive(false);
+
+        // Показываем портрет (можно оставить последний использованный)
+        if (portraitImage != null) portraitImage.gameObject.SetActive(true);
 
         onCompleteCallback = () =>
         {
@@ -345,8 +352,10 @@ public class UnifiedInfoSystem : MonoBehaviour
     {
         if (infoPanel != null && !infoPanel.activeSelf) infoPanel.SetActive(true);
         if (messageText != null) messageText.text = message;
+        // Для таймерных сообщений портрет не показываем (это не диалог)
         yield return new WaitForSeconds(duration);
-        if (messageText != null) messageText.text = defaultMessage;
+        if (infoPanel != null) infoPanel.SetActive(false);
+        if (messageText != null) messageText.text = "";
     }
     #endregion
 
@@ -368,15 +377,14 @@ public class UnifiedInfoSystem : MonoBehaviour
             return;
         }
 
-        if (messageQueue.Count == 0 && onCompleteCallback != null)
+        if (messageQueue.Count > 0)
         {
-            var callback = onCompleteCallback;
-            onCompleteCallback = null;
-            callback.Invoke();
+            ShowNextTrainingMessage();
         }
         else
         {
-            ShowNextTrainingMessage();
+            // Все сообщения показаны – показываем кнопку «Начать игру»
+            ShowNextTrainingMessage(); // он выведет финальный текст и кнопку
         }
     }
 
@@ -385,8 +393,8 @@ public class UnifiedInfoSystem : MonoBehaviour
         isShowing = false;
         if (startGameButton != null) startGameButton.gameObject.SetActive(false);
         if (continueButton != null) continueButton.gameObject.SetActive(false);
-        if (messageText != null) messageText.text = defaultMessage;
-
+        if (messageText != null) messageText.text = "";
+        if (infoPanel != null) infoPanel.SetActive(false);
         var callback = onCompleteCallback;
         onCompleteCallback = null;
         callback?.Invoke();
@@ -409,4 +417,6 @@ public class UnifiedInfoSystem : MonoBehaviour
 
         return true;
     }
+
+
 }

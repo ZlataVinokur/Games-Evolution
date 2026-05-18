@@ -24,6 +24,11 @@ public class VerticalPlatformGenerator : MonoBehaviour
     public GameObject[] enemyPrefabs;      // массив префабов врагов (Jump, Fly, Teleport)
     public float enemySpawnChance = 0.3f;  // 30% шанс спавна врага на платформе
 
+    [Header("Бонусы")]
+    public GameObject[] bonusPrefabs;      // массив префабов бонусов (HealthBonus, ShieldBonus)
+    [Range(0f, 1f)]
+    public float bonusSpawnChance = 0.2f;  // 20% шанс спавна бонуса на платформе
+
     void Start()
     {
         nextPlatformY = startY;
@@ -77,6 +82,14 @@ public class VerticalPlatformGenerator : MonoBehaviour
             GameObject enemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
             Vector3 enemyPos = new Vector3(xPos, yPos + 0.5f, 0); // чуть выше платформы
             Instantiate(enemyPrefab, enemyPos, Quaternion.identity);
+        }
+
+        // Спавн бонуса на платформе
+        if (bonusPrefabs != null && bonusPrefabs.Length > 0 && Random.value < bonusSpawnChance)
+        {
+            GameObject bonusPrefab = bonusPrefabs[Random.Range(0, bonusPrefabs.Length)];
+            Vector3 bonusPos = new Vector3(xPos, yPos + 0.7f, 0); // чуть выше платформы
+            Instantiate(bonusPrefab, bonusPos, Quaternion.identity);
         }
 
         // Увеличиваем следующую позицию
