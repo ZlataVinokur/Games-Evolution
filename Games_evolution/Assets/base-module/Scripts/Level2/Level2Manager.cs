@@ -1,19 +1,29 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Level2Manager : MonoBehaviour
 {
-    public Article levelData;          // перетащить Level2_Data
-    public WaveSpawner waveSpawner;
-    public PlayerController playerController;
-
+    [Header("Настройки уровня")]
+    [SerializeField] private int levelIndex = 1;
+    
+    [Header("Ссылки на компоненты")]
+    [SerializeField] private WaveSpawner waveSpawner;
+    [SerializeField] private PlayerController playerController;
+    
+    private bool levelCompleted = false;
+    
     void Start()
     {
+        // Если ссылки не назначены в инспекторе, попробуем найти
+        if (waveSpawner == null) waveSpawner = GetComponent<WaveSpawner>();
+        if (playerController == null) playerController = FindObjectOfType<PlayerController>();
+        
+        // Блокируем управление и спавн до обучения
         if (playerController != null) playerController.SetControlsEnabled(false);
         if (waveSpawner != null) waveSpawner.enabled = false;
-
+        
+        // Показываем обучение (один раз)
         if (PlayerPrefs.GetInt("Level2_TutorialShown", 0) == 0)
         {
             ShowTutorial();
@@ -23,46 +33,67 @@ public class Level2Manager : MonoBehaviour
             StartGame();
         }
     }
-
+    
     private void ShowTutorial()
     {
-        if (levelData == null || levelData.tutorialMessages.Count == 0)
+        List<string> messages = new List<string>
         {
-            StartGame();
-            return;
-        }
-        UnifiedInfoSystem.Instance.ShowSequentialMessages(levelData.tutorialMessages, () =>
-        {
+            "ПИКСЕЛЬ, ТЕПЕРЬ ТЫ МОЖЕШЬ ХОДИТЬ ВЛЕВО-ВПРАВО И СТРЕЛЯТЬ ВВЕРХ. ЭТО ОСНОВА АРКАДНОГО ШУТЕРА. ВРАГИ ДВИГАЮТСЯ ВОЛНАМИ: ЧЕМ МЕНЬШЕ ВРАГОВ, ТЕМ БЫСТРЕЕ ОНИ ДВИЖУТСЯ. ТАК СОЗДАЁТСЯ НАПРЯЖЕНИЕ. ТЫ ДОЛЖЕН ОДНОВРЕМЕННО УКЛОНЯТЬСЯ И АТАКОВАТЬ.",
+            "КОГДА УНИЧТОЖИШЬ ВСЕХ ВРАГОВ — НАЧИНАЕТСЯ НОВАЯ ВОЛНА, И ОНА СЛОЖНЕЕ. ЭТО ПРОГРЕССИЯ СЛОЖНОСТИ. С КАЖДОЙ ВОЛНОЙ ВРАГИ УСКОРЯЮТСЯ. ТАК ИГРА НЕ ДАЁТ РАССЛАБИТЬСЯ И ТРЕНИРУЕТ ТВОЮ РЕАКЦИЮ. ЗАПОМНИ ЭТОТ ПРИЁМ — ОН ИСПОЛЬЗУЕТСЯ ВО МНОГИХ ЖАНРАХ.",
+            "ЭТИ МЕХАНИКИ — ДВИЖЕНИЕ И СТРЕЛЬБА, ВОЛНЫ, УСКОРЕНИЕ — ИЗМЕНИЛИ ИГРОВУЮ ИНДУСТРИЮ. ОНИ ПЕРЕКОЧЕВАЛИ В ШУТЕРЫ, ЭКШЕНЫ, РОГЛАЙТЫ. ТЫ НЕ ПРОСТО ИГРАЕШЬ — ТЫ ИЗУЧАЕШЬ ИСТОРИЮ. ГОТОВ ПОКАЗАТЬ, ЧЕМУ НАУЧИЛСЯ?"
+        };
+
+        UnifiedInfoSystem.Instance.ShowSequentialMessages(messages, () => {
             PlayerPrefs.SetInt("Level2_TutorialShown", 1);
             PlayerPrefs.Save();
             StartGame();
         });
     }
-
+    
     private void StartGame()
     {
         if (playerController != null) playerController.SetControlsEnabled(true);
         if (waveSpawner != null)
         {
             waveSpawner.enabled = true;
-            waveSpawner.StartGame(); // предполагается, что в WaveSpawner есть этот метод
+            waveSpawner.StartGame(); // вызываем метод старта волн
         }
+        
         StartCoroutine(TimedHints());
     }
-
+    
     private IEnumerator TimedHints()
     {
-        if (levelData == null) yield break;
-        foreach (var hint in levelData.timedHints)
-        {
-            yield return new WaitForSeconds(hint.delayAfterStart);
-            UnifiedInfoSystem.Instance.ShowTimedMessage(hint.message, hint.duration);
-        }
+        yield return new WaitForSeconds(10f);
+        UnifiedInfoSystem.Instance.ShowTimedMessage("СТРЕЛЯЙ ПО ВРАГАМ, НО НЕ ЗАСТЫВАЙ НА МЕСТЕ — ПОСТОЯННО ДВИГАЙСЯ, ЧТОБЫ УКЛОНЯТЬСЯ ОТ ПУЛЬ.", 5f);
+        
+        yield return new WaitForSeconds(20f);
+        UnifiedInfoSystem.Instance.ShowTimedMessage("УНИЧТОЖАЙ ВРАГОВ БЫСТРЕЕ — С КАЖДОЙ ВОЛНОЙ ОНИ СТАНОВЯТСЯ ВСЁ БЫСТРЕЕ. ПРОГРЕССИЯ СЛОЖНОСТИ — ЭТО КЛЮЧЕВОЙ ПРИЁМ ГЕЙМДИЗАЙНА.", 5f);
+        
+        yield return new WaitForSeconds(30f);
+        UnifiedInfoSystem.Instance.ShowTimedMessage("СКОРОСТЬ ВРАГОВ ПОСТОЯННО РАСТЁТ. ЭТО ТРЕНИРУЕТ ТВОЮ РЕАКЦИЮ. БЕЗ ЭТОЙ МЕХАНИКИ ИГРЫ БЫЛИ БЫ СЛИШКОМ ЛЁГКИМИ.", 5f);
     }
-
+    
     public void CompleteLevel()
     {
-        // Действия при завершении уровня (например, загрузить следующий)
-        SceneManager.LoadScene("3_Level3"); // название сцены уровня 3
+        if (levelCompleted) return;
+        levelCompleted = true;
+        
+        int levelBonus = 1000;
+        
+        //if (GameManager.Instance != null)
+        //{
+          //  GameManager.Instance.AddScore(levelBonus);
+          //  GameManager.Instance.CompleteLevel(levelIndex, levelBonus);
+       // }
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddScore(levelBonus);
+    
+        Debug.Log("Level 2 completed! Score added: " + levelBonus);
+
+        // Показываем панель завершения
+        GameManager GameManager = FindObjectOfType<GameManager>();
+        if (GameManager != null)
+            GameManager.ShowWin();
     }
 }

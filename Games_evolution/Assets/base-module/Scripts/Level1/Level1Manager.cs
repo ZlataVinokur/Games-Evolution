@@ -4,67 +4,66 @@ using UnityEngine;
 
 public class Level1Manager : MonoBehaviour
 {
-    public Article levelData; // перетащить Level1_Data
     public BallController ball;
     public PaddleController paddle;
 
     void Start()
     {
-        // Блокируем управление
-        if (paddle != null) paddle.SetControlsEnabled(false);
-        if (ball != null) ball.SetGameStarted(false);
 
-        if (PlayerPrefs.GetInt("Level1_TutorialShown", 0) == 0)
-        {
-            ShowTutorial();
-        }
-        else
-        {
-            StartGame();
-        }
+        if (paddle != null) paddle.SetControlsEnabled(false);
+
+
+        ShowTutorial();
+
     }
 
     private void ShowTutorial()
     {
-        Debug.Log("ShowTutorial called");
-        if (levelData == null) { Debug.LogError("levelData is null!"); return; }
-        if (levelData == null || levelData.tutorialMessages.Count == 0)
+        List<string> messages = new List<string>
         {
-            Debug.LogError("tutorialMessages list is empty!"); 
-            StartGame();
-            return;
+            "ПИКСЕЛЬ, ТЫ ТОЛЬКО НАЧИНАЕШЬ СВОЙ ПУТЬ. ПОСМОТРИ: ЗДЕСЬ ЕСТЬ ПЛАТФОРМА И МЯЧ. ТВОЯ ЗАДАЧА — ОТБИВАТЬ МЯЧ ТАК, ЧТОБЫ ОН РАЗРУШАЛ БЛОКИ. ЭТО ПРОСТЕЙШАЯ МЕХАНИКА: ДВИЖЕНИЕ, ОТСКОК, ЦЕЛЬ. ИМЕННО С ТАКИХ ИГР НАЧИНАЛАСЬ ИСТОРИЯ ВИДЕОИГР.",
+            "УГОЛ ОТСКОКА ЗАВИСИТ ОТ ТОГО, КУДА МЯЧ ПОПАДЁТ ПО ПЛАТФОРМЕ. В ЦЕНТР — ЛЕТИТ ПРЯМО, В КРАЙ — КРУЧЕ. ЭТО ДОБАВЛЯЕТ МАСТЕРСТВО. ИГРОК УЧИТСЯ ПРЕДСКАЗЫВАТЬ ТРАЕКТОРИЮ. ТАК РОЖДАЕТСЯ ГЛУБИНА ИЗ ПРОСТОТЫ.",
+            "НЕКОТОРЫЕ БЛОКИ ПРОЧНЕЕ — ИХ НУЖНО БИТЬ НЕСКОЛЬКО РАЗ. А ЕСЛИ ПОВЕЗЁТ, ИЗ БЛОКА ВЫПАДЕТ БОНУС. ЛОВИ ЕГО ПЛАТФОРМОЙ — ОН МОЖЕТ УВЕЛИЧИТЬ ПЛАТФОРМУ ИЛИ ЗАМЕДЛИТЬ МЯЧ. ЭТО ПЕРВЫЕ В ИСТОРИИ «УЛУЧШЕНИЯ» В ИГРАХ. ЗАПОМНИ ЭТОТ МОМЕНТ, ПИКСЕЛЬ.",
+            "ТЫ СПРАВИШЬСЯ, ЕСЛИ БУДЕШЬ ВНИМАТЕЛЕН. ЭТА МЕХАНИКА — ДВИЖЕНИЕ И ОТСКОК — ЛЕЖИТ В ОСНОВЕ МНОГИХ СЛОЖНЫХ ИГР. ПОТОМ ТЫ ВСТРЕТИШЬ СТРЕЛЬБУ, ЛАБИРИНТЫ, ГОЛОВОЛОМКИ… НО ВСЁ НАЧИНАЕТСЯ С ПРОСТОГО УДАРА МЯЧА. ВПЕРЁД!"
+        };
+
+        // Используем UnifiedInfoSystem напрямую
+        if (UnifiedInfoSystem.Instance != null)
+        {
+            UnifiedInfoSystem.Instance.ShowSequentialMessages(messages, () => {
+                PlayerPrefs.SetInt("Level1_TutorialShown", 1);
+                PlayerPrefs.Save();
+                StartGame();
+            });
         }
-        Debug.Log("tutorialMessages count: " + levelData.tutorialMessages.Count);
-        UnifiedInfoSystem.Instance.ShowSequentialMessages(levelData.tutorialMessages, () =>
+        else
         {
-            Debug.Log("Tutorial completed callback");
-            PlayerPrefs.SetInt("Level1_TutorialShown", 1);
-            PlayerPrefs.Save();
+            Debug.LogError("UnifiedInfoSystem.Instance отсутствует! Не удалось показать обучение.");
+            // fallback: сразу запускаем игру
             StartGame();
-        });
+        }
     }
 
     private void StartGame()
     {
         if (paddle != null) paddle.SetControlsEnabled(true);
-        if (ball != null) ball.SetGameStarted(true);
+
         StartCoroutine(TimedHints());
     }
 
     private IEnumerator TimedHints()
     {
-        if (levelData == null) yield break;
-        foreach (var hint in levelData.timedHints)
-        {
-            yield return new WaitForSeconds(hint.delayAfterStart);
-            UnifiedInfoSystem.Instance.ShowTimedMessage(hint.message, hint.duration);
-        }
-    }
+        // Первая подсказка через 10 секунд
+        yield return new WaitForSeconds(10f);
+        if (UnifiedInfoSystem.Instance != null)
+            UnifiedInfoSystem.Instance.ShowTimedMessage("ПОДСКАЗКА: УГОЛ ОТСКОКА ЗАВИСИТ ОТ МЕСТА ПОПАДАНИЯ ПО ПЛАТФОРМЕ. ПОПРОБУЙ НАПРАВИТЬ МЯЧ В НУЖНУЮ СТОРОНУ!", 5f);
 
-    // Вызови этот метод при победе (например, когда разрушены все блоки)
-    public void CompleteLevel()
-    {
-        // Загрузить следующий уровень (например, Level2)
-        UnityEngine.SceneManagement.SceneManager.LoadScene("2_Level2");
+        yield return new WaitForSeconds(15f);
+        if (UnifiedInfoSystem.Instance != null)
+            UnifiedInfoSystem.Instance.ShowTimedMessage("БОНУСЫ ВЫПАДАЮТ ИЗ НЕКОТОРЫХ БЛОКОВ. ЛОВИ ИХ ПЛАТФОРМОЙ!", 5f);
+
+        yield return new WaitForSeconds(15f);
+        if (UnifiedInfoSystem.Instance != null)
+            UnifiedInfoSystem.Instance.ShowTimedMessage("ЧЕМ БОЛЬШЕ БЛОКОВ РАЗРУШИШЬ, ТЕМ БЛИЖЕ ПОБЕДА. УДАЧИ, ПИКСЕЛЬ!", 5f);
     }
 }
