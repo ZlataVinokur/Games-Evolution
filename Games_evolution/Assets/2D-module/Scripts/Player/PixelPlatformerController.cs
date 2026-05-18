@@ -128,8 +128,10 @@ public class PixelPlatformerController : PlayerController_2
         if (move > 0 && !facingRight) Flip();
         else if (move < 0 && facingRight) Flip();
 
-        // Проверка земли
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.3f, groundLayer);
+        // Новая проверка земли через Raycast (более надёжно)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1.1f, groundLayer);
+        isGrounded = hit.collider != null;
+        Debug.DrawRay(transform.position, Vector2.down * 1.1f, Color.green);
 
         // Сброс дополнительных прыжков при касании земли
         if (isGrounded)
@@ -137,12 +139,11 @@ public class PixelPlatformerController : PlayerController_2
             currentExtraJumps = extraJumps;
         }
 
-        // Прыжок
+        // Прыжок (на Space, W, UpArrow)
         if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (isGrounded)
             {
-                // Обычный прыжок с земли
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 PlaySound(jumpSound);
                 StartCoroutine(JumpSquashAndStretch());
@@ -155,7 +156,6 @@ public class PixelPlatformerController : PlayerController_2
             }
             else if (currentExtraJumps > 0)
             {
-                // Дополнительный прыжок в воздухе
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 currentExtraJumps--;
                 PlaySound(jumpSound);
