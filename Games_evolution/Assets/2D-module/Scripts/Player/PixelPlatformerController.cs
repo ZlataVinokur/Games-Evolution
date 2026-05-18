@@ -9,8 +9,16 @@ public class PixelPlatformerController : PlayerController_2
     [Header("Движение")]
     public float moveSpeed = 5f;
     public float jumpForce = 12f;
+    public int extraJumps = 1;          // количество дополнительных прыжков (двойной прыжок = 1)
+    private int currentExtraJumps;      // текущее количество доступных доп. прыжков
     public Transform groundCheck;
     public LayerMask groundLayer;
+
+    [Header("Телепортация по краям")]
+    public bool enableEdgeTeleport = true;
+    public float teleportOffset = 0.1f;
+    private Camera mainCamera;
+    private float leftBound, rightBound;
 
     [Header("Здоровье")]
     public int maxHealth = 5;
@@ -26,9 +34,10 @@ public class PixelPlatformerController : PlayerController_2
 
     [Header("Враги и прогресс")]
     private int enemiesKilled = 0;
-    private int neededKills = 5;
-    private bool portalActive = false;
-    public GameObject portalPrefab;
+    public int neededKills = 10;
+    public float requiredHeight = 150f;      // необходимая высота для победы
+    private bool victoryConditionMet = false; // чтобы не вызывать победу несколько раз
+    public GameObject portalPrefab;           // опционально, если нужен портал (пока не используется)
     private Vector3 portalPosition = new Vector3(12f, 30f, 0f);
 
     [Header("Бонусы")]
@@ -42,12 +51,28 @@ public class PixelPlatformerController : PlayerController_2
     public TextMeshProUGUI heightText;
     public TextMeshProUGUI killsText;
 
+    [Header("Звуки")]
+    public AudioSource audioSource;
+    public AudioClip jumpSound;
+    public AudioClip damageSound;
+    public AudioClip deathSound;
+    public AudioClip healthBonusSound;
+    public AudioClip shieldBonusSound;
+    public AudioClip weaponGetSound;
+    public AudioClip winSound;
+    public AudioClip killSound;   // опционально
+
     private Rigidbody2D rb;
     private bool isGrounded;
     private bool facingRight = true;
     private bool isDead = false;
 
-    // Свойства для доступа из UI
+    // Флаги для статей
+    private bool firstJumpDone = false;
+    private bool weaponUnlockedAndArticleShown = false;
+    private bool healthBonusTaken = false;
+    private bool shieldBonusTaken = false;
+
     public int CurrentHealth => currentHealth;
     public int EnemiesKilled => enemiesKilled;
 
@@ -59,24 +84,36 @@ public class PixelPlatformerController : PlayerController_2
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
-        // Убедимся, что коллайдер не триггер
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.isTrigger = false;
 
         currentHealth = maxHealth;
         UpdateHealthUI();
         UpdateKillsUI();
+
+        currentExtraJumps = extraJumps;
+
+        // AudioSource, если не назначен
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+        if (audioSource == null && (jumpSound != null || damageSound != null))
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Start()
     {
-        // Проверка groundCheck
         if (groundCheck == null)
         {
             GameObject go = new GameObject("GroundCheck");
             go.transform.SetParent(transform);
             go.transform.localPosition = new Vector3(0, -0.5f, 0);
             groundCheck = go.transform;
+        }
+
+        if (enableEdgeTeleport)
+        {
+            mainCamera = Camera.main;
+            UpdateBounds();
         }
     }
 
@@ -88,22 +125,59 @@ public class PixelPlatformerController : PlayerController_2
         float move = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(move * moveSpeed, rb.linearVelocity.y);
 
-        // Расширенная диагностика
-        Collider2D groundCollider = Physics2D.OverlapCircle(groundCheck.position, 0.3f, groundLayer);
-        isGrounded = groundCollider != null;
+        if (move > 0 && !facingRight) Flip();
+        else if (move < 0 && facingRight) Flip();
 
+        // Новая проверка земли через Raycast (более надёжно)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1.1f, groundLayer);
+        isGrounded = hit.collider != null;
+        Debug.DrawRay(transform.position, Vector2.down * 1.1f, Color.green);
 
-        if (Input.GetButtonDown("Jump"))
+        // Сброс дополнительных прыжков при касании земли
+        if (isGrounded)
         {
-            Debug.Log($"Jump pressed, isGrounded={isGrounded}");
+            currentExtraJumps = extraJumps;
+        }
+
+        // Прыжок (на Space, W, UpArrow)
+        if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
             if (isGrounded)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                PlaySound(jumpSound);
+                StartCoroutine(JumpSquashAndStretch());
+
+                if (!firstJumpDone)
+                {
+                    firstJumpDone = true;
+                    UnifiedInfoSystem.Instance?.UnlockArticle("platformer_jump");
+                }
+            }
+            else if (currentExtraJumps > 0)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                currentExtraJumps--;
+                PlaySound(jumpSound);
+                StartCoroutine(JumpSquashAndStretch());
             }
         }
     }
 
-    public override void Move() { } // не используется
+    // Эффект сжатия и растяжения при прыжке
+    IEnumerator JumpSquashAndStretch()
+    {
+        Vector3 originalScale = transform.localScale;
+        // Сжатие по Y, растяжение по X
+        transform.localScale = new Vector3(originalScale.x * 1.2f, originalScale.y * 0.8f, originalScale.z);
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = originalScale;
+        // Небольшое растяжение в верхней точке
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = new Vector3(originalScale.x * 0.9f, originalScale.y * 1.1f, originalScale.z);
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = originalScale;
+    }
 
     void Update()
     {
@@ -111,38 +185,58 @@ public class PixelPlatformerController : PlayerController_2
         if (IsInputBlocked()) return;
         if (isDead) return;
 
-        // Обновление UI высоты
+        if (enableEdgeTeleport) CheckEdgeTeleport();
+
         if (heightText != null)
             heightText.text = $"Высота: {Mathf.FloorToInt(transform.position.y)}";
 
-        // Стрельба
-        if (hasWeapon && Input.GetButtonDown("Fire1"))
-        {
-            Shoot();
-        }
+        if (hasWeapon && Input.GetButtonDown("Fire1")) Shoot();
 
-        // Получение оружия по высоте
         if (!hasWeapon && transform.position.y >= weaponUnlockHeight)
-        {
             UnlockWeapon();
-        }
 
-        // Активация портала
-        if (!portalActive && enemiesKilled >= neededKills)
+        // Проверка победы: убито достаточно врагов И достигнута нужная высота
+        if (!victoryConditionMet && enemiesKilled >= neededKills && transform.position.y >= requiredHeight)
         {
-            GameManager manager = FindObjectOfType<GameManager>();
-            if (manager != null) manager.ShowWin();
+            victoryConditionMet = true;
+            PlaySound(winSound);
+            GameManager.Instance?.ShowWin();
         }
+    }
+
+    void UpdateBounds()
+    {
+        if (mainCamera == null) return;
+        float halfHeight = mainCamera.orthographicSize;
+        float halfWidth = halfHeight * mainCamera.aspect;
+        leftBound = -halfWidth;
+        rightBound = halfWidth;
+    }
+
+    void CheckEdgeTeleport()
+    {
+        if (mainCamera == null) return;
+        Vector3 pos = transform.position;
+        bool teleported = false;
+        if (pos.x < leftBound)
+        {
+            pos.x = rightBound - teleportOffset;
+            teleported = true;
+        }
+        else if (pos.x > rightBound)
+        {
+            pos.x = leftBound + teleportOffset;
+            teleported = true;
+        }
+        if (teleported) transform.position = pos;
     }
 
     void Shoot()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         if (enemies.Length == 0) return;
-
         GameObject nearest = enemies.OrderBy(e => Vector2.Distance(transform.position, e.transform.position)).First();
         Vector2 direction = (nearest.transform.position - firePoint.position).normalized;
-
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         bullet.GetComponent<Bullet_2>().Initialize(direction);
     }
@@ -150,6 +244,12 @@ public class PixelPlatformerController : PlayerController_2
     void UnlockWeapon()
     {
         hasWeapon = true;
+        PlaySound(weaponGetSound);
+        if (!weaponUnlockedAndArticleShown)
+        {
+            weaponUnlockedAndArticleShown = true;
+            UnifiedInfoSystem.Instance?.UnlockArticle("platformer_weapon");
+        }
         if (UnifiedInfoSystem.Instance != null)
         {
             string[] fact = { "В 1985 году в игре Super Mario Bros. появилась возможность стрелять. А в 1987-м Contra сделала стрельбу главной механикой. Теперь и ты вооружён!" };
@@ -158,20 +258,9 @@ public class PixelPlatformerController : PlayerController_2
         Debug.Log("Оружие получено!");
     }
 
-    void ActivatePortal()
-    {
-        portalActive = true;
-        Instantiate(portalPrefab, portalPosition, Quaternion.identity);
-        if (UnifiedInfoSystem.Instance != null)
-        {
-            string[] msg = { "Портал в правом верхнем углу! Прыгни в него, чтобы завершить уровень, или продолжай подниматься выше – выбор за тобой." };
-            UnifiedInfoSystem.Instance.ShowDialogue(msg, "encyclopedia", "neutral");
-        }
-    }
-
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Portal") && portalActive)
+        if (other.CompareTag("Portal") && victoryConditionMet)
         {
             CompleteLevel();
         }
@@ -179,6 +268,12 @@ public class PixelPlatformerController : PlayerController_2
         {
             Heal(1);
             Destroy(other.gameObject);
+            PlaySound(healthBonusSound);
+            if (!healthBonusTaken)
+            {
+                healthBonusTaken = true;
+                UnifiedInfoSystem.Instance?.UnlockArticle("platformer_health");
+            }
             if (UnifiedInfoSystem.Instance != null)
                 UnifiedInfoSystem.Instance.ShowTimedMessage("Здоровье восстановлено! +1 сердце", 2f);
         }
@@ -186,6 +281,12 @@ public class PixelPlatformerController : PlayerController_2
         {
             StartCoroutine(ApplyShield());
             Destroy(other.gameObject);
+            PlaySound(shieldBonusSound);
+            if (!shieldBonusTaken)
+            {
+                shieldBonusTaken = true;
+                UnifiedInfoSystem.Instance?.UnlockArticle("platformer_shield");
+            }
             if (UnifiedInfoSystem.Instance != null)
                 UnifiedInfoSystem.Instance.ShowTimedMessage("Щит активирован! Временно неуязвим", 2f);
         }
@@ -193,17 +294,32 @@ public class PixelPlatformerController : PlayerController_2
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && !isInvincible)
+        if (collision.gameObject.CompareTag("Enemy"))
         {
-            TakeDamage(1);
+            ContactPoint2D contact = collision.contacts[0];
+            if (contact.normal.y < -0.5f) // сверху
+            {
+                Enemy_2 enemy = collision.gameObject.GetComponent<Enemy_2>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage();
+                    PlaySound(killSound);
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.6f);
+                }
+            }
+            else if (!isInvincible)
+            {
+                TakeDamage(1);
+            }
         }
     }
 
-    public void TakeDamage(int amount)  
+    public void TakeDamage(int amount)
     {
         if (isInvincible) return;
         currentHealth -= amount;
         UpdateHealthUI();
+        PlaySound(damageSound);
         StartCoroutine(InvincibilityFrames());
         if (currentHealth <= 0) Die();
     }
@@ -239,10 +355,8 @@ public class PixelPlatformerController : PlayerController_2
     {
         if (heartImages == null) return;
         for (int i = 0; i < heartImages.Length; i++)
-        {
             if (heartImages[i] != null)
                 heartImages[i].sprite = (i < currentHealth) ? heartFull : heartBroken;
-        }
     }
 
     void UpdateKillsUI()
@@ -256,7 +370,7 @@ public class PixelPlatformerController : PlayerController_2
         isDead = true;
         rb.linearVelocity = Vector2.zero;
         rb.simulated = false;
-        Debug.Log("Game Over");
+        PlaySound(deathSound);
         GameManager.Instance?.ShowGameOver();
     }
 
@@ -281,20 +395,16 @@ public class PixelPlatformerController : PlayerController_2
         enemiesKilled++;
         UpdateKillsUI();
 
-        if (enemiesKilled == 1 && UnifiedInfoSystem.Instance != null)
+        if (enemiesKilled == 1)
         {
-            string[] firstKillMsg = { "Первый враг повержен! В ранних платформерах врагов либо обходили, либо они были статичными. Позже появились патрулирующие и летающие враги." };
-            UnifiedInfoSystem.Instance.ShowDialogue(firstKillMsg, "encyclopedia", "neutral");
+            UnifiedInfoSystem.Instance?.UnlockArticle("platformer_first_kill");
         }
         else if (enemiesKilled == neededKills)
         {
-            if (UnifiedInfoSystem.Instance != null)
-            {
-                string[] allKilledMsg = { "Уничтожено 5 врагов! Теперь открыт портал к выходу." };
-                UnifiedInfoSystem.Instance.ShowDialogue(allKilledMsg, "encyclopedia", "happy");
-            }
+            UnifiedInfoSystem.Instance?.UnlockArticle("platformer_portal");
+            // Дополнительный диалог не нужен, аннотация из статьи покажется автоматически
         }
-        else if (UnifiedInfoSystem.Instance != null && enemiesKilled % 2 == 0)
+        else if (enemiesKilled % 2 == 0 && UnifiedInfoSystem.Instance != null)
         {
             UnifiedInfoSystem.Instance.ShowTimedMessage($"Уничтожено врагов: {enemiesKilled}/{neededKills}", 1.5f);
         }
@@ -306,5 +416,11 @@ public class PixelPlatformerController : PlayerController_2
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+    }
+
+    void PlaySound(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+            audioSource.PlayOneShot(clip);
     }
 }
