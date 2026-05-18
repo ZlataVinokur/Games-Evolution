@@ -1001,7 +1001,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &168731729
 Transform:
   m_ObjectHideFlags: 0
@@ -6980,7 +6980,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &348909193
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13890,11 +13890,9 @@ MonoBehaviour:
   spawner: {fileID: 2001467025}
   scoreText: {fileID: 891878164}
   linesText: {fileID: 1956195801}
-  gameOverPanel: {fileID: 0}
   pixelAnimator: {fileID: 652975773}
   flashImage: {fileID: 118946725}
-  GameManager: {fileID: 0}
-  quizManager: {fileID: 0}
+  levelIndex: 3
 --- !u!4 &1680697491
 Transform:
   m_ObjectHideFlags: 0

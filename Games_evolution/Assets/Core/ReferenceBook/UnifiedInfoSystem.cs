@@ -105,10 +105,20 @@ public class UnifiedInfoSystem : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // Перепривязываем UI и сбрасываем состояние диалога
         if (infoPanel == null || messageText == null || continueButton == null)
-        {
             RebindUIElements();
-        }
+
+        // Сброс всех флагов и очередей при загрузке новой сцены
+        isShowing = false;
+        isDialogueMode = false;
+        messageQueue.Clear();
+        dialoguePhrases.Clear();
+        onCompleteCallback = null;
+        onDialogueComplete = null;
+        if (infoPanel != null) infoPanel.SetActive(false);
+        if (messageText != null) messageText.text = "";
+        // Портрет не отключаем – при следующем диалоге он снова включится
     }
 
     private void RebindUIElements()
@@ -297,7 +307,7 @@ public class UnifiedInfoSystem : MonoBehaviour
             messageText.text = "ГОТОВ НАЧАТЬ ИГРУ?";
             startGameButton.gameObject.SetActive(true);
             continueButton.gameObject.SetActive(false);
-            // Портрет оставляем – не отключаем (убрано отключение)
+            // Портрет оставляем – не отключаем
         }
     }
     #endregion
@@ -343,8 +353,6 @@ public class UnifiedInfoSystem : MonoBehaviour
         if (infoPanel != null && !infoPanel.activeSelf) infoPanel.SetActive(true);
         if (messageText != null) messageText.text = message;
         // Для таймерных сообщений портрет не показываем (это не диалог)
-        // Но если нужен – раскомментируйте:
-        // if (portraitImage != null) portraitImage.gameObject.SetActive(true);
         yield return new WaitForSeconds(duration);
         if (infoPanel != null) infoPanel.SetActive(false);
         if (messageText != null) messageText.text = "";
@@ -369,15 +377,14 @@ public class UnifiedInfoSystem : MonoBehaviour
             return;
         }
 
-        if (messageQueue.Count == 0 && onCompleteCallback != null)
+        if (messageQueue.Count > 0)
         {
-            var callback = onCompleteCallback;
-            onCompleteCallback = null;
-            callback.Invoke();
+            ShowNextTrainingMessage();
         }
         else
         {
-            ShowNextTrainingMessage();
+            // Все сообщения показаны – показываем кнопку «Начать игру»
+            ShowNextTrainingMessage(); // он выведет финальный текст и кнопку
         }
     }
 
@@ -410,4 +417,6 @@ public class UnifiedInfoSystem : MonoBehaviour
 
         return true;
     }
+
+
 }
