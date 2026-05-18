@@ -1332,6 +1332,113 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 249433177}
   m_CullTransparentMesh: 1
+--- !u!1 &297143611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 297143615}
+  - component: {fileID: 297143614}
+  - component: {fileID: 297143613}
+  - component: {fileID: 297143612}
+  m_Layer: 0
+  m_Name: EncyclopediaManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &297143612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297143611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b7aaedb023cfd43b6bf8d64ba06bc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaExpression
+  emotions:
+  - emotionName: neutral
+    sprite: {fileID: -1491141727, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+  - emotionName: happy
+    sprite: {fileID: 864610845, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+  - emotionName: sad
+    sprite: {fileID: 324886886, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+  - emotionName: confused
+    sprite: {fileID: 23891835, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+--- !u!114 &297143613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297143611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c95e7b314fe3d76459c8feaafa01e1d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterExpression
+  emotions:
+  - emotionName: neutral
+    sprite: {fileID: 1047628607, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+  - emotionName: curious
+    sprite: {fileID: 116073629, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+  - emotionName: sad
+    sprite: {fileID: -1116846367, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+  - emotionName: happy
+    sprite: {fileID: 238834451, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
+--- !u!114 &297143614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297143611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 933a91abc84cafc43830b1457b8cdef3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnifiedInfoSystem
+  infoPanel: {fileID: 2081850152}
+  messageText: {fileID: 1049499444}
+  continueButton: {fileID: 901570802}
+  startGameButton: {fileID: 1778232580}
+  portraitImage: {fileID: 297823559}
+  encyclopediaEmotions: {fileID: 297143612}
+  defaultEncyclopediaEmotion: neutral
+  characterExpression: {fileID: 297143613}
+  canvasName: InfoCanvas
+  panelName: InfoPanel
+  messageTextName: MessageText
+  continueButtonName: ContinueButton
+  startGameButtonName: StartGameButton
+  portraitImageName: PortraitImage
+  allArticles: []
+  defaultMessage: "\u041F\u0440\u0438\u0441\u0442\u0443\u043F\u0430\u0439 \u043A
+    \u0438\u0433\u0440\u0435! \u0421\u043B\u0435\u0434\u0438 \u0437\u0430 \u043F\u043E\u0434\u0441\u043A\u0430\u0437\u043A\u0430\u043C\u0438."
+  defaultTimedMessageDuration: 3
+--- !u!4 &297143615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297143611}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1392.0688, y: 153.27203, z: -6.60093}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1804065055}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &297823557
 GameObject:
   m_ObjectHideFlags: 0
@@ -4875,7 +4982,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2081850153}
-  m_Father: {fileID: 2013770774}
+  m_Father: {fileID: 297143615}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5278,113 +5385,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968019334}
   m_CullTransparentMesh: 1
---- !u!1 &2013770773
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2013770774}
-  - component: {fileID: 2013770777}
-  - component: {fileID: 2013770776}
-  - component: {fileID: 2013770775}
-  m_Layer: 0
-  m_Name: EncyclopediaManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2013770774
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2013770773}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1392.0688, y: 153.27203, z: -6.60093}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1804065055}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2013770775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2013770773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b7aaedb023cfd43b6bf8d64ba06bc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaExpression
-  emotions:
-  - emotionName: neutral
-    sprite: {fileID: -1491141727, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
-  - emotionName: happy
-    sprite: {fileID: 864610845, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
-  - emotionName: sad
-    sprite: {fileID: 324886886, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
-  - emotionName: confused
-    sprite: {fileID: 23891835, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
---- !u!114 &2013770776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2013770773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c95e7b314fe3d76459c8feaafa01e1d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterExpression
-  emotions:
-  - emotionName: neutral
-    sprite: {fileID: 1047628607, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
-  - emotionName: curious
-    sprite: {fileID: 116073629, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
-  - emotionName: sad
-    sprite: {fileID: -1116846367, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
-  - emotionName: happy
-    sprite: {fileID: 238834451, guid: 4541fb5c27aa0454093ca9ca778d87c6, type: 3}
---- !u!114 &2013770777
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2013770773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 933a91abc84cafc43830b1457b8cdef3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UnifiedInfoSystem
-  infoPanel: {fileID: 2081850152}
-  messageText: {fileID: 1049499444}
-  continueButton: {fileID: 901570802}
-  startGameButton: {fileID: 1778232580}
-  portraitImage: {fileID: 297823559}
-  encyclopediaEmotions: {fileID: 2013770775}
-  defaultEncyclopediaEmotion: neutral
-  characterExpression: {fileID: 2013770776}
-  canvasName: InfoCanvas
-  panelName: InfoPanel
-  messageTextName: MessageText
-  continueButtonName: ContinueButton
-  startGameButtonName: StartGameButton
-  portraitImageName: PortraitImage
-  allArticles: []
-  defaultMessage: "\u041F\u0440\u0438\u0441\u0442\u0443\u043F\u0430\u0439 \u043A
-    \u0438\u0433\u0440\u0435! \u0421\u043B\u0435\u0434\u0438 \u0437\u0430 \u043F\u043E\u0434\u0441\u043A\u0430\u0437\u043A\u0430\u043C\u0438."
-  defaultTimedMessageDuration: 3
 --- !u!1 &2027505282
 GameObject:
   m_ObjectHideFlags: 0
@@ -5900,4 +5900,4 @@ SceneRoots:
   - {fileID: 1940429292}
   - {fileID: 1461337285}
   - {fileID: 1029781331}
-  - {fileID: 2013770774}
+  - {fileID: 297143615}
