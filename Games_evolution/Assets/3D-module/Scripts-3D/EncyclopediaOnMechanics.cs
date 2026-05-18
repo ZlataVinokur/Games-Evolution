@@ -13,9 +13,15 @@ public class EncyclopediaOnMechanics : MonoBehaviour
     [TextArea(3, 5)]
     public string[] lightFact = new string[]
     {
-        "А вот и он, можно добавить света! Но это еще не все, другая часть системы ждет за томами.",
+        "А вот и он, можно добавить света! Но это еще не все, другая часть системы ждет в тени за томами.",
         "А ты знаешь, что освещение - это ключевой аспект для восприятия пространства и создания атмосферы? Теперь знаешь.",
         "Ну красота! А теперь на верх."
+    };
+
+    [TextArea(3, 5)]
+    public string[] lightFact2 = new string[]
+    {
+        "Ну красота! А теперь на верх, по аркадным автоматам.",
     };
 
     [TextArea(3, 5)]
@@ -37,8 +43,8 @@ public class EncyclopediaOnMechanics : MonoBehaviour
     [TextArea(3, 5)]
     public string[] endFact = new string[]
     {
-        "Ты хорошо справляешься. Платформеры учат игрока оценивать расстояния и время прыжка.",
-        "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!"
+        "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!",
+        "Проходи в портал и проверь свои знания!"
     };
 
     private int factIndex = 0;
@@ -63,7 +69,6 @@ public class EncyclopediaOnMechanics : MonoBehaviour
 
     private void OnRightClickOutside(InputAction.CallbackContext context)
     {
-        // Используем IsShowingAnything() вместо несуществующего IsDialogueActive()
         if (!UnifiedInfoSystem.Instance.IsShowingAnything())
         {
             ShowNextFact();
@@ -75,24 +80,63 @@ public class EncyclopediaOnMechanics : MonoBehaviour
         switch (factIndex)
         {
             case 0:
-                UnifiedInfoSystem.Instance.ShowDialogue(movementFact, "encyclopedia", "explain");
+                ShowMovementFact();
                 break;
             case 1:
-                UnifiedInfoSystem.Instance.ShowDialogue(lightFact, "encyclopedia", "happy");
+                ShowLightFact();
                 break;
             case 2:
-                UnifiedInfoSystem.Instance.ShowDialogue(cameraFact, "encyclopedia", "explain");
+                ShowLightFact2();
                 break;
             case 3:
-                UnifiedInfoSystem.Instance.ShowDialogue(platformerFact, "encyclopedia", "explain");
+                ShowCameraFact();
                 break;
             case 4:
-                UnifiedInfoSystem.Instance.ShowDialogue(endFact, "encyclopedia", "explain");
+                ShowPlatformerFact();
+                break;
+            case 5:
+                ShowEndFact();
                 break;
             default:
-                UnifiedInfoSystem.Instance.ShowDialogue(new[] { "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!" }, "encyclopedia", "happy");
+                ShowDefaultFact();
                 break;
         }
         factIndex++;
+    }
+
+    // Публичные методы для вызова из GameEvents
+    public void ShowMovementFact()
+    {
+        UnifiedInfoSystem.Instance.ShowDialogue(movementFact, "encyclopedia", "explain");
+    }
+
+    public void ShowLightFact()
+    {
+        UnifiedInfoSystem.Instance.ShowDialogue(lightFact, "encyclopedia", "happy");
+    }
+
+    public void ShowLightFact2()
+    {
+        UnifiedInfoSystem.Instance.ShowDialogue(lightFact2, "encyclopedia", "happy");
+    }
+
+    public void ShowCameraFact()
+    {
+        UnifiedInfoSystem.Instance.ShowDialogue(cameraFact, "encyclopedia", "explain");
+    }
+
+    public void ShowPlatformerFact()
+    {
+        UnifiedInfoSystem.Instance.ShowDialogue(platformerFact, "encyclopedia", "explain");
+    }
+
+    public void ShowEndFact()
+    {
+        UnifiedInfoSystem.Instance.ShowDialogue(endFact, "encyclopedia", "explain");
+    }
+
+    public void ShowDefaultFact()
+    {
+        UnifiedInfoSystem.Instance.ShowDialogue(new[] { "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!" }, "encyclopedia", "happy");
     }
 }
