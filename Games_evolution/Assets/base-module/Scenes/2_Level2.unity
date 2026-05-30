@@ -5002,7 +5002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec5be1968237734ab01bd9cfe205803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Level2Manager
-  levelIndex: 1
+  levelData: {fileID: 11400000, guid: 42f28889e618b904a8c0b1767eb8a0ff, type: 2}
   waveSpawner: {fileID: 1952329349}
   playerController: {fileID: 399169373}
 --- !u!114 &1952329349
