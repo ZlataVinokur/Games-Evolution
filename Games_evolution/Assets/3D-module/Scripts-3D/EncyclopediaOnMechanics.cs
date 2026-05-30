@@ -3,49 +3,13 @@ using UnityEngine.InputSystem;
 
 public class EncyclopediaOnMechanics : MonoBehaviour
 {
-    [TextArea(3, 5)]
-    public string[] movementFact = new string[]
-    {
-        "Кстати, механика движения в 3D-пространстве стала возможна благодаря технологии 'матрица трансформации'.",
-        "Раньше, в 80-х, персонажи двигались только по 2D-сетке."
-    };
-
-    [TextArea(3, 5)]
-    public string[] lightFact = new string[]
-    {
-        "А вот и он, можно добавить света! Но это еще не все, другая часть системы ждет в тени за томами.",
-        "А ты знаешь, что освещение - это ключевой аспект для восприятия пространства и создания атмосферы? Теперь знаешь.",
-        "Ну красота! А теперь на верх."
-    };
-
-    [TextArea(3, 5)]
-    public string[] lightFact2 = new string[]
-    {
-        "Ну красота! А теперь на верх, по аркадным автоматам.",
-    };
-
-    [TextArea(3, 5)]
-    public string[] cameraFact = new string[]
-    {
-        "Страшно прыгать на высоте? Ничего, закрой глаза и представь себя со стороны...",
-        "Теперь у тебя куда больше контроля над прыжком, а еще можно полюбоваться на себя и анимации.",
-        "Камеры от первого и третьего лица появились в игре 'Mario 64' и 'Tomb Raider' (1996).",
-        "Это был прорыв в восприятии виртуального мира."
-    };
-
-    [TextArea(3, 5)]
-    public string[] platformerFact = new string[]
-    {
-        "Ты хорошо справляешься. Платформеры учат игрока оценивать расстояния и время прыжка.",
-        "В 3D добавилась третья ось — теперь нужно прыгать ещё и 'на глубину'."
-    };
-
-    [TextArea(3, 5)]
-    public string[] endFact = new string[]
-    {
-        "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!",
-        "Проходи в портал и проверь свои знания!"
-    };
+    [Header("Статьи для фактов")]
+    public Article movementArticle;
+    public Article lightArticle;
+    public Article lightArticle2;
+    public Article cameraArticle;
+    public Article platformerArticle;
+    public Article endArticle;
 
     private int factIndex = 0;
     private InputSystem3D inputControls;
@@ -104,39 +68,72 @@ public class EncyclopediaOnMechanics : MonoBehaviour
         factIndex++;
     }
 
-    // Публичные методы для вызова из GameEvents
     public void ShowMovementFact()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(movementFact, "encyclopedia", "explain");
+        if (movementArticle != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { movementArticle.shortAnnotation },
+                "encyclopedia",
+                "explain"
+            );
     }
 
     public void ShowLightFact()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(lightFact, "encyclopedia", "happy");
+        if (lightArticle != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { lightArticle.shortAnnotation },
+                "encyclopedia",
+                "happy"
+            );
     }
 
     public void ShowLightFact2()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(lightFact2, "encyclopedia", "happy");
+        if (lightArticle2 != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { lightArticle2.shortAnnotation },
+                "encyclopedia",
+                "happy"
+            );
     }
 
     public void ShowCameraFact()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(cameraFact, "encyclopedia", "explain");
+        if (cameraArticle != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { cameraArticle.shortAnnotation },
+                "encyclopedia",
+                "explain"
+            );
     }
 
     public void ShowPlatformerFact()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(platformerFact, "encyclopedia", "explain");
+        if (platformerArticle != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { platformerArticle.shortAnnotation },
+                "encyclopedia",
+                "explain"
+            );
     }
 
     public void ShowEndFact()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(endFact, "encyclopedia", "explain");
+        if (endArticle != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { endArticle.shortAnnotation },
+                "encyclopedia",
+                "explain"
+            );
     }
 
     public void ShowDefaultFact()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(new[] { "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!" }, "encyclopedia", "happy");
+        UnifiedInfoSystem.Instance.ShowDialogue(
+            new[] { "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!" },
+            "encyclopedia",
+            "happy"
+        );
     }
 }

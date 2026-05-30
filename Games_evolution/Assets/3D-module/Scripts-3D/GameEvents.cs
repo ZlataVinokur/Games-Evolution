@@ -1,19 +1,14 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameEvents : MonoBehaviour
 {
-    public EncyclopediaOnMechanics encyclopedia; // Ссылка на скрипт энциклопедии
+    public EncyclopediaOnMechanics encyclopedia;
 
     private void Start()
     {
         Debug.Log($"GameEvents инициализирован на объекте {gameObject.name}");
-
-        // Если ссылка не назначена в инспекторе, попробуем найти автоматически
         if (encyclopedia == null)
-        {
             encyclopedia = FindObjectOfType<EncyclopediaOnMechanics>();
-        }
     }
 
     public void OnGameWin()
@@ -21,52 +16,75 @@ public class GameEvents : MonoBehaviour
         GameManager.Instance.LoadQuizForCurrentModule(8);
     }
 
-    // Методы для триггеров
     public void TriggerMovementFact()
     {
-        if (encyclopedia != null && !UnifiedInfoSystem.Instance.IsShowingAnything())
+        if (encyclopedia != null && encyclopedia.movementArticle != null)
         {
-            encyclopedia.ShowMovementFact();
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { encyclopedia.movementArticle.shortAnnotation },
+                "encyclopedia",
+                "explain"
+            );
         }
     }
 
     public void TriggerLightFact()
     {
-        if (encyclopedia != null && !UnifiedInfoSystem.Instance.IsShowingAnything())
+        if (encyclopedia != null && encyclopedia.lightArticle != null)
         {
-            encyclopedia.ShowLightFact();
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { encyclopedia.lightArticle.shortAnnotation },
+                "encyclopedia",
+                "happy"
+            );
         }
     }
 
     public void TriggerLightFact2()
     {
-        if (encyclopedia != null && !UnifiedInfoSystem.Instance.IsShowingAnything())
+        if (encyclopedia != null && encyclopedia.lightArticle2 != null)
         {
-            encyclopedia.ShowLightFact2();
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { encyclopedia.lightArticle2.shortAnnotation },
+                "encyclopedia",
+                "happy"
+            );
         }
     }
 
     public void TriggerCameraFact()
     {
-        if (encyclopedia != null && !UnifiedInfoSystem.Instance.IsShowingAnything())
+        if (encyclopedia != null && encyclopedia.cameraArticle != null)
         {
-            encyclopedia.ShowCameraFact();
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { encyclopedia.cameraArticle.shortAnnotation },
+                "encyclopedia",
+                "explain"
+            );
         }
     }
 
     public void TriggerPlatformerFact()
     {
-        if (encyclopedia != null && !UnifiedInfoSystem.Instance.IsShowingAnything())
+        if (encyclopedia != null && encyclopedia.platformerArticle != null)
         {
-            encyclopedia.ShowPlatformerFact();
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { encyclopedia.platformerArticle.shortAnnotation },
+                "encyclopedia",
+                "explain"
+            );
         }
     }
 
     public void TriggerEndFact()
     {
-        if (encyclopedia != null && !UnifiedInfoSystem.Instance.IsShowingAnything())
+        if (encyclopedia != null && encyclopedia.endArticle != null)
         {
-            encyclopedia.ShowEndFact();
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                new[] { encyclopedia.endArticle.shortAnnotation },
+                "encyclopedia",
+                "explain"
+            );
         }
     }
 }
