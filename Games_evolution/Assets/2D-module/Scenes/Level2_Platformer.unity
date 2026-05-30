@@ -5831,6 +5831,7 @@ GameObject:
   - component: {fileID: 446185122}
   - component: {fileID: 446185124}
   - component: {fileID: 446185125}
+  - component: {fileID: 446185126}
   - component: {fileID: 446185127}
   m_Layer: 22
   m_Name: Player
@@ -6010,6 +6011,14 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.784, y: 2.044}
   m_EdgeRadius: 0
+--- !u!81 &446185126
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446185118}
+  m_Enabled: 1
 --- !u!114 &446185127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7158,7 +7167,6 @@ GameObject:
   - component: {fileID: 907047793}
   - component: {fileID: 907047797}
   - component: {fileID: 907047798}
-  - component: {fileID: 907047799}
   m_Layer: 0
   m_Name: Pixel Perfect Camera
   m_TagString: MainCamera
@@ -7416,14 +7424,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!81 &907047799
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 907047792}
-  m_Enabled: 1
 --- !u!1 &937551828
 GameObject:
   m_ObjectHideFlags: 0
