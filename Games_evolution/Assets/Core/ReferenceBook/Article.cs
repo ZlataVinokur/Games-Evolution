@@ -4,6 +4,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Reference Book/Article")]
 public class Article : ScriptableObject
 {
+
+    [Header("Привязка к уровню")]
+    public int moduleIndex = 0; // индекс модуля
     [Header("Идентификация")]
     public string articleId;
     public string title;

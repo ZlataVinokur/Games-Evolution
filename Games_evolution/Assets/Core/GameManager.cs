@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -25,7 +26,9 @@ public class GameManager : MonoBehaviour
     private bool isWin = false;
     private bool wasCursorLocked;
 
-    // Ваши старые поля (сохраните их из вашего файла!)
+    public bool[] modulesCompleted;  // 3 модуля
+
+    // старые поля
     public int totalScore;
     public bool[] levelsCompleted;
     private int currentLevelScore = 0;
@@ -39,12 +42,18 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            LoadGame(); // ваш старый метод LoadGame
+            LoadGame(); // старый метод LoadGame
         }
         else
         {
             Destroy(gameObject);
             return;
+        }
+
+        void InitializeModules()
+        {
+            if (modulesCompleted == null || modulesCompleted.Length != 3)
+                modulesCompleted = new bool[3];
         }
     }
 
@@ -177,6 +186,8 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
+        CompleteModule(completedModuleSceneIndex);
+
         // Сохраняем индекс модуля перед загрузкой сцены квиза
         PlayerPrefs.SetInt("CompletedModuleIndex", completedModuleSceneIndex);
         PlayerPrefs.Save();
@@ -222,9 +233,9 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isWin = false;
         Time.timeScale = 1f;
-        SceneManager.LoadScene(menuSceneName);
+        SceneManager.LoadScene(0);
     }
-
+    
     public void LoadNextLevel()
     {
         isPaused = false;
@@ -236,6 +247,24 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(nextIndex);
         else
             Debug.Log("Игра пройдена! Все уровни завершены.");
+    }
+
+    public void CompleteModule(int moduleIndex)
+    {
+        if (moduleIndex < modulesCompleted.Length && !modulesCompleted[moduleIndex])
+        {
+            modulesCompleted[moduleIndex] = true;
+            SaveGame();
+
+            // Разблокировать статьи модуля
+            var infoSys = UnifiedInfoSystem.Instance;
+            if (infoSys != null)
+            {
+                var articles = infoSys.AllArticles.Where(a => a.moduleIndex == moduleIndex);
+                foreach (var art in articles)
+                    infoSys.UnlockArticle(art.articleId);
+            }
+        }
     }
 
     // ==================== СТАРЫЕ МЕТОДЫ (без изменений) ====================
@@ -278,6 +307,10 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("Level_" + i, levelsCompleted[i] ? 1 : 0);
         PlayerPrefs.Save();
         Debug.Log("Игра сохранена. Очки: " + totalScore);
+
+        for (int i = 0; i < modulesCompleted.Length; i++)
+            PlayerPrefs.SetInt("Module_" + i, modulesCompleted[i] ? 1 : 0);
+        PlayerPrefs.Save();
     }
 
     public void LoadGame()
@@ -287,6 +320,10 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < levelsCompleted.Length; i++)
             levelsCompleted[i] = PlayerPrefs.GetInt("Level_" + i, 0) == 1;
         Debug.Log("Игра загружена. Очки: " + totalScore);
+
+        if (modulesCompleted == null) modulesCompleted = new bool[3];
+        for (int i = 0; i < modulesCompleted.Length; i++)
+            modulesCompleted[i] = PlayerPrefs.GetInt("Module_" + i, 0) == 1;
     }
 
     public void ResetGame()

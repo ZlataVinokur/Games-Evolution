@@ -95,7 +95,7 @@ public class RPGLevelManager : MonoBehaviour
             GameManager.Instance.CompleteLevel("RPG_Module");
             GameManager.Instance.SetFlag("RPG_Completed", true);
             // Загружаем сцену квиза через GameManager
-            GameManager.Instance.LoadQuizForCurrentModule(SceneManager.GetActiveScene().buildIndex);
+            GameManager.Instance.LoadQuizForCurrentModule(1);
         }
 
     }

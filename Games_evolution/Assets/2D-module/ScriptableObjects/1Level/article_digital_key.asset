@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a57df3f5377114b900b13deae2fd8e, type: 3}
   m_Name: article_digital_key
   m_EditorClassIdentifier: Assembly-CSharp::Article
+  moduleIndex: 1
   articleId: article_digital_key
   title: "\u0426\u0438\u0444\u0440\u043E\u0432\u044B\u0435 \u0437\u0430\u043C\u043A\u0438
     \u0438 \u0433\u0435\u0439\u0442\u0438\u043D\u0433 \u043F\u0440\u043E\u0433\u0440\u0435\u0441\u0441\u0430"
@@ -35,3 +36,5 @@ MonoBehaviour:
     \u0437\u043D\u0430\u043A\u043E\u043C\u0430\u044F \u043D\u0430\u043C \u043F\u043E
     Doom \u0438 \u0442\u044B\u0441\u044F\u0447\u0430\u043C \u0434\u0440\u0443\u0433\u0438\u0445
     \u0438\u0433\u0440."
+  tutorialMessages: []
+  timedHints: []
