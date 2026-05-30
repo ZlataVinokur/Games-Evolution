@@ -1434,6 +1434,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7c14b08754753af4cad2fb6a8b5fe07c, type: 2}
   - {fileID: 11400000, guid: 96c41e04d119f4241b3340debcd6a83a, type: 2}
   - {fileID: 11400000, guid: f6b4a3915e14ad74ba274ac68d9e2898, type: 2}
+  - {fileID: 11400000, guid: e5b18a75a1f3a0f448e95afea65952f6, type: 2}
+  - {fileID: 11400000, guid: 837b545ae0e9fd0498652e2084046129, type: 2}
+  - {fileID: 11400000, guid: 72a321a915b19954ca6f95b9d3808319, type: 2}
+  - {fileID: 11400000, guid: fdbcd88dd0d74454e8cca5929f235ce7, type: 2}
   defaultMessage: "\u041F\u0440\u0438\u0441\u0442\u0443\u043F\u0430\u0439 \u043A
     \u0438\u0433\u0440\u0435! \u0421\u043B\u0435\u0434\u0438 \u0437\u0430 \u043F\u043E\u0434\u0441\u043A\u0430\u0437\u043A\u0430\u043C\u0438."
   defaultTimedMessageDuration: 3

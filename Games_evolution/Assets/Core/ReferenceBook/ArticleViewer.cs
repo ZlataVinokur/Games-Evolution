@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿    using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -22,6 +22,9 @@ public class ArticleViewer : MonoBehaviour
 
     [Header("Навигация")]
     public Button backButton;
+
+    [Header("Возврат в квиз")]
+    public Button returnToQuizButton;
 
     // Данные
     private List<Article> allArticles;
@@ -48,6 +51,15 @@ public class ArticleViewer : MonoBehaviour
 
         // По умолчанию показываем первый модуль (0)
         OnModuleSelected(0);
+
+        if (returnToQuizButton != null)
+        {
+            returnToQuizButton.onClick.AddListener(ReturnToQuiz);
+
+            // Показываем кнопку только если пришли из квиза
+            bool shouldReturn = PlayerPrefs.GetInt("ReturnToQuiz", 0) == 1;
+            returnToQuizButton.gameObject.SetActive(shouldReturn);
+        }
     }
 
     private void LoadArticles()
@@ -147,5 +159,26 @@ public class ArticleViewer : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
+    }
+
+    private void ReturnToQuiz()
+    {
+        // Очищаем флаг возврата
+        PlayerPrefs.DeleteKey("ReturnToQuiz");
+
+        int moduleSceneIndex = PlayerPrefs.GetInt("RetryModuleSceneIndex", -1);
+        if (moduleSceneIndex != -1)
+        {
+            PlayerPrefs.DeleteKey("RetryModuleSceneIndex");
+            PlayerPrefs.SetInt("CompletedModuleIndex", moduleSceneIndex);
+            PlayerPrefs.Save();
+
+            SceneLoader.LoadScene("Quiz");
+        }
+        else
+        {
+            Debug.LogError("Не найден индекс модуля для повторного квиза");
+            GoToMainMenu();
+        }
     }
 }

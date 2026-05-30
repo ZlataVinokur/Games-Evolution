@@ -42,7 +42,11 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            LoadGame(); // старый метод LoadGame
+
+            if (modulesCompleted == null || modulesCompleted.Length != 3)
+                modulesCompleted = new bool[3];
+
+            LoadGame();
         }
         else
         {
@@ -50,11 +54,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        void InitializeModules()
-        {
-            if (modulesCompleted == null || modulesCompleted.Length != 3)
-                modulesCompleted = new bool[3];
-        }
+
     }
 
     void Start()
@@ -186,7 +186,6 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        CompleteModule(completedModuleSceneIndex);
 
         // Сохраняем индекс модуля перед загрузкой сцены квиза
         PlayerPrefs.SetInt("CompletedModuleIndex", completedModuleSceneIndex);
@@ -251,19 +250,51 @@ public class GameManager : MonoBehaviour
 
     public void CompleteModule(int moduleIndex)
     {
-        if (moduleIndex < modulesCompleted.Length && !modulesCompleted[moduleIndex])
+        Debug.Log($"=== CompleteModule вызван с moduleIndex = {moduleIndex} ===");
+        Debug.Log($"modulesCompleted.Length = {modulesCompleted.Length}");
+
+        if (modulesCompleted == null)
+        {
+            Debug.LogError("modulesCompleted == null!");
+            return;
+        }
+
+        if (moduleIndex >= modulesCompleted.Length)
+        {
+            Debug.LogError($"moduleIndex {moduleIndex} выходит за пределы массива (длина {modulesCompleted.Length})");
+            return;
+        }
+
+        Debug.Log($"Текущее состояние modulesCompleted[{moduleIndex}] = {modulesCompleted[moduleIndex]}");
+
+        if (!modulesCompleted[moduleIndex])
         {
             modulesCompleted[moduleIndex] = true;
             SaveGame();
+            Debug.Log($"Модуль {moduleIndex} отмечен как пройденный!");
 
             // Разблокировать статьи модуля
             var infoSys = UnifiedInfoSystem.Instance;
             if (infoSys != null)
             {
                 var articles = infoSys.AllArticles.Where(a => a.moduleIndex == moduleIndex);
+                int count = 0;
                 foreach (var art in articles)
+                {
                     infoSys.UnlockArticle(art.articleId);
+                    count++;
+                    Debug.Log($"Разблокирована статья: {art.title} (ID: {art.articleId})");
+                }
+                Debug.Log($"Всего разблокировано статей для модуля {moduleIndex}: {count}");
             }
+            else
+            {
+                Debug.LogError("UnifiedInfoSystem.Instance == null!");
+            }
+        }
+        else
+        {
+            Debug.Log($"Модуль {moduleIndex} уже был пройден ранее");
         }
     }
 

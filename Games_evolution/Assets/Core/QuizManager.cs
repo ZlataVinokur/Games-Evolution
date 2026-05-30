@@ -35,6 +35,10 @@ public class QuizManager : MonoBehaviour
     public Button startQuizButton;
     public Image flashImage;
     public float flashDuration = 0.3f;
+    [Header("Панель провала")]
+    public GameObject failPanel;
+    public Button failEncyclopediaButton;
+    public TMP_Text failMessageText;
 
     [Header("Настройка модулей")]
     public List<ModuleQuiz> modules = new List<ModuleQuiz>();
@@ -69,12 +73,18 @@ public class QuizManager : MonoBehaviour
                 flashImage.color = new Color(0, 0, 0, 0);
             }
 
+            // Проверяем, не возвращаемся ли мы из справочника
+            if (PlayerPrefs.HasKey("ReturnToQuiz"))
+            {
+                // Возвращаемся - удаляем флаг, но оставляем CompletedModuleIndex
+                PlayerPrefs.DeleteKey("ReturnToQuiz");
+            }
+
             // Загружаем сохраненный индекс модуля
             if (PlayerPrefs.HasKey("CompletedModuleIndex"))
             {
                 int moduleIndex = PlayerPrefs.GetInt("CompletedModuleIndex");
                 LoadQuizForModule(moduleIndex);
-                PlayerPrefs.DeleteKey("CompletedModuleIndex");
             }
             else
             {
@@ -86,6 +96,9 @@ public class QuizManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        if (failEncyclopediaButton != null)
+            failEncyclopediaButton.onClick.AddListener(GoToEncyclopedia);
     }
 
     void OnEnable()
@@ -232,15 +245,77 @@ public class QuizManager : MonoBehaviour
     private void EndQuiz()
     {
         quizPanel.SetActive(false);
-        finalPanel.SetActive(true);
 
-        TMP_Text resultText = finalPanel.GetComponentInChildren<TMP_Text>();
         var questions = modules[currentModuleIndex].questions;
-        if (resultText != null)
-            resultText.text = $"Вы ответили правильно на {score} из {questions.Count} вопросов!";
+        float percent = (float)score / questions.Count * 100f;
 
-        bool isLastModule = (currentModuleIndex == modules.Count - 1);
-        nextModuleButton.gameObject.SetActive(!isLastModule);
+        if (GameManager.Instance != null)
+        {
+            int moduleIndex = GetModuleNumberFromSceneIndex(modules[currentModuleIndex].moduleSceneIndex);
+            GameManager.Instance.CompleteModule(moduleIndex);
+        }
+
+        if (percent >= 50f)
+        {            
+
+            finalPanel.SetActive(true);
+            TMP_Text resultText = finalPanel.GetComponentInChildren<TMP_Text>();
+            if (resultText != null)
+                resultText.text = $"Вы ответили правильно на {score} из {questions.Count} вопросов!";
+
+            if (nextModuleButton != null)
+            {
+                bool isLastModule = (currentModuleIndex == modules.Count - 1);
+                if (isLastModule)
+                {
+                    // Последний модуль - кнопка ведёт в меню
+                    nextModuleButton.onClick.RemoveAllListeners();
+                    nextModuleButton.onClick.AddListener(GoToMainMenu);
+                    nextModuleButton.GetComponentInChildren<TMP_Text>().text = "В меню";
+                }
+                else
+                {
+                    // Не последний - следующий модуль
+                    nextModuleButton.onClick.RemoveAllListeners();
+                    nextModuleButton.onClick.AddListener(GoToNextModule);
+                    nextModuleButton.GetComponentInChildren<TMP_Text>().text = "Продолжить";
+                }
+                nextModuleButton.gameObject.SetActive(true);
+            }
+
+            // Удаляем временные ключи после успешного прохождения
+            PlayerPrefs.DeleteKey("CompletedModuleIndex");
+            PlayerPrefs.DeleteKey("RetryModuleSceneIndex");
+            PlayerPrefs.Save();
+        }
+        else
+        {
+            // Провал - показываем панель со ссылкой на справочник
+            failPanel.SetActive(true);
+            if (failMessageText != null)
+                failMessageText.text = $"Квиз не пройден ({score}/{questions.Count}). Изучите материалы в справочнике и попробуйте снова.";
+
+            // Сохраняем какой модуль пытались пройти
+            PlayerPrefs.SetInt("RetryModuleSceneIndex", modules[currentModuleIndex].moduleSceneIndex);
+            PlayerPrefs.Save();
+        }
+    }
+
+    private int GetModuleNumberFromSceneIndex(int sceneIndex)
+    {
+        if (sceneIndex == 1) return 0;
+        if (sceneIndex == 7) return 1;
+        if (sceneIndex == 8) return 2;
+        return -1;
+    }
+
+    private void GoToEncyclopedia()
+    {
+        // Сохраняем что нужно вернуться в квиз
+        PlayerPrefs.SetInt("ReturnToQuiz", 1);
+        PlayerPrefs.Save();
+
+        SceneLoader.LoadScene("ReferenceBook");
     }
 
     private void GoToMainMenu()

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a57df3f5377114b900b13deae2fd8e, type: 3}
   m_Name: LightFact
   m_EditorClassIdentifier: Assembly-CSharp::Article
+  moduleIndex: 2
   articleId: mechanics_light
   title: "\u041E\u0441\u0432\u0435\u0449\u0435\u043D\u0438\u0435 \u0432 3D"
   fullText: "\u0410 \u0442\u044B \u0437\u043D\u0430\u0435\u0448\u044C, \u0447\u0442\u043E

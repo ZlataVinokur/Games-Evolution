@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a57df3f5377114b900b13deae2fd8e, type: 3}
   m_Name: EndFact
   m_EditorClassIdentifier: Assembly-CSharp::Article
+  moduleIndex: 2
   articleId: mechanics_end
   title: "\u0424\u0438\u043D\u0430\u043B 3D"
   fullText: 

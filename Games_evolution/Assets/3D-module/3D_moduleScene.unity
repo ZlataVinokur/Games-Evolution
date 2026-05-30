@@ -31566,6 +31566,7 @@ MonoBehaviour:
   pauseRestartButton: {fileID: 0}
   pauseMenuButton: {fileID: 0}
   winNextButton: {fileID: 0}
+  modulesCompleted: 
   totalScore: 0
   levelsCompleted: 
   menuSceneName: 0
@@ -38917,7 +38918,7 @@ Transform:
   m_GameObject: {fileID: 1709387620}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.044, y: 21.689, z: 1.046}
+  m_LocalPosition: {x: 1.44, y: -4.25, z: 10.08}
   m_LocalScale: {x: 1.0913339, y: 0.6138535, z: 1.0913339}
   m_ConstrainProportionsScale: 0
   m_Children: []
