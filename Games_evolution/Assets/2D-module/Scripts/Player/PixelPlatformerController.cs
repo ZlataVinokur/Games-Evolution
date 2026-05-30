@@ -9,8 +9,8 @@ public class PixelPlatformerController : PlayerController_2
     [Header("Движение")]
     public float moveSpeed = 5f;
     public float jumpForce = 12f;
-    public int extraJumps = 1;          // количество дополнительных прыжков (двойной прыжок = 1)
-    private int currentExtraJumps;      // текущее количество доступных доп. прыжков
+    //public int extraJumps = 1;          // количество дополнительных прыжков (двойной прыжок = 1)
+    //private int currentExtraJumps;      // текущее количество доступных доп. прыжков
     public Transform groundCheck;
     public LayerMask groundLayer;
 
@@ -91,7 +91,7 @@ public class PixelPlatformerController : PlayerController_2
         UpdateHealthUI();
         UpdateKillsUI();
 
-        currentExtraJumps = extraJumps;
+        //currentExtraJumps = extraJumps;
 
         // AudioSource, если не назначен
         if (audioSource == null)
@@ -106,7 +106,7 @@ public class PixelPlatformerController : PlayerController_2
         {
             GameObject go = new GameObject("GroundCheck");
             go.transform.SetParent(transform);
-            go.transform.localPosition = new Vector3(0, -0.5f, 0);
+            go.transform.localPosition = new Vector3(0, -0.9f, 0);
             groundCheck = go.transform;
         }
 
@@ -133,11 +133,11 @@ public class PixelPlatformerController : PlayerController_2
         isGrounded = hit.collider != null;
         Debug.DrawRay(transform.position, Vector2.down * 1.1f, Color.green);
 
-        // Сброс дополнительных прыжков при касании земли
-        if (isGrounded)
-        {
-            currentExtraJumps = extraJumps;
-        }
+        //// Сброс дополнительных прыжков при касании земли
+        //if (isGrounded)
+        //{
+        //    currentExtraJumps = extraJumps;
+        //}
 
         // Прыжок (на Space, W, UpArrow)
         if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
@@ -146,7 +146,7 @@ public class PixelPlatformerController : PlayerController_2
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 PlaySound(jumpSound);
-                StartCoroutine(JumpSquashAndStretch());
+                //StartCoroutine(JumpSquashAndStretch());
 
                 if (!firstJumpDone)
                 {
@@ -154,30 +154,30 @@ public class PixelPlatformerController : PlayerController_2
                     UnifiedInfoSystem.Instance?.UnlockArticle("platformer_jump");
                 }
             }
-            else if (currentExtraJumps > 0)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                currentExtraJumps--;
-                PlaySound(jumpSound);
-                StartCoroutine(JumpSquashAndStretch());
-            }
+            //else if (currentExtraJumps > 0)
+            //{
+            //    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            //    currentExtraJumps--;
+            //    PlaySound(jumpSound);
+            //    StartCoroutine(JumpSquashAndStretch());
+            //}
         }
     }
 
-    // Эффект сжатия и растяжения при прыжке
-    IEnumerator JumpSquashAndStretch()
-    {
-        Vector3 originalScale = transform.localScale;
-        // Сжатие по Y, растяжение по X
-        transform.localScale = new Vector3(originalScale.x * 1.2f, originalScale.y * 0.8f, originalScale.z);
-        yield return new WaitForSeconds(0.1f);
-        transform.localScale = originalScale;
-        // Небольшое растяжение в верхней точке
-        yield return new WaitForSeconds(0.1f);
-        transform.localScale = new Vector3(originalScale.x * 0.9f, originalScale.y * 1.1f, originalScale.z);
-        yield return new WaitForSeconds(0.1f);
-        transform.localScale = originalScale;
-    }
+    //// Эффект сжатия и растяжения при прыжке
+    //IEnumerator JumpSquashAndStretch()
+    //{
+    //    Vector3 originalScale = transform.localScale;
+    //    // Сжатие по Y, растяжение по X
+    //    transform.localScale = new Vector3(originalScale.x * 1.2f, originalScale.y * 0.8f, originalScale.z);
+    //    yield return new WaitForSeconds(0.1f);
+    //    transform.localScale = originalScale;
+    //    // Небольшое растяжение в верхней точке
+    //    yield return new WaitForSeconds(0.1f);
+    //    transform.localScale = new Vector3(originalScale.x * 0.9f, originalScale.y * 1.1f, originalScale.z);
+    //    yield return new WaitForSeconds(0.1f);
+    //    transform.localScale = originalScale;
+    //}
 
     void Update()
     {

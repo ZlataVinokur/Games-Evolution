@@ -6,7 +6,7 @@ public class BallController : MonoBehaviour
     private Rigidbody2D rb;
     private bool isLaunched = false;
     private Transform paddle;
-    
+    private bool gameStarted = false;
     [SerializeField] private float launchSpeed = 7f;
     [SerializeField] private float maxSpeed = 15f;
     private float originalSpeed;
@@ -15,7 +15,18 @@ public class BallController : MonoBehaviour
     // Таймер для защиты от зацикливания
     private float timeSinceLastUsefulHit = 0f;
     private const float maxIdleTime = 3f; // секунд без касания платформы/кирпича
-    
+    public void SetGameStarted(bool started)
+    {
+        gameStarted = started;
+       if (!gameStarted)
+       {
+        // Проверяем, что rb не null
+            if (rb != null)
+                rb.linearVelocity = Vector2.zero;
+            isLaunched = false;
+            ResetBall(); // ResetBall сам проверит наличие paddle
+        }
+    }
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -38,6 +49,7 @@ public class BallController : MonoBehaviour
     
     void Update()
     {
+        if (!gameStarted) return;
         if (!isLaunched && Input.GetKeyDown(KeyCode.Space))
         {
             LaunchBall();
@@ -110,7 +122,8 @@ public class BallController : MonoBehaviour
     public void ResetBall()
     {
         isLaunched = false;
-        rb.linearVelocity = Vector2.zero;
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
         timeSinceLastUsefulHit = 0f;
         GameObject paddleObject = GameObject.FindGameObjectWithTag("Paddle");
         if (paddleObject != null)

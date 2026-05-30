@@ -36,8 +36,8 @@ public class BossCombat : MonoBehaviour
     {
         if (col.gameObject.CompareTag("PlayerProjectile") && !isDead)
         {
-            int damage = 10 + (RPGLevelManager.Instance.HasTamagotchiBuff() ? 5 : 0);
-            TakeDamage(damage);
+            //int damage = 10 + (RPGLevelManager.Instance.HasTamagotchiBuff() ? 5 : 0);
+            //TakeDamage(damage);
         }
     }
 
@@ -55,6 +55,6 @@ public class BossCombat : MonoBehaviour
         Destroy(gameObject);
         if (deathPortal != null)
             Instantiate(deathPortal, transform.position, Quaternion.identity);
-        RPGLevelManager.Instance.OnBossDefeated();
+        //RPGLevelManager.Instance.OnBossDefeated();
     }
 }

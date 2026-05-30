@@ -24,6 +24,13 @@ public class InventoryManager2 : MonoBehaviour
         items.Add(type);
         icons.Add(icon);
         UpdateUI();
+
+        if (items.Count == 1) // первый предмет
+        {
+            UnifiedInfoSystem.Instance?.ShowDialogue(
+                new[] { "Предмет в инвентаре! Нажми на него и перетащи на алтарь нужного цвета." },
+                "encyclopedia", "neutral", null);
+        }
     }
 
     public bool HasItem(string type)
@@ -42,20 +49,22 @@ public class InventoryManager2 : MonoBehaviour
         }
     }
 
+    public void AddItemBack(string type, Sprite icon)
+    {
+        items.Add(type);
+        icons.Add(icon);
+        UpdateUI();
+    }
+
     private void UpdateUI()
     {
-        // Очищаем контент
         foreach (Transform child in inventoryContent)
             Destroy(child.gameObject);
-
-        // Создаём слоты для каждого предмета
         for (int i = 0; i < items.Count; i++)
         {
             GameObject slot = Instantiate(itemSlotPrefab, inventoryContent);
-            Image img = slot.GetComponent<Image>();
-            img.sprite = icons[i];
-            DragAndDropItem drag = slot.GetComponent<DragAndDropItem>();
-            drag.itemType = items[i];
+            slot.GetComponent<Image>().sprite = icons[i];
+            slot.GetComponent<DragAndDropItem>().itemType = items[i];
         }
     }
 }

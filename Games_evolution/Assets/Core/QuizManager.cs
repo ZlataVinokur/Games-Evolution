@@ -49,13 +49,14 @@ public class QuizManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
 
-            // Инициализация UI
+            // Инициализация UI (по умолчанию всё выключено)
             quizPanel.SetActive(false);
             finalPanel.SetActive(false);
             introPanel.SetActive(false);
 
+            // Кнопки и события инициализируем всегда (они могут понадобиться)
             if (mainMenuButton != null)
                 mainMenuButton.onClick.AddListener(GoToMainMenu);
             if (nextModuleButton != null)
@@ -75,6 +76,11 @@ public class QuizManager : MonoBehaviour
                 LoadQuizForModule(moduleIndex);
                 PlayerPrefs.DeleteKey("CompletedModuleIndex");
             }
+            else
+            {
+                // Нет индекса – переходим в меню
+                GoToMainMenu();
+            }
         }
         else
         {
@@ -84,12 +90,23 @@ public class QuizManager : MonoBehaviour
 
     void OnEnable()
     {
-        // Убеждаемся, что время нормальное при активации квиза
         Time.timeScale = 1f;
     }
 
     public void LoadQuizForModule(int completedModuleSceneIndex)
     {
+        // **Проверка: только индекс 10 активирует квиз**
+        if (SceneManager.GetActiveScene().buildIndex != 10)
+        {
+            Debug.Log($"Квиз не предназначен для этой сцены. Загружаем меню.");
+            // Скрываем все панели квиза
+            if (quizPanel != null) quizPanel.SetActive(false);
+            if (finalPanel != null) finalPanel.SetActive(false);
+            if (introPanel != null) introPanel.SetActive(false);
+            return;
+        }
+
+        // Ищем модуль с нужным индексом (например, модуль RPG)
         for (int i = 0; i < modules.Count; i++)
         {
             if (modules[i].moduleSceneIndex == completedModuleSceneIndex)
@@ -99,11 +116,18 @@ public class QuizManager : MonoBehaviour
                 return;
             }
         }
-        Debug.LogError("Квиз для модуля " + completedModuleSceneIndex + " не найден");
+        Debug.LogError($"Квиз для модуля {completedModuleSceneIndex} не найден");
+        GoToMainMenu();
     }
 
     public void ShowIntroPanel()
     {
+        // Убедимся, что мы в разрешённом режиме (индекс 10)
+        if (currentModuleIndex == -1)
+        {
+            GoToMainMenu();
+            return;
+        }
         introPanel.SetActive(true);
         quizPanel.SetActive(false);
         finalPanel.SetActive(false);
@@ -111,8 +135,10 @@ public class QuizManager : MonoBehaviour
 
     public void StartQuiz()
     {
-        if (currentModuleIndex == -1) return;
-
+        if (currentModuleIndex == -1 || SceneManager.GetActiveScene().buildIndex != 10)
+        {
+            return;
+        }
         introPanel.SetActive(false);
         currentQuestion = 0;
         score = 0;

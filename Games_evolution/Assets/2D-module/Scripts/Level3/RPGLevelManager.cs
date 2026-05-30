@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class RPGLevelManager : MonoBehaviour
 {
@@ -9,102 +10,93 @@ public class RPGLevelManager : MonoBehaviour
     public bool[] metersActivated = new bool[3];
     public GameObject[] meterIndicatorUI;
 
-    [Header("Boss Fight")]
-    public GameObject bossPrefab;
-    public Transform bossSpawnPoint;
-    public GameObject barrierWall;
-
-    private bool hasTamagotchiBuff = false;
     private UnifiedInfoSystem infoSystem;
     private GameManager gameManager;
+    private bool levelCompleted = false;
 
-    void Awake()
-    {
-        Instance = this;
-    }
+    void Awake() => Instance = this;
 
     void Start()
     {
-        // Восстанавливаем состояние из GameManager
-        bool[] savedMeters = GameManager.Instance.GetRPGMeters();
-        if (savedMeters != null)
-        {
-            for (int i = 0; i < 3; i++)
+        // Восстанавливаем состояние из RPGProgress
+        for (int i = 0; i < 3; i++)
+            if (RPGProgress.IsMeterActivated(i) && !metersActivated[i])
             {
-                if (savedMeters[i] && !metersActivated[i])
-                {
-                    metersActivated[i] = true;
-                    UpdateMeterUI();
-                    // Если нужно восстановить артефакты (алтари и т.д.) – дополнительно
-                }
+                metersActivated[i] = true;
+                UpdateMeterUI();
             }
-        }
 
-        infoSystem = UnifiedInfoSystem.Instance ?? FindObjectOfType<UnifiedInfoSystem>();
-        gameManager = GameManager.Instance ?? FindObjectOfType<GameManager>();
+        infoSystem = UnifiedInfoSystem.Instance ?? FindFirstObjectByType<UnifiedInfoSystem>();
+        gameManager = GameManager.Instance ?? FindFirstObjectByType<GameManager>();
         UpdateMeterUI();
-        if (barrierWall != null) barrierWall.SetActive(true);
+
+        // Приветственный диалог с заданием
+        infoSystem?.ShowDialogue(new[] {
+            "Твоя задача – активировать три измерителя.",
+            "1. Пройди ритм-игру (мигающий круг).",
+            "2. Найди провод, чип, батарею и положи на алтари в правильном порядке.",
+            "3. Активируй третий измеритель – собери 5 кристаллов энергии или убей 5 багов.",
+            "Когда все три загорятся, уровень завершится."
+        }, "encyclopedia", "serious");
     }
 
     public void ActivateMeter(int index)
     {
-        if (metersActivated[index]) return;
-        metersActivated[index] = true;
-        UpdateMeterUI();
-        GameManager.Instance.SetRPGMeter(index, true); // сохраняем
-
         if (index < 0 || index >= metersActivated.Length) return;
         if (metersActivated[index]) return;
 
         metersActivated[index] = true;
+        RPGProgress.ActivateMeter(index);
         UpdateMeterUI();
+        Debug.Log($"Meter {index} activated. State: [{metersActivated[0]},{metersActivated[1]},{metersActivated[2]}]");
 
         string[] articleIds = { "rpg_rhythm", "rpg_logic", "rpg_moral" };
-        if (infoSystem != null) infoSystem.UnlockArticle(articleIds[index]);
+        infoSystem?.UnlockArticle(articleIds[index]);
 
-        foreach (bool activated in metersActivated)
-            if (!activated) return;
-
-        StartBossFight();
+        // Проверяем, все ли активированы
+        if (metersActivated[0] && metersActivated[1] && metersActivated[2])
+        {
+            Debug.Log("All meters activated! Completing level...");
+            CompleteLevel();
+        }
     }
 
     void UpdateMeterUI()
     {
         for (int i = 0; i < meterIndicatorUI.Length; i++)
+        {
             if (meterIndicatorUI[i] != null)
-                meterIndicatorUI[i].SetActive(metersActivated[i]);
+            {
+                Image img = meterIndicatorUI[i].GetComponent<Image>();
+                if (img != null)
+                    img.color = metersActivated[i] ? Color.white : new Color(0.5f, 0.5f, 0.5f, 0.5f);
+            }
+        }
     }
 
-    void StartBossFight()
+    void Update()
     {
-        if (barrierWall != null) barrierWall.SetActive(false);
-        Instantiate(bossPrefab, bossSpawnPoint.position, Quaternion.identity);
-        if (infoSystem != null)
-            infoSystem.ShowDialogue(new string[] { "Портал открыт! Победи мини-босса, чтобы завершить модуль." }, "encyclopedia", "serious");
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Debug.Log("Принудительный вызов CompleteLevel() по клавише L");
+            CompleteLevel();
+        }
     }
 
-    public void SetTamagotchiBuff(bool value)
+    void CompleteLevel()
     {
-        hasTamagotchiBuff = value;
-        if (value && infoSystem != null)
-            infoSystem.TellFact(new string[] { "Тамагочи благодарен! В бою он поможет тебе наносить больше урона." }, "happy");
-    }
+        if (levelCompleted) return;
+        levelCompleted = true;
+        Debug.Log("CompleteLevel: запускаем загрузку квиза");
 
-    public bool HasTamagotchiBuff() => hasTamagotchiBuff;
-
-    public void OnBossDefeated()
-    {
+        // Сохраняем прогресс в GameManager (если он есть)
         if (GameManager.Instance != null)
         {
             GameManager.Instance.CompleteLevel("RPG_Module");
             GameManager.Instance.SetFlag("RPG_Completed", true);
+            // Загружаем сцену квиза через GameManager
+            GameManager.Instance.LoadQuizForCurrentModule(1);
         }
-        UnifiedInfoSystem.Instance.ShowDialogue(
-            new string[] { "Поздравляю! Ты освоил эволюцию 2D-жанров. Теперь тебя ждёт итоговый квиз." },
-            "encyclopedia", "celebrate", () =>
-            {
-                GameManager.Instance.LoadQuizForCurrentModule(SceneManager.GetActiveScene().buildIndex);
-            }
-        );
+
     }
 }

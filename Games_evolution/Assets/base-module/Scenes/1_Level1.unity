@@ -1609,8 +1609,8 @@ Transform:
   m_GameObject: {fileID: 367486175}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.29, y: 0.5763, z: -0}
-  m_LocalScale: {x: 1.418821, y: 1.3479482, z: 1}
+  m_LocalPosition: {x: 1.21, y: 0.49, z: -0}
+  m_LocalScale: {x: 1.5040921, y: 1.3883866, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -4500,6 +4500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9048da5e7a91b6243846636db8d22f66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Level1Manager
+  levelData: {fileID: 11400000, guid: ddd8fa7a2e9d5da4983c7fc39b287b33, type: 2}
   ball: {fileID: 1726412066}
   paddle: {fileID: 367486180}
 --- !u!4 &1297402786
@@ -5266,7 +5267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 827812019481160402, guid: e2d2b5c31c02ef641a64e574a13059b9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.85
+      value: 1.71
       objectReference: {fileID: 0}
     - target: {fileID: 827812019481160402, guid: e2d2b5c31c02ef641a64e574a13059b9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5475,7 +5476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BallController
   launchSpeed: 5
-  maxSpeed: 15
+  maxSpeed: 10
 --- !u!58 &1726412067
 CircleCollider2D:
   m_ObjectHideFlags: 0

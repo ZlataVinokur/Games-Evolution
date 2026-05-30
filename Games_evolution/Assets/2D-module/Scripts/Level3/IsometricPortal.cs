@@ -6,7 +6,7 @@ public class IsometricPortal : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            RPGLevelManager.Instance.OnBossDefeated();
+            //RPGLevelManager.Instance.OnBossDefeated();
         }
     }
 }
