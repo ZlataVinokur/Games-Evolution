@@ -74,15 +74,6 @@ public class RPGLevelManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Debug.Log("Принудительный вызов CompleteLevel() по клавише L");
-            CompleteLevel();
-        }
-    }
-
     void CompleteLevel()
     {
         if (levelCompleted) return;

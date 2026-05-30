@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4896988840745354144}
   - component: {fileID: 4643275782559728777}
-  - component: {fileID: -4426190336655398642}
-  - component: {fileID: 877301066600154909}
   m_Layer: 0
   m_Name: flower3
   m_TagString: Untagged
@@ -27,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2626923568297684624}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
@@ -93,125 +91,3 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!60 &-4426190336655398642
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2626923568297684624}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1.830447, y: 2.43}
-    newSize: {x: 1.830447, y: 2.43}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.9038926, y: 0.6633882}
-      - {x: 0.83063245, y: 0.73664826}
-      - {x: 0.6548083, y: 0.7952563}
-      - {x: 0.4643321, y: 0.6926922}
-      - {x: 0.347116, y: 0.5754761}
-      - {x: 0.20059584, y: 0.5608241}
-      - {x: 0.30315995, y: 0.70734423}
-      - {x: 0.47898412, y: 0.7659523}
-      - {x: 0.7866764, y: 0.9564285}
-      - {x: 0.9185446, y: 1.1029487}
-      - {x: 0.9185446, y: 1.1908607}
-      - {x: 0.8599365, y: 1.3080769}
-      - {x: 0.64015627, y: 1.3373809}
-      - {x: 0.5668962, y: 1.3080769}
-      - {x: 0.37642002, y: 1.2201648}
-      - {x: 0.17129181, y: 1.0443406}
-      - {x: 0.20059584, y: 1.1908607}
-      - {x: 0.28850794, y: 1.1615567}
-      - {x: 0.39107203, y: 1.2641208}
-      - {x: 0.6548083, y: 1.6890292}
-      - {x: 0.5815482, y: 1.7769413}
-      - {x: 0.64015627, y: 1.9381135}
-      - {x: 0.52294016, y: 2.2311537}
-      - {x: 0.4496801, y: 2.3337178}
-      - {x: 0.31781197, y: 2.2897618}
-      - {x: 0.20059584, y: 2.2751098}
-      - {x: 0.09803174, y: 2.42163}
-      - {x: 0.024771666, y: 2.42163}
-      - {x: -0.10709646, y: 2.3190658}
-      - {x: -0.20966057, y: 2.3630219}
-      - {x: -0.2536166, y: 2.3923259}
-      - {x: -0.48804885, y: 2.0992856}
-      - {x: -0.48804885, y: 1.9234614}
-      - {x: -0.57596093, y: 1.8355494}
-      - {x: -0.619917, y: 1.7183332}
-      - {x: -0.47339684, y: 1.6597252}
-      - {x: -0.41478878, y: 1.410641}
-      - {x: -0.20966057, y: 1.2348168}
-      - {x: -0.121748485, y: 1.1029487}
-      - {x: -0.3122247, y: 1.1469047}
-      - {x: -0.57596093, y: 1.2201648}
-      - {x: -0.8543492, y: 1.1908607}
-      - {x: -0.89830524, y: 1.1029487}
-      - {x: -0.89830524, y: 0.98573256}
-      - {x: -0.634569, y: 0.72199625}
-      - {x: -0.4294408, y: 0.60478014}
-      - {x: -0.18035655, y: 0.5461721}
-      - {x: -0.45874482, y: 0.5461721}
-      - {x: -0.60526496, y: 0.39965194}
-      - {x: -0.60526496, y: 0.29708785}
-      - {x: -0.45874482, y: 0.106611654}
-      - {x: -0.19500856, y: 0.09195963}
-      - {x: 0.010119651, y: 0.033351578}
-      - {x: 0.24455188, y: 0.033351578}
-      - {x: 0.42037606, y: 0.062655605}
-      - {x: 0.6987643, y: 0.3410439}
-      - {x: 0.9185446, y: 0.50221604}
-      - {x: 0.9185446, y: 0.5754761}
-  m_UseDelaunayMesh: 1
---- !u!114 &877301066600154909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2626923568297684624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ff50fce1420b834fa07f341c9dce332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  interactionType: 0
-  itemId: 
-  requiredItemId: 
-  dialogueOnLook: []
-  flagToSetOnAction: 

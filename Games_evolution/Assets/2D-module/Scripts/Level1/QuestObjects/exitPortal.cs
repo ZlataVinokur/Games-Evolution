@@ -21,7 +21,7 @@ public class ExitPortal : Interactable
     protected override bool PerformAction()
     {
         UnifiedInfoSystem.Instance.ShowDialogue(portalDialogue, speaker: "encyclopedia");
-        // «агружаем следующий уровень после закрыти€ диалога (можно с задержкой)
+        // «агружает следующий уровень после закрыти€ диалога
         StartCoroutine(LoadAfterDelay(2f));
         return true;
     }
@@ -29,7 +29,13 @@ public class ExitPortal : Interactable
     System.Collections.IEnumerator LoadAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        GameManager manager = FindObjectOfType<GameManager>();
-        if (manager != null) manager.ShowWin();
+        CompleteLevel();
+    }
+
+    public void CompleteLevel()
+    {
+        GameManager.Instance.CompleteLevel("Platformer_Module");
+        GameManager.Instance.SetFlag("Platformer_Completed", true);
+        GameManager.Instance?.ShowWin();
     }
 }
