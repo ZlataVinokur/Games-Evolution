@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1969783437479024922}
   - component: {fileID: 3540045303852430252}
   - component: {fileID: -392370590694240906}
-  - component: {fileID: 4223333026737781149}
   m_Layer: 0
   m_Name: gates
   m_TagString: Untagged
@@ -204,20 +203,3 @@ PolygonCollider2D:
       - {x: -2.273153, y: 0.1451823}
       - {x: -1.5845084, y: 0.15983431}
   m_UseDelaunayMesh: 1
---- !u!114 &4223333026737781149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7194841403058858251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ff50fce1420b834fa07f341c9dce332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  interactionType: 0
-  itemId: 
-  requiredItemId: 
-  dialogueOnLook: []
-  flagToSetOnAction: 

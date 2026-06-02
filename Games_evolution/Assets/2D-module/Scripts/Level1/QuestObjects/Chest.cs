@@ -4,7 +4,7 @@ public class Chest : MonoBehaviour
 {
     public Sprite closedSprite;
     public Sprite openSprite;
-    public GameObject keyPrefab;   // не обязательно, т.к. ключ добавляется сразу в инвентарь
+    public GameObject keyObject;
     private SpriteRenderer sr;
     private bool isOpen = false;
 
@@ -16,7 +16,7 @@ public class Chest : MonoBehaviour
         {
             isOpen = true;
             sr.sprite = openSprite;
-            InventoryManager.Instance.AddItem("digital_key");
+            keyObject.SetActive(true);
             UnifiedInfoSystem.Instance.ShowDialogue(new[] {
                 "В сундуке лежит цифровой ключ!"
             }, speaker: "encyclopedia", emotion: "happy");

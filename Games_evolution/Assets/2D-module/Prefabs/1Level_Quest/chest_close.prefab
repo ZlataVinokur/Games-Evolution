@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1970190013853299511}
   - component: {fileID: 6935250786999043503}
   - component: {fileID: 5950732748368949949}
-  - component: {fileID: -2660004285884335590}
   m_Layer: 0
   m_Name: chest_close
   m_TagString: Untagged
@@ -172,20 +171,3 @@ PolygonCollider2D:
       - {x: 1.0671736, y: 0.27840796}
       - {x: 1.2869538, y: 0.4395801}
   m_UseDelaunayMesh: 1
---- !u!114 &-2660004285884335590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7007958867162157618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ff50fce1420b834fa07f341c9dce332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  interactionType: 0
-  itemId: 
-  requiredItemId: 
-  dialogueOnLook: []
-  flagToSetOnAction: 

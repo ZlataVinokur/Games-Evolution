@@ -4,6 +4,7 @@ public class MarioNPC : Interactable
 {
     public Sprite aliveSprite;
     private SpriteRenderer sr;
+    public GameObject mushroomObject;
 
     void Start()
     {
@@ -16,7 +17,7 @@ public class MarioNPC : Interactable
     protected override bool PerformAction()
     {
         sr.sprite = aliveSprite;
-        InventoryManager.Instance.AddItem("mushroom");
+        mushroomObject.SetActive(true);
         GameManager.Instance.SetFlag("mario_helped", true);
         UnifiedInfoSystem.Instance.ShowDialogue(new[]
             { "Марио ожил! 'Спасибо! Возьми этот гриб.'" },
@@ -24,8 +25,7 @@ public class MarioNPC : Interactable
 
         UnifiedInfoSystem.Instance?.UnlockArticle("article_pointandclick");
 
-        capabilities = InteractionCapabilities.Look;
-        dialogueOnLook = new string[] { "Марио весело подмигивает." };
+        UnifiedInfoSystem.Instance.ShowDialogue(new[] { "В знак благодарности Марисио дал гриб!" }, speaker: "encyclopedia", emotion: "happy");
         return true;
     }
 }

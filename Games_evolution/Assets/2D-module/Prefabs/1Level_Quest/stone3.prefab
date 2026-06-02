@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5364531500851515720}
   - component: {fileID: 8962525217861556643}
-  - component: {fileID: 8506269161047309984}
-  - component: {fileID: 4355934663500316520}
   m_Layer: 0
   m_Name: stone3
   m_TagString: Untagged
@@ -27,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2291111438883211581}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
@@ -81,7 +79,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1126625398, guid: d7d8503dd335b9849b659c7d329fbfe1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -93,117 +91,3 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!60 &8506269161047309984
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2291111438883211581}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 3.7609184, y: 4.37}
-    newSize: {x: 3.7609184, y: 4.37}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 1.2234236, y: 0.37994543}
-      - {x: 1.3992478, y: 0.42390147}
-      - {x: 1.7655481, y: 0.7755498}
-      - {x: 1.8388082, y: 0.951374}
-      - {x: 1.8388082, y: 1.1565022}
-      - {x: 1.677636, y: 1.2737184}
-      - {x: 1.5018119, y: 1.2883704}
-      - {x: 1.3992478, y: 1.2151103}
-      - {x: 1.1501635, y: 1.0539382}
-      - {x: 1.1501635, y: 2.050275}
-      - {x: 1.1355115, y: 2.3433154}
-      - {x: 1.1355115, y: 3.7352567}
-      - {x: 1.0622514, y: 3.8231688}
-      - {x: 0.7692111, y: 3.9843411}
-      - {x: 0.5054748, y: 4.1015573}
-      - {x: -0.051301725, y: 4.3799453}
-      - {x: -0.21247388, y: 4.3799453}
-      - {x: -0.28573397, y: 4.3652935}
-      - {x: -0.44690612, y: 4.2187734}
-      - {x: -0.5934263, y: 4.1308613}
-      - {x: -0.8278585, y: 3.925733}
-      - {x: -0.9157706, y: 3.7499087}
-      - {x: -0.9450746, y: 3.6180406}
-      - {x: -0.9304226, y: 3.5594325}
-      - {x: -0.9304226, y: 2.9587}
-      - {x: -0.9157706, y: 2.2993593}
-      - {x: -0.9450746, y: 2.2700553}
-      - {x: -0.98903066, y: 1.7572348}
-      - {x: -1.0476388, y: 1.7425828}
-      - {x: -1.311375, y: 1.7718868}
-      - {x: -1.3699831, y: 1.7279308}
-      - {x: -1.4285911, y: 1.5960627}
-      - {x: -1.4578952, y: 1.4055865}
-      - {x: -1.7069794, y: 0.99533004}
-      - {x: -1.8681515, y: 0.80485386}
-      - {x: -1.8681515, y: 0.5704216}
-      - {x: -1.8534995, y: 0.4678575}
-      - {x: -1.7655874, y: 0.39459744}
-      - {x: -1.5458072, y: 0.30668533}
-      - {x: -1.326027, y: 0.20412123}
-      - {x: -1.1502029, y: 0.14551318}
-      - {x: -1.0915948, y: 0.13086116}
-      - {x: -0.5787743, y: 0.08690512}
-      - {x: -0.19782187, y: 0.013645046}
-      - {x: -0.08060575, y: -0.0010069683}
-      - {x: 0.32965067, y: -0.0010069683}
-      - {x: 0.4761708, y: 0.013645046}
-      - {x: 0.57873493, y: 0.05760109}
-      - {x: 0.8571232, y: 0.05760109}
-      - {x: 1.0915555, y: 0.2627293}
-  m_UseDelaunayMesh: 1
---- !u!114 &4355934663500316520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2291111438883211581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ff50fce1420b834fa07f341c9dce332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  interactionType: 0
-  itemId: 
-  requiredItemId: 
-  dialogueOnLook: []
-  flagToSetOnAction: 

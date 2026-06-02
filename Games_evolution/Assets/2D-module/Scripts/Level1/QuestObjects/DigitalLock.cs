@@ -25,8 +25,8 @@ public class DigitalLock : Interactable
 
         exitPortal.SetActive(true);
         capabilities = InteractionCapabilities.Look;
-
         UnifiedInfoSystem.Instance?.UnlockArticle("article_pixel_evolution");
+        this.gameObject.SetActive(false);
         return true;
     }
 }

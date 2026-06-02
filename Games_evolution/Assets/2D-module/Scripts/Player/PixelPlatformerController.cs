@@ -374,7 +374,7 @@ public class PixelPlatformerController : PlayerController_2
         GameManager.Instance?.ShowGameOver();
     }
 
-    void CompleteLevel()
+    public void CompleteLevel()
     {
         GameManager.Instance?.CompleteLevel("platformer");
         GameManager.Instance?.ShowWin();
