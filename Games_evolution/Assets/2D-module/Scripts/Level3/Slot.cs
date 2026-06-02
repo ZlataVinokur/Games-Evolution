@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class Slot : MonoBehaviour, IDropHandler
@@ -7,7 +6,6 @@ public class Slot : MonoBehaviour, IDropHandler
     public string requiredItemType;
     public System.Action<string, DragAndDropItem> OnCorrectItemDropped;
     public AltarVisual altarVisual;
-
     private DragAndDropItem currentItem;
 
     public void OnDrop(PointerEventData eventData)
@@ -18,11 +16,8 @@ public class Slot : MonoBehaviour, IDropHandler
             currentItem = dragged;
             dragged.gameObject.SetActive(false);
             InventoryManager2.Instance.RemoveItem(dragged.itemType);
-
-            Image img = dragged.GetComponent<Image>();
-            if (altarVisual != null && img != null)
-                altarVisual.PlaceItem(img.sprite);
-
+            if (altarVisual != null && altarVisual.itemSpriteRenderer != null)
+                altarVisual.PlaceItem(dragged.GetComponent<UnityEngine.UI.Image>().sprite);
             OnCorrectItemDropped?.Invoke(requiredItemType, dragged);
         }
         else
@@ -36,12 +31,9 @@ public class Slot : MonoBehaviour, IDropHandler
         if (currentItem != null)
         {
             currentItem.gameObject.SetActive(true);
-            Image img = currentItem.GetComponent<Image>();
-            if (img != null)
-                InventoryManager2.Instance.AddItem(currentItem.itemType, img.sprite); // изменено
+            InventoryManager2.Instance.AddItem(currentItem.itemType, currentItem.GetComponent<UnityEngine.UI.Image>().sprite);
             currentItem = null;
         }
-        if (altarVisual != null)
-            altarVisual.ResetAltar();
+        if (altarVisual != null) altarVisual.ResetAltar();
     }
 }

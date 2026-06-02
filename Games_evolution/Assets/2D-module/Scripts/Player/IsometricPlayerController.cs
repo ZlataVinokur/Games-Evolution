@@ -49,6 +49,14 @@ public class IsometricPlayerController : PlayerController_2
         }
     }
 
+    public int damageBonus = 0;
+
+    public void HealFull()
+    {
+        currentHealth = maxHealth;
+        UpdateHealthUI();
+    }
+
     void ShootAtNearestEnemy()
     {
         Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, 10f);
@@ -64,13 +72,17 @@ public class IsometricPlayerController : PlayerController_2
         }
         if (nearest == null) return;
         Vector2 direction = (nearest.position - firePoint.position).normalized;
-        ShootInDirection(direction);
+        ShootInDirection(direction, damageBonus);
     }
 
-    void ShootInDirection(Vector2 direction)
+    void ShootInDirection(Vector2 direction, int bonusDamage)
     {
-        if (projectilePrefab == null || firePoint == null) return;
+        if (projectilePrefab == null || firePoint == null) return; // —Õ¿◊¿À¿ œ–Œ¬≈– ¿
+
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+        Projectile projScript = proj.GetComponent<Projectile>();
+        if (projScript != null) projScript.damage = 10 + bonusDamage;
+
         Rigidbody2D rbProj = proj.GetComponent<Rigidbody2D>();
         if (rbProj == null) { Destroy(proj); return; }
         rbProj.linearVelocity = direction * projectileSpeed;

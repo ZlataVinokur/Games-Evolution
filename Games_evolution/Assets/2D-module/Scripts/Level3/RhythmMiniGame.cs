@@ -3,91 +3,82 @@ using UnityEngine;
 public class RhythmMiniGame : MonoBehaviour
 {
     public float beatInterval = 1f;
+    public int successesNeeded = 5;
+    public int maxMistakes = 3;
+
     private float nextBeatTime;
     private bool isActive = false;
-    public int successesNeeded = 5;       // количество успехов для победы
     private int successes = 0;
-    public int maxMistakes = 3;           // разрешённое количество ошибок
     private int mistakes = 0;
-    private bool isCompleted = false;     // чтобы не активировать дважды
+    private bool isCompleted = false;
+    private SpriteRenderer visualHint;
+
+    void Start() => visualHint = GetComponent<SpriteRenderer>();
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (isCompleted) return;
-        if (other.CompareTag("Player") && RPGLevelManager.Instance != null && !RPGLevelManager.Instance.metersActivated[0])
+        if (isCompleted || !other.CompareTag("Player")) return;
+        if (RPGLevelManager.Instance != null && RPGLevelManager.Instance.metersActivated[0]) return;
+
+        isActive = true;
+        nextBeatTime = Time.time + beatInterval;
+        if (visualHint != null) visualHint.color = Color.cyan;
+        UnifiedInfoSystem.Instance?.ShowTimedMessage("РИТМ-ИГРА: Нажимай ПРОБЕЛ в такт мигающему кругу!", 2f);
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player") && isActive && !isCompleted)
         {
-            isActive = true;
-            nextBeatTime = Time.time + beatInterval;
-            UnifiedInfoSystem.Instance?.ShowTimedMessage($"Нажимай ПРОБЕЛ в такт! Нужно {successesNeeded} успехов. Ошибок можно {maxMistakes}.", 2f);
+            isActive = false;
+            if (visualHint != null) visualHint.color = Color.gray;
+            UnifiedInfoSystem.Instance?.ShowTimedMessage("Ты вышел из зоны ритм-игры. Прогресс сброшен.", 1f);
+            successes = 0;
+            mistakes = 0;
         }
     }
 
     void Update()
     {
         if (!isActive || isCompleted) return;
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             float diff = Mathf.Abs(Time.time - nextBeatTime);
-            if (diff < 0.2f)
+            if (diff < 0.25f)
             {
                 successes++;
                 UnifiedInfoSystem.Instance?.ShowTimedMessage($"Успех! {successes}/{successesNeeded}", 0.5f);
-
-                if (successes >= successesNeeded)
-                {
-                    Win();
-                }
-                else
-                {
-                    // Готовим следующий такт
-                    nextBeatTime = Time.time + beatInterval;
-                }
+                if (successes >= successesNeeded) Win();
+                else nextBeatTime = Time.time + beatInterval;
             }
             else
             {
                 mistakes++;
                 UnifiedInfoSystem.Instance?.ShowTimedMessage($"Мимо! Ошибок: {mistakes}/{maxMistakes}", 1f);
-
-                if (mistakes >= maxMistakes)
-                {
-                    Lose();
-                }
-                else
-                {
-                    // Не сбрасываем успехи, но сдвигаем следующий такт
-                    nextBeatTime = Time.time + beatInterval;
-                }
+                if (mistakes >= maxMistakes) Lose();
+                else nextBeatTime = Time.time + beatInterval;
             }
         }
+        if (visualHint != null && Time.time >= nextBeatTime - 0.1f && Time.time < nextBeatTime + 0.1f)
+            visualHint.color = Color.red;
+        else if (visualHint != null && isActive) visualHint.color = Color.cyan;
     }
 
-    public bool IsActive => isActive && !isCompleted;
-
-    private void Win()
+    void Win()
     {
         isCompleted = true;
         isActive = false;
-        RPGLevelManager.Instance.ActivateMeter(0); // активируем красный измеритель
-        UnifiedInfoSystem.Instance?.ShowDialogue(
-            new string[] { "Отличный ритм! Ты освоил механику ритм-игр. Это настоящий вызов для координации." },
-            "encyclopedia", "happy");
-        Destroy(gameObject);
+        if (visualHint != null) visualHint.color = Color.green;
+        RPGLevelManager.Instance.ActivateMeter(0);
+        UnifiedInfoSystem.Instance?.ShowDialogue(new[] { "Отличный ритм! Красный измеритель активирован." }, "encyclopedia", "happy");
+        Destroy(gameObject, 1f);
     }
 
-    private void Lose()
+    void Lose()
     {
-        isActive = false;
         successes = 0;
         mistakes = 0;
-        UnifiedInfoSystem.Instance?.ShowDialogue(
-            new string[] { "Не получилось с первого раза. Ритм-игры требуют практики! Попробуй ещё раз." },
-            "encyclopedia", "neutral", () =>
-            {
-                // Перезапускаем мини-игру: снова активируем триггер
-                isActive = true;
-                nextBeatTime = Time.time + beatInterval;
-            });
-        // Не уничтожаем объект, чтобы игрок мог попробовать снова
+        UnifiedInfoSystem.Instance?.ShowDialogue(new[] { "Не получилось. Попробуй ещё раз, нажимай строго в такт!" }, "encyclopedia", "neutral");
+        nextBeatTime = Time.time + beatInterval;
     }
 }

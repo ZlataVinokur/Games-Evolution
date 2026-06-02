@@ -3,29 +3,24 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public int damage = 10;
+    public float lifeTime = 2f;
+
+    void Start() => Destroy(gameObject, lifeTime);
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // ѕытаемс€ нанести урон боссу
-        BossCombat boss = other.GetComponent<BossCombat>();
-        if (boss != null)
+        if (other.CompareTag("Enemy"))
         {
-            boss.TakeDamage(damage);
+            var enemy = other.GetComponent<HazardBug>();
+            if (enemy != null) enemy.TakeDamage(damage);
+            else
+            {
+                var boss = other.GetComponent<NewBoss>();
+                if (boss != null) boss.TakeDamage(damage);
+            }
             Destroy(gameObject);
-            return;
         }
-
-        // ѕытаемс€ нанести урон багу
-        HazardBug bug = other.GetComponent<HazardBug>();
-        if (bug != null)
-        {
-            bug.TakeDamage(damage);
-            Destroy(gameObject);
-            return;
-        }
-
-        // ≈сли попали в стену или другой объект (не игрок и не другой снар€д) Ц исчезаем
-        if (!other.CompareTag("Player") && !other.CompareTag("PlayerProjectile"))
+        else if (!other.CompareTag("Player") && !other.CompareTag("PlayerProjectile"))
         {
             Destroy(gameObject);
         }
