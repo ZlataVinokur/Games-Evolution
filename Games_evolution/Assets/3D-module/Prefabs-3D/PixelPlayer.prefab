@@ -371,9 +371,14 @@ MonoBehaviour:
   groundDistance: 0.05
   groundMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   firstPersonCam: {fileID: 0}
   thirdPersonCam: {fileID: 0}
+  interactRange: 3
+  interactRadius: 0.5
+  interactableMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!95 &2013350300828899106
 Animator:
   serializedVersion: 7
