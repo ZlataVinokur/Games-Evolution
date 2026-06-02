@@ -30,6 +30,13 @@ public class PlayerController_3 : MonoBehaviour
     [SerializeField] private float interactRadius = 0.5f;
     [SerializeField] private LayerMask interactableMask;
 
+    [Header("Звуки")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] walkFootstepClips;
+    [SerializeField] private AudioClip[] runFootstepClips;
+    [SerializeField] private AudioClip[] jumpClips;
+
+
     private CharacterController controller;
     private Animator animator;
     private Vector2 moveInput;
@@ -41,8 +48,6 @@ public class PlayerController_3 : MonoBehaviour
     private bool isGrounded;
     private bool isRunning;
 
-
-
     private float currentRotationY;
     private float rotationVelocity;
     private Transform cameraTransform;
@@ -50,6 +55,8 @@ public class PlayerController_3 : MonoBehaviour
     private CinemachinePanTilt firstPersonPanTilt;
 
     private InputSystem3D input;
+
+
 
     private void Awake()
     {
@@ -208,6 +215,29 @@ public class PlayerController_3 : MonoBehaviour
     }
 
 
+    public void PlayWalkFootstep()
+    {
+        if (walkFootstepClips == null || walkFootstepClips.Length == 0) return;
+
+        AudioClip randomClip = walkFootstepClips[Random.Range(0, walkFootstepClips.Length)];
+        audioSource.PlayOneShot(randomClip);
+    }
+
+    public void PlayRunFootstep()
+    {
+        if (runFootstepClips == null || runFootstepClips.Length == 0) return;
+
+        AudioClip randomClip = runFootstepClips[Random.Range(0, runFootstepClips.Length)];
+        audioSource.PlayOneShot(randomClip);
+    }
+
+    public void PlayJumpSound()
+    {
+        if (jumpClips == null || jumpClips.Length == 0) return;
+
+        AudioClip randomClip = jumpClips[Random.Range(0, jumpClips.Length)];
+        audioSource.PlayOneShot(randomClip);
+    }
 
 
     private void OnDisable()
