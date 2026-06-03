@@ -21,9 +21,10 @@ public class GameEvents : MonoBehaviour
         if (encyclopedia != null && encyclopedia.movementArticle != null)
         {
             UnifiedInfoSystem.Instance.ShowDialogue(
-                new[] { encyclopedia.movementArticle.shortAnnotation },
+                encyclopedia.movementArticle.shortAnnotation.ToArray(),
                 "encyclopedia",
-                "explain"
+                "explain",
+                force: true
             );
         }
     }
@@ -33,9 +34,10 @@ public class GameEvents : MonoBehaviour
         if (encyclopedia != null && encyclopedia.lightArticle != null)
         {
             UnifiedInfoSystem.Instance.ShowDialogue(
-                new[] { encyclopedia.lightArticle.shortAnnotation },
+                encyclopedia.lightArticle.shortAnnotation.ToArray(),
                 "encyclopedia",
-                "happy"
+                "happy",
+                force: true
             );
         }
     }
@@ -45,9 +47,10 @@ public class GameEvents : MonoBehaviour
         if (encyclopedia != null && encyclopedia.lightArticle2 != null)
         {
             UnifiedInfoSystem.Instance.ShowDialogue(
-                new[] { encyclopedia.lightArticle2.shortAnnotation },
+                encyclopedia.lightArticle2.shortAnnotation.ToArray(),
                 "encyclopedia",
-                "happy"
+                "happy",
+                force: true
             );
         }
     }
@@ -57,9 +60,10 @@ public class GameEvents : MonoBehaviour
         if (encyclopedia != null && encyclopedia.cameraArticle != null)
         {
             UnifiedInfoSystem.Instance.ShowDialogue(
-                new[] { encyclopedia.cameraArticle.shortAnnotation },
+                encyclopedia.cameraArticle.shortAnnotation.ToArray(),
                 "encyclopedia",
-                "explain"
+                "explain",
+                force: true
             );
         }
     }
@@ -69,9 +73,10 @@ public class GameEvents : MonoBehaviour
         if (encyclopedia != null && encyclopedia.platformerArticle != null)
         {
             UnifiedInfoSystem.Instance.ShowDialogue(
-                new[] { encyclopedia.platformerArticle.shortAnnotation },
+                encyclopedia.platformerArticle.shortAnnotation.ToArray(),
                 "encyclopedia",
-                "explain"
+                "explain",
+                force: true
             );
         }
     }
@@ -81,9 +86,10 @@ public class GameEvents : MonoBehaviour
         if (encyclopedia != null && encyclopedia.endArticle != null)
         {
             UnifiedInfoSystem.Instance.ShowDialogue(
-                new[] { encyclopedia.endArticle.shortAnnotation },
+                encyclopedia.endArticle.shortAnnotation.ToArray(),
                 "encyclopedia",
-                "explain"
+                "explain",
+                force: true
             );
         }
     }

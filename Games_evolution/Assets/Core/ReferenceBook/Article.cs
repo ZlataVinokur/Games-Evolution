@@ -14,7 +14,19 @@ public class Article : ScriptableObject
     [Header("Для энциклопедии (полная статья)")]
     [TextArea(5, 20)]
     public string fullText;
-    public string shortAnnotation;
+
+    public List<string> shortAnnotation = new List<string>();
+
+    // Свойство для обратной совместимости (если где-то используется как строка)
+    public string ShortAnnotationText
+    {
+        get
+        {
+            if (shortAnnotation != null && shortAnnotation.Count > 0)
+                return shortAnnotation[0];
+            return "";
+        }
+    }
 
     [Header("Для обучения (последовательные сообщения)")]
     public List<string> tutorialMessages;

@@ -812,7 +812,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4104380202958562290, guid: aabcfa6f674f8194692620e52c55561a, type: 3}
 --- !u!1001 &80328422
@@ -6540,7 +6540,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4104380202958562290, guid: aabcfa6f674f8194692620e52c55561a, type: 3}
 --- !u!1001 &541177565
@@ -6653,7 +6653,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4104380202958562290, guid: aabcfa6f674f8194692620e52c55561a, type: 3}
 --- !u!1001 &554314568
@@ -6845,7 +6845,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &555967698
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23834,7 +23834,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4104380202958562290, guid: aabcfa6f674f8194692620e52c55561a, type: 3}
 --- !u!1001 &1165858359
@@ -33422,7 +33422,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1453378316
 RectTransform:
   m_ObjectHideFlags: 0
@@ -45554,7 +45554,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2037664874
 Transform:
   m_ObjectHideFlags: 0
@@ -46941,6 +46941,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1741862099547621192, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8308805124956260842}
+    - targetCorrespondingSourceObject: {fileID: 1741862099547621192, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8308805124956260843}
   m_SourcePrefab: {fileID: 100100000, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
 --- !u!4 &8308805124956260841 stripped
 Transform:
@@ -47044,6 +47047,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8308805124956260843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339708935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1457076bec44c4745a9593257258e895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FallDetector
+  fallThreshold: 3
+  groundY: -8
+  minYForFall: 11
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

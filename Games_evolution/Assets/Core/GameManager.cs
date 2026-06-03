@@ -166,6 +166,9 @@ public class GameManager : MonoBehaviour
         else Debug.LogError("GameOverPanel не найден!");
         if (pausePanel != null) pausePanel.SetActive(false);
         if (winPanel != null) winPanel.SetActive(false);
+
+        Cursor.lockState = isGameOver ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = isGameOver;
     }
 
     public void ShowWin()

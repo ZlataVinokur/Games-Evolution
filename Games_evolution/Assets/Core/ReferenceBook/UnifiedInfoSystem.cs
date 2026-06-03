@@ -198,7 +198,7 @@ public class UnifiedInfoSystem : MonoBehaviour
         }
 
         GameManager.Instance.UnlockArticle(articleId);
-        ShowDialogue(new[] { article.shortAnnotation }, "encyclopedia", "happy");
+        ShowDialogue(article.shortAnnotation.ToArray(), "encyclopedia", "happy");
     }
 
     public string GetArticleText(string articleId)
@@ -220,10 +220,15 @@ public class UnifiedInfoSystem : MonoBehaviour
     #endregion
 
     #region Диалоги
-    public void ShowDialogue(string[] lines, string speaker = "encyclopedia", string emotion = "neutral", Action onComplete = null)
+    public void ShowDialogue(string[] lines, string speaker = "encyclopedia", string emotion = "neutral", Action onComplete = null, bool force = false)
     {
-        if (isShowing) return;
         if (!EnsureUIReady()) return;
+
+        if (isShowing)
+        {
+            if (!force) return;
+            ForceCloseInternal();
+        }
 
         isShowing = true;
         isDialogueMode = true;
@@ -236,7 +241,6 @@ public class UnifiedInfoSystem : MonoBehaviour
         continueButton.gameObject.SetActive(true);
         startGameButton.gameObject.SetActive(false);
 
-        // Всегда показываем портрет
         if (portraitImage != null)
         {
             portraitImage.gameObject.SetActive(true);
@@ -270,6 +274,33 @@ public class UnifiedInfoSystem : MonoBehaviour
         // Портрет не отключаем – при следующем диалоге он снова включится
         onDialogueComplete?.Invoke();
         onDialogueComplete = null;
+    }
+
+    public void ForceCloseDialogue()
+    {
+        ForceCloseInternal();
+    }
+
+    private void ForceCloseInternal()
+    {
+        isShowing = false;
+        isDialogueMode = false;
+        messageQueue.Clear();
+        dialoguePhrases.Clear();
+        onCompleteCallback = null;
+        onDialogueComplete = null;
+        if (infoPanel != null)
+        {
+            infoPanel.SetActive(false);
+        }
+        if (messageText != null)
+        {
+            messageText.text = "";
+        }
+        if (continueButton != null)
+            continueButton.gameObject.SetActive(false);
+        if (startGameButton != null)
+            startGameButton.gameObject.SetActive(false);
     }
     #endregion
 
