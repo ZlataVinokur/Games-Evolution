@@ -22,6 +22,7 @@ TagManager:
   - HealthBonus
   - ShieldBonus
   - PlayerProjectile
+  - Mouse
   layers:
   - Default
   - TransparentFX
