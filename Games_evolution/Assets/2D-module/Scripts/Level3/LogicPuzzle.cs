@@ -30,7 +30,9 @@ public class LogicPuzzle : MonoBehaviour
             {
                 solved = true;
                 RPGLevelManager.Instance.ActivateMeter(1);
-                UnifiedInfoSystem.Instance?.ShowDialogue(new[] { "Правильный порядок! Синий измеритель активирован." }, "encyclopedia", "happy");
+                var toast = GetComponent<WorldToast>();
+                if (toast != null) toast.Show("Правильный порядок! Синий измеритель активирован.", 1.5f);
+
                 Destroy(gameObject);
             }
         }
@@ -38,7 +40,8 @@ public class LogicPuzzle : MonoBehaviour
         {
             foreach (Slot slot in slots) slot.ReturnItem();
             currentIndex = 0;
-            UnifiedInfoSystem.Instance?.ShowTimedMessage("Не тот порядок! Нужно: сначала ПРОВОД, потом ЧИП, потом БАТАРЕЯ.", 3f);
+            var toast = GetComponent<WorldToast>();
+            if (toast != null) toast.Show("Не тот порядок! Нужно: сначала ПРОВОД, потом ЧИП, потом БАТАРЕЯ.", 1.5f);
         }
     }
 }

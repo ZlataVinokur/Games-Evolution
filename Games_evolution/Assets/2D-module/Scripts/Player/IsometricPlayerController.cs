@@ -119,6 +119,7 @@ public class IsometricPlayerController : PlayerController_2
         currentHealth -= damage;
         UpdateHealthUI();
         if (currentHealth <= 0) Die();
+        FloatingTextManager.Instance?.ShowDamage(transform.position, damage);
     }
 
     void UpdateHealthUI()

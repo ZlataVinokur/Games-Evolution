@@ -52,6 +52,7 @@ public class HazardBug : MonoBehaviour
         if (sprite != null) sprite.color = Color.red;
         if (health <= 0) Die();
         else Invoke(nameof(ResetColor), 0.2f);
+        FloatingTextManager.Instance?.ShowDamage(transform.position, dmg);
     }
 
     void ResetColor() { if (sprite != null) sprite.color = Color.white; }

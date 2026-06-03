@@ -34,7 +34,7 @@ public class NewBoss : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        UnifiedInfoSystem.Instance?.ShowTimedMessage($"Страж получает {damage} урона! Осталось {currentHealth} HP", 0.5f);
+        FloatingTextManager.Instance?.ShowDamage(transform.position, damage);
         if (currentHealth <= 0) Die();
     }
 

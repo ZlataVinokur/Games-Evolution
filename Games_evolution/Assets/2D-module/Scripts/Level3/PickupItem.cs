@@ -12,7 +12,8 @@ public class PickupItem : MonoBehaviour
         {
             InventoryManager2.Instance.AddItem(itemType, itemIcon);
             Destroy(gameObject);
-            UnifiedInfoSystem.Instance?.ShowTimedMessage($"Вы подобрали: {itemType} (нажмите E)", 1f);
+            var toast = GetComponent<WorldToast>();
+            if (toast != null) toast.Show($"Предмет теперь в инвентаре", 1.5f);
         }
     }
 
@@ -21,7 +22,9 @@ public class PickupItem : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
-            UnifiedInfoSystem.Instance?.ShowTimedMessage($"Нажмите E, чтобы подобрать {itemType}", 1f);
+            // подсказка над предметом
+            var toast = GetComponent<WorldToast>();
+            if (toast != null) toast.Show($"Нажмите E, чтобы подобрать {itemType}", 1.5f);
         }
     }
 

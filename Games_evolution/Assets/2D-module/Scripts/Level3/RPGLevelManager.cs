@@ -32,12 +32,31 @@ public class RPGLevelManager : MonoBehaviour
         gameManager = GameManager.Instance ?? FindFirstObjectByType<GameManager>();
         UpdateMeterUI();
 
-        infoSystem?.ShowDialogue(new[] {
-            "Твоя задача – активировать три измерителя.",
-            "1. Пройди ритм-игру (мигающий круг).",
-            "2. Найди провод, чип, батарею и положи на алтари В ПРАВИЛЬНОМ ПОРЯДКЕ (провод → чип → батарея).",
-            "3. Найди лейку и полей 5 грибочков, чтобы накопить энергию."
-        }, "encyclopedia", "serious");
+        // Приостанавливаем игру
+        Time.timeScale = 0f;
+
+        // Показываем диалог с колбэком на возобновление
+        if (infoSystem != null)
+        {
+            infoSystem.ShowDialogue(
+                new[] {
+                "Твоя задача – активировать три измерителя.",
+                "1. Пройди ритм-игру (мигающий круг).",
+                "2. Найди провод, чип, батарею и положи на алтари В ПРАВИЛЬНОМ ПОРЯДКЕ (провод → чип → батарея).",
+                "3. Найди лейку и полей 5 грибочков, чтобы накопить энергию."
+                },
+                "encyclopedia",
+                "serious",
+                onComplete: () => {
+                    Time.timeScale = 1f; // возобновляем игру
+                }
+            );
+        }
+        else
+        {
+            // Если нет InfoSystem, всё равно надо разморозить, иначе игра навсегда виснет
+            Time.timeScale = 1f;
+        }
     }
 
     public void ActivateMeter(int index)

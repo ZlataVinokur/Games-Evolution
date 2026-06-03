@@ -23,7 +23,8 @@ public class RhythmMiniGame : MonoBehaviour
         isActive = true;
         nextBeatTime = Time.time + beatInterval;
         if (visualHint != null) visualHint.color = Color.cyan;
-        UnifiedInfoSystem.Instance?.ShowTimedMessage("РИТМ-ИГРА: Нажимай ПРОБЕЛ в такт мигающему кругу!", 2f);
+        var toast = GetComponent<WorldToast>();
+        if (toast != null) toast.Show("РИТМ-ИГРА: Нажимай ПРОБЕЛ в такт мигающему кругу!", 1.5f);
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -32,7 +33,8 @@ public class RhythmMiniGame : MonoBehaviour
         {
             isActive = false;
             if (visualHint != null) visualHint.color = Color.gray;
-            UnifiedInfoSystem.Instance?.ShowTimedMessage("Ты вышел из зоны ритм-игры. Прогресс сброшен.", 1f);
+            var toast = GetComponent<WorldToast>();
+            if (toast != null) toast.Show("Ты вышел из зоны ритм-игры. Прогресс сброшен.", 1.5f);
             successes = 0;
             mistakes = 0;
         }
@@ -47,14 +49,16 @@ public class RhythmMiniGame : MonoBehaviour
             if (diff < 0.25f)
             {
                 successes++;
-                UnifiedInfoSystem.Instance?.ShowTimedMessage($"Успех! {successes}/{successesNeeded}", 0.5f);
+                var toast = GetComponent<WorldToast>();
+                if (toast != null) toast.Show($"В точку! {successes}/{successesNeeded}", 1.5f);
                 if (successes >= successesNeeded) Win();
                 else nextBeatTime = Time.time + beatInterval;
             }
             else
             {
                 mistakes++;
-                UnifiedInfoSystem.Instance?.ShowTimedMessage($"Мимо! Ошибок: {mistakes}/{maxMistakes}", 1f);
+                var toast = GetComponent<WorldToast>();
+                if (toast != null) toast.Show($"Мимо! Ошибок: {mistakes}/{maxMistakes}", 1.5f);
                 if (mistakes >= maxMistakes) Lose();
                 else nextBeatTime = Time.time + beatInterval;
             }
@@ -78,7 +82,8 @@ public class RhythmMiniGame : MonoBehaviour
     {
         successes = 0;
         mistakes = 0;
-        UnifiedInfoSystem.Instance?.ShowDialogue(new[] { "Не получилось. Попробуй ещё раз, нажимай строго в такт!" }, "encyclopedia", "neutral");
+        var toast = GetComponent<WorldToast>();
+        if (toast != null) toast.Show("Не получилось. Попробуй ещё раз, нажимай строго в такт!", 1.5f);
         nextBeatTime = Time.time + beatInterval;
     }
 }
