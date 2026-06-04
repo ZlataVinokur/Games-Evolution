@@ -26,6 +26,7 @@ TagManager:
   - Ladder
   - Potion
   - Candle
+  - DeadZone
   layers:
   - Default
   - TransparentFX
