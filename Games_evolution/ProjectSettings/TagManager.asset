@@ -23,6 +23,9 @@ TagManager:
   - ShieldBonus
   - PlayerProjectile
   - Mouse
+  - Ladder
+  - Potion
+  - Candle
   layers:
   - Default
   - TransparentFX
