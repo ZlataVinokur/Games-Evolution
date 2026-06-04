@@ -55,6 +55,17 @@ public class InteractableSwitch : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionDistance))
         {
+            // Проверяем, не зелье ли это
+            if (hit.transform.CompareTag("Potion"))
+            {
+                PotionBottle potion = hit.transform.GetComponent<PotionBottle>();
+                if (potion != null)
+                {
+                    potion.Drink();
+                    return;
+                }
+            }
+
             // Проверяем, можно ли поднять предмет
             PickupableObject pickupable = hit.transform.GetComponent<PickupableObject>();
             if (pickupable != null && currentHeldObject == null)
@@ -118,6 +129,14 @@ public class InteractableSwitch : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionDistance))
         {
+            // Подсказка для зелья
+            if (hit.transform.CompareTag("Potion") && currentHeldObject == null)
+            {
+                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 20, 200, 30),
+                         "Нажмите E чтобы выпить");
+                return;
+            }
+
             // Показываем подсказку для предметов
             PickupableObject pickupable = hit.transform.GetComponent<PickupableObject>();
             if (pickupable != null && currentHeldObject == null)
