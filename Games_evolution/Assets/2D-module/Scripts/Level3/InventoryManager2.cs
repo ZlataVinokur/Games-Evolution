@@ -1,65 +1,38 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class InventoryManager2 : MonoBehaviour
 {
-    public static InventoryManager2 Instance { get; private set; }
-
-    [Header("UI")]
-    public Transform inventoryContent; // ссылка на Content из ScrollView
-    public GameObject itemSlotPrefab;  // префаб с Image + DragAndDropItem
+    public static InventoryManager2 Instance;
+    public Transform inventoryContent;
+    public GameObject itemSlotPrefab;
 
     private List<string> items = new List<string>();
     private List<Sprite> icons = new List<Sprite>();
 
-    void Awake()
-    {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-    }
+    void Awake() => Instance = this;
 
     public void AddItem(string type, Sprite icon)
     {
         items.Add(type);
         icons.Add(icon);
         UpdateUI();
-
-        if (items.Count == 1) // первый предмет
-        {
-            UnifiedInfoSystem.Instance?.ShowDialogue(
-                new[] { "Предмет в инвентаре! Нажми на него и перетащи на алтарь нужного цвета." },
-                "encyclopedia", "neutral", null);
-        }
+        if (type == "WateringCan")
+            UnifiedInfoSystem.Instance?.ShowTimedMessage("Ты подобрал лейку! Теперь поливай грибочки (подойди и нажми E).", 3f);
     }
 
-    public bool HasItem(string type)
-    {
-        return items.Contains(type);
-    }
+    public bool HasItem(string type) => items.Contains(type);
 
     public void RemoveItem(string type)
     {
-        int index = items.IndexOf(type);
-        if (index != -1)
-        {
-            items.RemoveAt(index);
-            icons.RemoveAt(index);
-            UpdateUI();
-        }
-    }
-
-    public void AddItemBack(string type, Sprite icon)
-    {
-        items.Add(type);
-        icons.Add(icon);
-        UpdateUI();
+        int idx = items.IndexOf(type);
+        if (idx != -1) { items.RemoveAt(idx); icons.RemoveAt(idx); UpdateUI(); }
     }
 
     private void UpdateUI()
     {
-        foreach (Transform child in inventoryContent)
-            Destroy(child.gameObject);
+        foreach (Transform child in inventoryContent) Destroy(child.gameObject);
         for (int i = 0; i < items.Count; i++)
         {
             GameObject slot = Instantiate(itemSlotPrefab, inventoryContent);

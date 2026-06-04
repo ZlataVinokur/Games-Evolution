@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4412315737788537287}
   - component: {fileID: 5884286341747056142}
   - component: {fileID: 347162750887534994}
+  - component: {fileID: 4516402585490654450}
+  - component: {fileID: -5299526506959061943}
   m_Layer: 0
   m_Name: BossPortal
   m_TagString: Untagged
@@ -27,9 +29,9 @@ Transform:
   m_GameObject: {fileID: 8526327902349226952}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.2359786, y: -6.3972125, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -138,3 +140,28 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.42, y: 1.31}
   m_EdgeRadius: 0
+--- !u!114 &4516402585490654450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8526327902349226952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfb05396e4264e246a07bb3725733403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PortalToNextLevel
+--- !u!114 &-5299526506959061943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8526327902349226952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97a4e94055717884a8a779089553a41a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingTextManager
+  floatingTextPrefab: {fileID: 0}

@@ -10,9 +10,7 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Canvas parentCanvas;
     public string itemType;
 
-    // Для призрака
     private GameObject dragGhost;
-    private Canvas ghostCanvas;
 
     void Awake()
     {
@@ -28,42 +26,26 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         canvasGroup.alpha = 0.6f;
         canvasGroup.blocksRaycasts = false;
 
-        // Создаём призрак
         dragGhost = new GameObject("DragGhost");
         dragGhost.transform.SetParent(parentCanvas.transform, false);
-        dragGhost.transform.SetAsLastSibling(); // поверх всего
-
-        // Копируем изображение
+        dragGhost.transform.SetAsLastSibling();
         Image originalImage = GetComponent<Image>();
         Image ghostImage = dragGhost.AddComponent<Image>();
         ghostImage.sprite = originalImage.sprite;
-        ghostImage.raycastTarget = false; // чтобы не мешать лучам
-
-        // Копируем размер и pivot
+        ghostImage.raycastTarget = false;
         RectTransform ghostRect = dragGhost.GetComponent<RectTransform>();
         ghostRect.sizeDelta = rectTransform.sizeDelta;
         ghostRect.pivot = rectTransform.pivot;
-
-        // Позиционируем под курсор
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            parentCanvas.transform as RectTransform,
-            eventData.position,
-            eventData.pressEventCamera,
-            out Vector2 localPoint);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentCanvas.transform as RectTransform, eventData.position, eventData.pressEventCamera, out Vector2 localPoint);
         ghostRect.anchoredPosition = localPoint;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // Оригинал не двигаем, двигаем только призрака
         if (dragGhost != null)
         {
             RectTransform ghostRect = dragGhost.GetComponent<RectTransform>();
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                parentCanvas.transform as RectTransform,
-                eventData.position,
-                eventData.pressEventCamera,
-                out Vector2 localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parentCanvas.transform as RectTransform, eventData.position, eventData.pressEventCamera, out Vector2 localPoint);
             ghostRect.anchoredPosition = localPoint;
         }
     }
@@ -72,24 +54,16 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
-
-        // Уничтожаем призрака
         if (dragGhost != null) Destroy(dragGhost);
 
-        // Далее – обработка дропа (как было раньше)
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero);
         if (hit.collider != null)
         {
             Slot slot = hit.collider.GetComponent<Slot>();
-            if (slot != null)
-            {
-                slot.OnDrop(eventData);
-                return;
-            }
+            if (slot != null) slot.OnDrop(eventData);
+            else rectTransform.anchoredPosition = startPos;
         }
-
-        // Не попали – возвращаем предмет на исходную позицию
-        rectTransform.anchoredPosition = startPos;
+        else rectTransform.anchoredPosition = startPos;
     }
 }

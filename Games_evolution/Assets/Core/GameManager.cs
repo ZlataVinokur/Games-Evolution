@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isWin = false;
         Time.timeScale = 1f;
+        CursorManager.Instance?.ResetCursor();
     }
 
     private void FindAndBindUI()
@@ -164,6 +165,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
         else Debug.LogError("GameOverPanel не найден!");
+        CursorManager.Instance?.ResetCursor();
         if (pausePanel != null) pausePanel.SetActive(false);
         if (winPanel != null) winPanel.SetActive(false);
 
@@ -178,6 +180,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         if (winPanel != null) winPanel.SetActive(true);
         else Debug.LogError("WinPanel не найден!");
+        CursorManager.Instance?.ResetCursor();
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (pausePanel != null) pausePanel.SetActive(false);
     }
@@ -188,6 +191,7 @@ public class GameManager : MonoBehaviour
         // Разблокируем курсор перед загрузкой квиза
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        CursorManager.Instance?.ResetCursor();
 
 
         // Сохраняем индекс модуля перед загрузкой сцены квиза
@@ -209,6 +213,7 @@ public class GameManager : MonoBehaviour
 
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0f : 1f;
+        CursorManager.Instance?.ResetCursor();
 
         if (wasCursorLocked)
         {
@@ -225,6 +230,7 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isWin = false;
         Time.timeScale = 1f;
+        CursorManager.Instance?.ResetCursor();
         HideAllPanels();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -235,6 +241,7 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isWin = false;
         Time.timeScale = 1f;
+        CursorManager.Instance?.ResetCursor();
         SceneManager.LoadScene(0);
     }
     
@@ -249,6 +256,7 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(nextIndex);
         else
             Debug.Log("Игра пройдена! Все уровни завершены.");
+        CursorManager.Instance?.ResetCursor();
     }
 
     public void CompleteModule(int moduleIndex)

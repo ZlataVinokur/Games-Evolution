@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5571276657121800736}
   - component: {fileID: 3349780718770810657}
   - component: {fileID: 2617407745964652041}
-  m_Layer: 0
+  m_Layer: 24
   m_Name: hazardBug
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1969909791, guid: 9cd2636b9d76b3d47b91f8d911e0c385, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.16, y: 1.16}

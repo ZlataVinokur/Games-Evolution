@@ -30,19 +30,18 @@ public class LogicPuzzle : MonoBehaviour
             {
                 solved = true;
                 RPGLevelManager.Instance.ActivateMeter(1);
-                // Можно удалить все алтари или оставить как есть
+                var toast = GetComponent<WorldToast>();
+                if (toast != null) toast.Show("Правильный порядок! Синий измеритель активирован.", 1.5f);
+
                 Destroy(gameObject);
             }
         }
         else
         {
-            // Неправильный порядок: возвращаем ВСЕ предметы в инвентарь и сбрасываем алтари
-            foreach (Slot slot in slots)
-            {
-                slot.ReturnItem();
-            }
+            foreach (Slot slot in slots) slot.ReturnItem();
             currentIndex = 0;
-            UnifiedInfoSystem.Instance?.ShowTimedMessage("Не тот порядок! Нужно: сначала провод, потом чип, потом батарея.", 3f);
+            var toast = GetComponent<WorldToast>();
+            if (toast != null) toast.Show("Не тот порядок! Нужно: сначала ПРОВОД, потом ЧИП, потом БАТАРЕЯ.", 1.5f);
         }
     }
 }
