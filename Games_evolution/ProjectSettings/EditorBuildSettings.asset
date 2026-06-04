@@ -6,8 +6,35 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Core/0_Menu.unity
+    guid: b4605357c79aae34a84d2cc9a4118bb2
+  - enabled: 1
+    path: Assets/base-module/Scenes/1_Level1.unity
+    guid: fff2eb4f62394a845893eb759350b88a
+  - enabled: 1
+    path: Assets/base-module/Scenes/2_Level2.unity
+    guid: f60d750731d6d774b9c8717ccf7d6f92
+  - enabled: 1
+    path: Assets/base-module/Scenes/3_Level3.unity
+    guid: 06ef4db3b7e3e5241908bceed13f8a3b
+  - enabled: 1
+    path: Assets/base-module/Scenes/4_Level4.unity
+    guid: e9c62492312c5d94085bbd5b78c54ece
+  - enabled: 1
+    path: Assets/2D-module/Scenes/Level1_Quest.unity
+    guid: d92af59af918e5f4fac17c7a623b9e16
+  - enabled: 1
+    path: Assets/2D-module/Scenes/Level2_Platformer.unity
+    guid: 728bf95344dca44448081912daa8635d
+  - enabled: 1
+    path: Assets/2D-module/Scenes/Level3_RPG.unity
+    guid: 7e29ddb8d81522c4a8bef2f7efb737db
+  - enabled: 1
+    path: Assets/3D-module/3D_moduleScene.unity
+    guid: 3eefc444f73c9254a967e780b09cc2d8
+  - enabled: 1
+    path: Assets/Core/ReferenceBook.unity
+    guid: dbc35625aa0431a408869fb715682cc7
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
