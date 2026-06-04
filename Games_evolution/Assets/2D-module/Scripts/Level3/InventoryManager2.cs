@@ -19,7 +19,7 @@ public class InventoryManager2 : MonoBehaviour
         icons.Add(icon);
         UpdateUI();
         if (type == "WateringCan")
-            UnifiedInfoSystem.Instance?.ShowTimedMessage("Ты подобрал лейку! Теперь поливай грибочки (подойди и нажми E).", 3f);
+            NotificationManager.Instance?.ShowNotification("Ты подобрал лейку! Теперь поливай грибочки (подойди и нажми E).", 3f);
     }
 
     public bool HasItem(string type) => items.Contains(type);

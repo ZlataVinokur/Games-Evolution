@@ -20,7 +20,7 @@ public class WaterablePlant : MonoBehaviour
             }
             else
             {
-                UnifiedInfoSystem.Instance?.ShowTimedMessage("Нужна лейка! Найди её и подбери.", 1f);
+                NotificationManager.Instance?.ShowNotification("Нужна лейка! Найди её и подбери.", 1.5f);
             }
         }
     }

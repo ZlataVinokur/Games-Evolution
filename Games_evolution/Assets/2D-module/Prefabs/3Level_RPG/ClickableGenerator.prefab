@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterablePlant
   energyValue: 2
-  grownSprite: {fileID: -831551037, guid: d7d8503dd335b9849b659c7d329fbfe1, type: 3}
+  grownSprite: {fileID: 1594871736, guid: c2fb4f42a08646443a4ba90acfa432bf, type: 3}
   waterSound: {fileID: 8300000, guid: e9cabd903c29e4e409fd2edaab4d8c48, type: 3}
 --- !u!58 &3443732847229014032
 CircleCollider2D:

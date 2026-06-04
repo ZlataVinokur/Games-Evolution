@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] private int damage = 1;
     
     [Header("Тип пули")]
-    public bool isEnemyBullet = false;  // <- ЭТО ЕДИНСТВЕННОЕ ИЗМЕНЕНИЕ
+    public bool isEnemyBullet = false;  
     
     private Rigidbody2D rb;
     

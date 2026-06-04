@@ -22,7 +22,7 @@ public class Slot : MonoBehaviour, IDropHandler
         }
         else
         {
-            UnifiedInfoSystem.Instance?.ShowTimedMessage("Этот предмет не подходит для этого алтаря.", 1f);
+            NotificationManager.Instance?.ShowNotification("Этот предмет не подходит для этого алтаря.", 1f);
         }
     }
 

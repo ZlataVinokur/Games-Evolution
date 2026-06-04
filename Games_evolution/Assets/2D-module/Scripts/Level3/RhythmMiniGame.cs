@@ -23,8 +23,7 @@ public class RhythmMiniGame : MonoBehaviour
         isActive = true;
         nextBeatTime = Time.time + beatInterval;
         if (visualHint != null) visualHint.color = Color.cyan;
-        var toast = GetComponent<WorldToast>();
-        if (toast != null) toast.Show("РИТМ-ИГРА: Нажимай ПРОБЕЛ в такт мигающему кругу!", 1.5f);
+        NotificationManager.Instance?.ShowNotification("РИТМ-ИГРА: Нажимай ПРОБЕЛ в такт!", 2f);
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -33,8 +32,7 @@ public class RhythmMiniGame : MonoBehaviour
         {
             isActive = false;
             if (visualHint != null) visualHint.color = Color.gray;
-            var toast = GetComponent<WorldToast>();
-            if (toast != null) toast.Show("Ты вышел из зоны ритм-игры. Прогресс сброшен.", 1.5f);
+            NotificationManager.Instance?.ShowNotification("Выход из зоны. Прогресс сброшен.", 1.5f);
             successes = 0;
             mistakes = 0;
         }
@@ -49,16 +47,14 @@ public class RhythmMiniGame : MonoBehaviour
             if (diff < 0.25f)
             {
                 successes++;
-                var toast = GetComponent<WorldToast>();
-                if (toast != null) toast.Show($"В точку! {successes}/{successesNeeded}", 1.5f);
+                NotificationManager.Instance?.ShowNotification($"Успех! {successes}/{successesNeeded}", 0.8f);
                 if (successes >= successesNeeded) Win();
                 else nextBeatTime = Time.time + beatInterval;
             }
             else
             {
                 mistakes++;
-                var toast = GetComponent<WorldToast>();
-                if (toast != null) toast.Show($"Мимо! Ошибок: {mistakes}/{maxMistakes}", 1.5f);
+                NotificationManager.Instance?.ShowNotification($"Мимо! Ошибок: {mistakes}/{maxMistakes}", 1f);
                 if (mistakes >= maxMistakes) Lose();
                 else nextBeatTime = Time.time + beatInterval;
             }
@@ -82,8 +78,7 @@ public class RhythmMiniGame : MonoBehaviour
     {
         successes = 0;
         mistakes = 0;
-        var toast = GetComponent<WorldToast>();
-        if (toast != null) toast.Show("Не получилось. Попробуй ещё раз, нажимай строго в такт!", 1.5f);
+        NotificationManager.Instance?.ShowNotification("Не получилось. Попробуй ещё раз, нажимай строго в такт!", 2f);
         nextBeatTime = Time.time + beatInterval;
     }
 }

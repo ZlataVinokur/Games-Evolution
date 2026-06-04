@@ -7,18 +7,17 @@ public class EnergyCollectionManager : MonoBehaviour
 
     void Start()
     {
-        UnifiedInfoSystem.Instance?.ShowTimedMessage($"Нужно полить {energyRequired} грибочков с помощью лейки (нажми E)", 1.5f);
+        NotificationManager.Instance?.ShowNotification($"Нужно полить {energyRequired} грибочков лейкой (нажми E)", 3f);
     }
 
     public void AddEnergy(int amount)
     {
         currentEnergy += amount;
-        var toast = GetComponent<WorldToast>();
-        if (toast != null) toast.Show($"Энергия: {currentEnergy}/{energyRequired}", 1.5f);
+        NotificationManager.Instance?.ShowNotification($"Энергия: {currentEnergy}/{energyRequired}", 1f);
         if (currentEnergy >= energyRequired && !RPGLevelManager.Instance.metersActivated[2])
         {
             RPGLevelManager.Instance.ActivateMeter(2);
-            UnifiedInfoSystem.Instance?.ShowDialogue(new[] { "Мы собрали достаточно энергии! Измеритель активирован." }, "encyclopedia", "happy");
+            UnifiedInfoSystem.Instance?.ShowDialogue(new[] { "Достаточно энергии! Зелёный измеритель активирован." }, "encyclopedia", "happy");
         }
     }
 }
