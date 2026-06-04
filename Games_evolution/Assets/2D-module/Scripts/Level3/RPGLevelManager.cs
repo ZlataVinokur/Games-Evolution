@@ -13,7 +13,6 @@ public class RPGLevelManager : MonoBehaviour
     public GameObject winPortalPrefab;
 
     private UnifiedInfoSystem infoSystem;
-    private GameManager gameManager;
     private bool levelCompleted = false;
     private bool bossDefeated = false;
 
@@ -23,40 +22,22 @@ public class RPGLevelManager : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
             if (RPGProgress.IsMeterActivated(i) && !metersActivated[i])
-            {
                 metersActivated[i] = true;
-                UpdateMeterUI();
-            }
 
         infoSystem = UnifiedInfoSystem.Instance ?? FindFirstObjectByType<UnifiedInfoSystem>();
-        gameManager = GameManager.Instance ?? FindFirstObjectByType<GameManager>();
         UpdateMeterUI();
 
-        // Приостанавливаем игру
         Time.timeScale = 0f;
-
-        // Показываем диалог с колбэком на возобновление
-        if (infoSystem != null)
-        {
-            infoSystem.ShowDialogue(
-                new[] {
+        infoSystem?.ShowDialogue(
+            new[] {
                 "Твоя задача – активировать три измерителя.",
                 "1. Пройди ритм-игру (мигающий круг).",
-                "2. Найди провод, чип, батарею и положи на алтари В ПРАВИЛЬНОМ ПОРЯДКЕ (провод → чип → батарея).",
-                "3. Найди лейку и полей 5 грибочков, чтобы накопить энергию."
-                },
-                "encyclopedia",
-                "serious",
-                onComplete: () => {
-                    Time.timeScale = 1f; // возобновляем игру
-                }
-            );
-        }
-        else
-        {
-            // Если нет InfoSystem, всё равно надо разморозить, иначе игра навсегда виснет
-            Time.timeScale = 1f;
-        }
+                "2. Найди кассету, хард-драйв и диск, положи в сундуки.",
+                "3. Найди лейку и полей 5 грибочков."
+            },
+            "encyclopedia", "serious",
+            onComplete: () => Time.timeScale = 1f
+        );
     }
 
     public void ActivateMeter(int index)
@@ -67,17 +48,13 @@ public class RPGLevelManager : MonoBehaviour
         metersActivated[index] = true;
         RPGProgress.ActivateMeter(index);
         UpdateMeterUI();
-        Debug.Log($"Meter {index} activated.");
 
         string[] articleIds = { "rpg_rhythm", "rpg_logic", "rpg_energy" };
         infoSystem?.UnlockArticle(articleIds[index]);
-
         ApplyRPGUpgrade(index);
 
         if (metersActivated[0] && metersActivated[1] && metersActivated[2])
-        {
             SpawnBoss();
-        }
     }
 
     private void ApplyRPGUpgrade(int index)
@@ -98,7 +75,7 @@ public class RPGLevelManager : MonoBehaviour
             case 2:
                 player.maxHealth += 20;
                 player.HealFull();
-                infoSystem?.ShowTimedMessage("Бонус: здоровье увеличено и восстановлено!", 2f);
+                infoSystem?.ShowTimedMessage("Бонус: здоровье увеличено!", 2f);
                 break;
         }
     }
@@ -120,34 +97,21 @@ public class RPGLevelManager : MonoBehaviour
     {
         if (levelCompleted || bossDefeated) return;
         levelCompleted = true;
-
         if (bossPrefab != null && bossSpawnPoint != null)
         {
             Instantiate(bossPrefab, bossSpawnPoint.position, Quaternion.identity);
-            infoSystem?.ShowDialogue(new[] { "Ты активировал все измерители! Теперь сразись с финальным стражем." }, "encyclopedia", "serious");
+            infoSystem?.ShowDialogue(new[] { "Ты активировал все измерители! Сразись с финальным стражем." }, "encyclopedia", "serious");
         }
-        else
-        {
-            Debug.LogError("BossPrefab или BossSpawnPoint не назначены!");
-            CompleteLevel();
-        }
+        else CompleteLevel();
     }
 
     public void OnBossDefeated()
     {
         if (bossDefeated) return;
         bossDefeated = true;
-
-        infoSystem?.ShowDialogue(new[] { "Страж повержен! Ты доказал свою силу. Портал открыт." }, "encyclopedia", "happy");
-
-        if (winPortalPrefab != null)
-        {
-            Instantiate(winPortalPrefab, bossSpawnPoint.position, Quaternion.identity);
-        }
-        else
-        {
-            CompleteLevel();
-        }
+        infoSystem?.ShowDialogue(new[] { "Страж повержен! Портал открыт." }, "encyclopedia", "happy");
+        if (winPortalPrefab != null) Instantiate(winPortalPrefab, bossSpawnPoint.position, Quaternion.identity);
+        else CompleteLevel();
     }
 
     public void CompleteLevel()
@@ -158,9 +122,6 @@ public class RPGLevelManager : MonoBehaviour
             GameManager.Instance.SetFlag("RPG_Completed", true);
             GameManager.Instance.LoadQuizForCurrentModule(7);
         }
-        else
-        {
-            SceneManager.LoadScene("Quiz");
-        }
+        else SceneManager.LoadScene("Quiz");
     }
 }

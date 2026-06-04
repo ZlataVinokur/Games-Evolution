@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1138397722608165775}
   - component: {fileID: 7260883524199243261}
   - component: {fileID: 249069438217413807}
+  - component: {fileID: 1599109554286326337}
   m_Layer: 0
   m_Name: "\u0421\u043F\u0440\u0430\u0439\u0442\u044B \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u043E\u0432_14
     (2)"
@@ -149,7 +150,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6272035090357495934}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d25c0f475d971d4da9e7fc5156e827e, type: 3}
   m_Name: 
@@ -163,7 +164,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6272035090357495934}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 57cbe3668c039ef4381de9a70545ad62, type: 3}
   m_Name: 
@@ -172,6 +173,23 @@ MonoBehaviour:
   defaultColor: {r: 0.4113207, g: 0.4113207, b: 0.4113207, a: 1}
   activatedColor: {r: 0, g: 1, b: 0, a: 1}
   activateSound: {fileID: 0}
+--- !u!114 &1599109554286326337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6272035090357495934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f3177d59866fe429092984553df859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnergyChest
+  meterIndex: 0
+  requiredItem: 
+  closedSprite: {fileID: 333524235, guid: c2fb4f42a08646443a4ba90acfa432bf, type: 3}
+  openedSprite: {fileID: 877781594, guid: c2fb4f42a08646443a4ba90acfa432bf, type: 3}
+  openSound: {fileID: 8300000, guid: c0a48f17044e90d498660a15c3027b80, type: 3}
 --- !u!1 &7483745677457239096
 GameObject:
   m_ObjectHideFlags: 0

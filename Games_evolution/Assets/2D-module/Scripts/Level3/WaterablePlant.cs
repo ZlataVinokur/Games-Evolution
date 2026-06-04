@@ -3,10 +3,11 @@ using UnityEngine;
 public class WaterablePlant : MonoBehaviour
 {
     public int energyValue = 1;
-    private bool isWatered = false;
     public Sprite grownSprite;
-    private SpriteRenderer sr;
     public AudioClip waterSound;
+
+    private bool isWatered = false;
+    private SpriteRenderer sr;
 
     void Start() => sr = GetComponent<SpriteRenderer>();
 
@@ -14,13 +15,15 @@ public class WaterablePlant : MonoBehaviour
     {
         if (!isWatered && other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
         {
-            if (InventoryManager2.Instance != null && InventoryManager2.Instance.HasItem("WateringCan"))
+            // Проверяем, что в активном слоте именно лейка
+            string activeItem = InventoryManager2.Instance?.GetActiveItemType();
+            if (activeItem == "лейка")
             {
                 Water();
             }
             else
             {
-                NotificationManager.Instance?.ShowNotification("Нужна лейка! Найди её и подбери.", 1.5f);
+                NotificationManager.Instance?.ShowNotification("Нужно выбрать лейку в инвентаре (цифры 1-5) и нажать E", 1.5f);
             }
         }
     }

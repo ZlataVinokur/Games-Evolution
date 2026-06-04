@@ -12,7 +12,17 @@ public class PickupItem : MonoBehaviour
         {
             InventoryManager2.Instance.AddItem(itemType, itemIcon);
             Destroy(gameObject);
-            NotificationManager.Instance?.ShowNotification($"Предмет '{itemType}' добавлен в инвентарь", 1.5f);
+
+            if (itemType == "пистолет")
+            {
+                var player = FindObjectOfType<IsometricPlayerController>();
+                if (player != null) player.hasGun = true;
+                NotificationManager.Instance?.ShowNotification("Пистолет экипирован! ЛКМ – стрельба.", 2f);
+            }
+            else
+            {
+                NotificationManager.Instance?.ShowNotification($"Предмет '{itemType}' добавлен в инвентарь", 1.5f);
+            }
         }
     }
 

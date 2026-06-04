@@ -1,43 +1,125 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 
 public class InventoryManager2 : MonoBehaviour
 {
     public static InventoryManager2 Instance;
+
+    [Header("UI")]
     public Transform inventoryContent;
     public GameObject itemSlotPrefab;
 
-    private List<string> items = new List<string>();
-    private List<Sprite> icons = new List<Sprite>();
+    [Header("Settings")]
+    public int maxSlots = 5;
 
-    void Awake() => Instance = this;
+    private List<InventorySlot> slots = new List<InventorySlot>();
+    private int activeSlotIndex = 0;
+
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
+
+    void Start()
+    {
+        CreateSlots();
+        SelectSlot(0);
+    }
+
+    void Update()
+    {
+        for (int i = 0; i < maxSlots && i < 9; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i) || Input.GetKeyDown(KeyCode.Keypad1 + i))
+            {
+                SelectSlot(i);
+                break;
+            }
+        }
+    }
+
+    void CreateSlots()
+    {
+        for (int i = 0; i < maxSlots; i++)
+        {
+            GameObject slotObj = Instantiate(itemSlotPrefab, inventoryContent);
+            InventorySlot slot = slotObj.GetComponent<InventorySlot>();
+            if (slot == null) slot = slotObj.AddComponent<InventorySlot>();
+            slot.Initialize(i);
+            slots.Add(slot);
+        }
+    }
+
+    void SelectSlot(int index)
+    {
+        if (index < 0 || index >= maxSlots) return;
+        activeSlotIndex = index;
+        for (int i = 0; i < slots.Count; i++)
+            slots[i].SetHighlight(i == activeSlotIndex);
+        NotificationManager.Instance?.ShowNotification($"Выбран слот {index + 1}: {(slots[index].itemType ?? "пусто")}", 0.8f);
+    }
 
     public void AddItem(string type, Sprite icon)
     {
-        items.Add(type);
-        icons.Add(icon);
-        UpdateUI();
-        if (type == "WateringCan")
-            NotificationManager.Instance?.ShowNotification("Ты подобрал лейку! Теперь поливай грибочки (подойди и нажми E).", 3f);
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (slots[i].itemType == null)
+            {
+                slots[i].SetItem(type, icon);
+                NotificationManager.Instance?.ShowNotification($"Предмет '{type}' добавлен в слот {i + 1}", 1.5f);
+                return;
+            }
+        }
+        NotificationManager.Instance?.ShowNotification("Инвентарь полон!", 1f);
     }
 
-    public bool HasItem(string type) => items.Contains(type);
+    public bool HasItem(string type)
+    {
+        foreach (var slot in slots)
+            if (slot.itemType == type) return true;
+        return false;
+    }
 
     public void RemoveItem(string type)
     {
-        int idx = items.IndexOf(type);
-        if (idx != -1) { items.RemoveAt(idx); icons.RemoveAt(idx); UpdateUI(); }
+        foreach (var slot in slots)
+        {
+            if (slot.itemType == type)
+            {
+                slot.ClearItem();
+                break;
+            }
+        }
     }
 
-    private void UpdateUI()
+    public string GetActiveItemType()
     {
-        foreach (Transform child in inventoryContent) Destroy(child.gameObject);
-        for (int i = 0; i < items.Count; i++)
+        if (activeSlotIndex < 0 || activeSlotIndex >= slots.Count) return null;
+        return slots[activeSlotIndex].itemType;
+    }
+    public void UseActiveItem()
+    {
+        if (activeSlotIndex < 0 || activeSlotIndex >= slots.Count) return;
+        var slot = slots[activeSlotIndex];
+        if (slot.itemType == null) return;
+
+        // Получаем позицию мыши в мировых координатах
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos.z = 0f;
+
+        // Проверяем коллайдер в этой точке
+        Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
+        if (hit != null)
         {
-            GameObject slot = Instantiate(itemSlotPrefab, inventoryContent);
-            slot.GetComponent<Image>().sprite = icons[i];
-            slot.GetComponent<DragAndDropItem>().itemType = items[i];
+            EnergyChest chest = hit.GetComponent<EnergyChest>();
+            if (chest != null && chest.TryUseItem(slot.itemType))
+            {
+                slot.ClearItem();
+                return;
+            }
         }
+        NotificationManager.Instance?.ShowNotification($"Не на что применить {slot.itemType}", 1f);
     }
 }
