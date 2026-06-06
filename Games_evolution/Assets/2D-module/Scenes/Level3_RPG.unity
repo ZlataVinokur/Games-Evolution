@@ -17305,7 +17305,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 571860253}
-  - component: {fileID: 571860254}
   - component: {fileID: 571860255}
   m_Layer: 0
   m_Name: Altars
@@ -17332,18 +17331,6 @@ Transform:
   - {fileID: 1485142256}
   m_Father: {fileID: 302405910}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &571860254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 571860252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18aa6dbddbd9450448f22a6cd32f4cde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LogicPuzzle
 --- !u!82 &571860255
 AudioSource:
   m_ObjectHideFlags: 0
@@ -56309,6 +56296,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 571860253}
     m_Modifications:
+    - target: {fileID: 249069438217413807, guid: 99f0e5c690c90ba4e80b9bdeb7c7ee66, type: 3}
+      propertyPath: itemSpriteRenderer
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1138397722608165775, guid: 99f0e5c690c90ba4e80b9bdeb7c7ee66, type: 3}
       propertyPath: m_Size.x
       value: 3
@@ -56377,7 +56368,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7260883524199243261, guid: 99f0e5c690c90ba4e80b9bdeb7c7ee66, type: 3}
+    - {fileID: 249069438217413807, guid: 99f0e5c690c90ba4e80b9bdeb7c7ee66, type: 3}
     m_RemovedGameObjects:
     - {fileID: 7483745677457239096, guid: 99f0e5c690c90ba4e80b9bdeb7c7ee66, type: 3}
     m_AddedGameObjects:
@@ -108098,22 +108091,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &249069438300137109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6272035090509392452}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57cbe3668c039ef4381de9a70545ad62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AltarVisual
-  itemSpriteRenderer: {fileID: 0}
-  defaultColor: {r: 0.4113207, g: 0.4113207, b: 0.4113207, a: 1}
-  activatedColor: {r: 0, g: 1, b: 0, a: 1}
-  activateSound: {fileID: 0}
 --- !u!224 &879683056015593248 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5216642624268164815, guid: 1fbb354663a4f8a488852bbf081ea3de, type: 3}
@@ -108372,6 +108349,10 @@ PrefabInstance:
       value: PlaceHardDriveHere
       objectReference: {fileID: 0}
     - target: {fileID: 7260883524199243261, guid: 99f0e5c690c90ba4e80b9bdeb7c7ee66, type: 3}
+      propertyPath: altarVisual
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7260883524199243261, guid: 99f0e5c690c90ba4e80b9bdeb7c7ee66, type: 3}
       propertyPath: requiredItemType
       value: "\u0445\u0430\u0440\u0434\u0434\u0440\u0430\u0439\u0432"
       objectReference: {fileID: 0}
@@ -108419,7 +108400,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 249069438217413807, guid: 99f0e5c690c90ba4e80b9bdeb7c7ee66, type: 3}
+    - {fileID: 7260883524199243261, guid: 99f0e5c690c90ba4e80b9bdeb7c7ee66, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -108619,8 +108602,6 @@ GameObject:
   - component: {fileID: 8326542131673421048}
   - component: {fileID: 5825746963072609656}
   - component: {fileID: 1138397721619571125}
-  - component: {fileID: 7260883523680214983}
-  - component: {fileID: 249069438300137109}
   - component: {fileID: 1599109554941505659}
   m_Layer: 0
   m_Name: PlaceCDHere
@@ -108629,20 +108610,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7260883523680214983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6272035090509392452}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d25c0f475d971d4da9e7fc5156e827e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Slot
-  requiredItemType: "\u0434\u0438\u0441\u043A"
-  altarVisual: {fileID: 249069438300137109}
 --- !u!4 &8326542131673421048
 Transform:
   m_ObjectHideFlags: 0
