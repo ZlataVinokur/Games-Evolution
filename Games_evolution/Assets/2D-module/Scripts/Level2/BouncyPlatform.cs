@@ -14,7 +14,6 @@ public class BouncyPlatform : MonoBehaviour
                 Vector2 velocity = rb.linearVelocity;
                 velocity.y = extraJumpForce;
                 rb.linearVelocity = velocity;
-                // ����� �������� ���� ��� ������
             }
         }
     }

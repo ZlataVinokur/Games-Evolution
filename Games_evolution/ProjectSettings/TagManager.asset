@@ -27,6 +27,7 @@ TagManager:
   - Potion
   - Candle
   - DeadZone
+  - WeaponPickup
   layers:
   - Default
   - TransparentFX
