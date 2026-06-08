@@ -49,7 +49,6 @@ public class EncyclopediaOnMechanics : MonoBehaviour
             case 3: ShowCameraFact(); break;
             case 4: ShowPlatformerFact(); break;
             case 5: ShowEndFact(); break;
-            default: ShowDefaultFact(); break;
         }
         factIndex++;
     }
@@ -96,10 +95,5 @@ public class EncyclopediaOnMechanics : MonoBehaviour
                 endArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
     }
 
-    public void ShowDefaultFact()
-    {
-        UnifiedInfoSystem.Instance.ShowDialogue(
-            new[] { "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!" },
-            "encyclopedia", "happy", force: true);
-    }
+
 }

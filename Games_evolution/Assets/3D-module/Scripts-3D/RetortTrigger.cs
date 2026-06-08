@@ -9,6 +9,7 @@ public class RetortTrigger : MonoBehaviour
     [SerializeField] private float colorChangeDuration = 3f;
     [SerializeField] private GameObject potionBottle;
     [SerializeField] private AudioSource boilAudioSource;
+    [SerializeField] private AudioClip SolvedClip;
     [SerializeField] private GameEvents gameEvents;
 
     private Color originalColor;
@@ -37,6 +38,9 @@ public class RetortTrigger : MonoBehaviour
         activated = true;
 
         Destroy(pickup.gameObject);
+
+        if (SolvedClip != null)
+            AudioSource.PlayClipAtPoint(SolvedClip, transform.position);
 
         if (hiddenCandleOnRetort != null)
             hiddenCandleOnRetort.SetActive(true);

@@ -7,6 +7,7 @@ public class InteractableSwitch : MonoBehaviour
     [Header("Свет")]
     [SerializeField] private int lightmapSetIndex = -1;
     [SerializeField] private List<Light> lightsToToggle;
+    [SerializeField] private AudioClip SolvedClip;
 
     [Header("Взаимодействие")]
     [SerializeField] private float interactionDistance = 3f;
@@ -26,8 +27,11 @@ public class InteractableSwitch : MonoBehaviour
     {
         playerCamera = Camera.main.transform;
         lightmapSwitcher = FindObjectOfType<LightmapSwitcher>();
+
         if (lightmapSwitcher == null)
-            Debug.LogWarning("LightmapSwitcher не найден на сцене!");
+            Debug.LogError($"[{gameObject.name}] LightmapSwitcher НЕ НАЙДЕН!");
+        else
+            Debug.Log($"[{gameObject.name}] LightmapSwitcher найден: {lightmapSwitcher.name}");
     }
 
     private void OnEnable()
@@ -84,7 +88,7 @@ public class InteractableSwitch : MonoBehaviour
             }
 
             // Выключатель
-            if (hit.transform == transform)
+            if (hit.transform.CompareTag("PC"))
             {
                 InteractionHint.Instance.ShowInteract();
                 return;
@@ -136,9 +140,14 @@ public class InteractableSwitch : MonoBehaviour
             }
 
             // Выключатель
-            if (hit.transform == transform)
+            if (hit.transform.CompareTag("PC"))
             {
-                Toggle();
+                InteractableSwitch sw = hit.transform.GetComponent<InteractableSwitch>();
+                if (sw != null)
+                {
+                    sw.Toggle();
+                }
+                return;
             }
         }
     }
@@ -152,16 +161,17 @@ public class InteractableSwitch : MonoBehaviour
         }
     }
 
-    private void Toggle()
+    public void Toggle()
     {
         isActive = !isActive;
+
+        if (SolvedClip != null)
+            AudioSource.PlayClipAtPoint(SolvedClip, transform.position);
 
         if (lightmapSwitcher != null && lightmapSetIndex >= 0)
         {
             if (isActive)
                 lightmapSwitcher.LoadLightmapSet(lightmapSetIndex);
-            else
-                lightmapSwitcher.LoadLightmapSet(0);
         }
 
         foreach (Light light in lightsToToggle)
