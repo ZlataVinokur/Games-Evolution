@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Chest : MonoBehaviour
+public class Chest : Interactable
 {
     public Sprite closedSprite;
     public Sprite openSprite;
@@ -8,21 +8,30 @@ public class Chest : MonoBehaviour
     private SpriteRenderer sr;
     private bool isOpen = false;
 
-    void Start() => sr = GetComponent<SpriteRenderer>();
+    void Start()
+    {
+        sr = GetComponent<SpriteRenderer>();
+        capabilities = InteractionCapabilities.Look | InteractionCapabilities.Use;
+        dialogueOnLook = new string[] { "Закрытый сундук. Нужно как-то его открыть." };
+        articleOnFirstInteractId = "article_digital_key";   // откроется при первом осмотре/попытке открыть
+    }
 
     public void Open()
     {
-        if (!isOpen)
-        {
-            isOpen = true;
-            sr.sprite = openSprite;
-            keyObject.SetActive(true);
-            UnifiedInfoSystem.Instance.ShowDialogue(new[] {
-                "В сундуке лежит цифровой ключ!"
-            }, speaker: "encyclopedia", emotion: "happy");
+        if (isOpen) return;
 
-            // Открываем статью о цифровых ключах
-            UnifiedInfoSystem.Instance?.UnlockArticle("article_digital_key");
-        }
+        isOpen = true;
+        sr.sprite = openSprite;
+        keyObject.SetActive(true);
+
+        UnifiedInfoSystem.Instance.ShowDialogue(new[] {
+            "В сундуке лежит цифровой ключ!"
+        }, "encyclopedia", "happy");
+
+        // Статья откроется через базовый механизм, но дополнительный вызов не помешает
+        UnifiedInfoSystem.Instance?.UnlockArticle("article_digital_key");
+
+        // После открытия сундук больше не интерактивен
+        capabilities = InteractionCapabilities.None;
     }
 }

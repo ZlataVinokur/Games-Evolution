@@ -82,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1549261218, guid: 9cd2636b9d76b3d47b91f8d911e0c385, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -142,9 +142,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18460042200fa2b42ad182bccaebd5ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTeleport
-  health: 1
+  health: 3
   teleportInterval: 2
-  teleportRadius: 3
+  teleportRadius: 4
 --- !u!50 &7128420781754180564
 Rigidbody2D:
   serializedVersion: 5

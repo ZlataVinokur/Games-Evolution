@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class ExitPortal : Interactable
 {
@@ -14,19 +14,18 @@ public class ExitPortal : Interactable
 
     void Start()
     {
-        capabilities = InteractionCapabilities.Use;   // реагирует на левую кнопку
-        speaker = Speaker.Encyclopedia;               // говорит Справочник
+        capabilities = InteractionCapabilities.Use;
+        speaker = Speaker.Encyclopedia;
     }
 
     protected override bool PerformAction()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(portalDialogue, speaker: "encyclopedia");
-        // Загружает следующий уровень после закрытия диалога
+        UnifiedInfoSystem.Instance.ShowDialogue(portalDialogue, "encyclopedia", "serious");
         StartCoroutine(LoadAfterDelay(2f));
         return true;
     }
 
-    System.Collections.IEnumerator LoadAfterDelay(float delay)
+    IEnumerator LoadAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         CompleteLevel();

@@ -2,29 +2,29 @@ using UnityEngine;
 
 public class BushSocket : Interactable
 {
-    [Tooltip("Объект розетки, который появится после открытия куста")]
     public GameObject socketObject;
+
+    void Start()
+    {
+        capabilities = InteractionCapabilities.Look | InteractionCapabilities.Use;
+        dialogueOnLook = new string[] { "Подозрительный куст. Может, его можно раздвинуть?" };
+        articleOnFirstInteractId = "article_puzzles";   // статья откроется при первом осмотре или использовании
+    }
 
     protected override bool PerformAction()
     {
-        if (!GameManager.Instance.GetFlag("bush_opened"))
+        if (GameManager.Instance.GetFlag("bush_opened")) return false;
+
+        GameManager.Instance.SetFlag("bush_opened", true);
+        UnifiedInfoSystem.Instance.ShowDialogue(new[]
         {
-            GameManager.Instance.SetFlag("bush_opened", true);
+            "Куст раздвинут. За ним оказалась старая розетка!"
+        }, "encyclopedia", "curious");
 
-            UnifiedInfoSystem.Instance.ShowDialogue(new[]
-            {
-                "Куст раздвинут. За ним оказалась старая розетка!"
-            }, speaker: "encyclopedia", emotion: "confused");
+        if (socketObject != null)
+            socketObject.SetActive(true);
 
-            if (socketObject != null)
-                socketObject.SetActive(true);
-
-            // Открываем статью о логических цепочках
-            UnifiedInfoSystem.Instance?.UnlockArticle("article_puzzles");
-
-            gameObject.SetActive(false);
-            return true;
-        }
-        return false;
+        gameObject.SetActive(false);
+        return true;
     }
 }

@@ -10,18 +10,21 @@ public class TamagotchiController : Interactable
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        capabilities = InteractionCapabilities.UseWithItem | InteractionCapabilities.Look;
+        capabilities = InteractionCapabilities.Look | InteractionCapabilities.UseWithItem;
         useableItemIds.Add("mushroom");
         dialogueOnLook = new string[] { "Тамагочи на контроллере выглядит голодным." };
+        articleOnFirstInteractId = "article_puzzles";   // статья при осмотре
     }
 
     protected override bool PerformAction()
     {
         sr.sprite = happySprite;
         GameManager.Instance.SetFlag("tamagotchi_fed", true);
+
         UnifiedInfoSystem.Instance.ShowDialogue(new[]
-            { "Тамагочи съедает гриб и посылает искру в сундук!" },
-            speaker: "player");
+        {
+            "Тамагочи съедает гриб и посылает искру в сундук!"
+        }, "player", "happy");
 
         if (chestObject != null)
             chestObject.GetComponent<Chest>()?.Open();
