@@ -5,11 +5,23 @@ public class EncyclopediaOnMechanics : MonoBehaviour
 {
     [Header("Статьи для фактов")]
     public Article movementArticle;
+    public Article freeCameraArticle;
+    public Article interactionArticle;
     public Article lightArticle;
     public Article lightArticle2;
-    public Article cameraArticle;
+    public Article tpCameraArticle;
     public Article platformerArticle;
+    public Article animationArticle;
+    public Article physicsArticle;
     public Article endArticle;
+
+    [Header("Статьи для диалогов")]
+    public Article dialog1;
+    public Article dialog2;
+    public Article dialog3;
+    public Article dialogMouse;
+    public Article dialogRetort;
+    public Article dialogScales;
 
     private int factIndex = 0;
     private InputSystem3D inputControls;
@@ -44,12 +56,15 @@ public class EncyclopediaOnMechanics : MonoBehaviour
         switch (factIndex)
         {
             case 0: ShowMovementFact(); break;
-            case 1: ShowLightFact(); break;
-            case 2: ShowLightFact2(); break;
-            case 3: ShowCameraFact(); break;
-            case 4: ShowPlatformerFact(); break;
-            case 5: ShowEndFact(); break;
-            default: ShowDefaultFact(); break;
+            case 1: ShowFreeCameraFact(); break;
+            case 2: ShowInteractionFact(); break;
+            case 3: ShowLightFact(); break;
+            case 4: ShowLightFact2(); break;
+            case 5: ShowTPCameraFact(); break;
+            case 6: ShowPlatformerFact(); break;
+            case 7: ShowAnimationFact(); break;
+            case 8: ShowPhysicsFact(); break;
+            case 9: ShowEndFact(); break;
         }
         factIndex++;
     }
@@ -59,6 +74,20 @@ public class EncyclopediaOnMechanics : MonoBehaviour
         if (movementArticle != null)
             UnifiedInfoSystem.Instance.ShowDialogue(
                 movementArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+    }
+
+    public void ShowFreeCameraFact()
+    {
+        if (freeCameraArticle != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                freeCameraArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+    }
+
+    public void ShowInteractionFact()
+    {
+        if (interactionArticle != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                interactionArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
     }
 
     public void ShowLightFact()
@@ -75,11 +104,11 @@ public class EncyclopediaOnMechanics : MonoBehaviour
                 lightArticle2.shortAnnotation.ToArray(), "encyclopedia", "happy", force: true);
     }
 
-    public void ShowCameraFact()
+    public void ShowTPCameraFact()
     {
-        if (cameraArticle != null)
+        if (tpCameraArticle != null)
             UnifiedInfoSystem.Instance.ShowDialogue(
-                cameraArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+                tpCameraArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
     }
 
     public void ShowPlatformerFact()
@@ -89,6 +118,20 @@ public class EncyclopediaOnMechanics : MonoBehaviour
                 platformerArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
     }
 
+    public void ShowAnimationFact()
+    {
+        if (animationArticle != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                animationArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+    }
+
+    public void ShowPhysicsFact()
+    {
+        if (physicsArticle != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                physicsArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+    }
+
     public void ShowEndFact()
     {
         if (endArticle != null)
@@ -96,10 +139,46 @@ public class EncyclopediaOnMechanics : MonoBehaviour
                 endArticle.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
     }
 
-    public void ShowDefaultFact()
+    // Диалоги
+    public void ShowDialog1()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(
-            new[] { "Вау! Ты прошла эти испытания и теперь знаешь больше об основах геймдизайна 3D!" },
-            "encyclopedia", "happy", force: true);
+        if (dialog1 != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                dialog1.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+    }
+
+    public void ShowDialog2()
+    {
+        if (dialog2 != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                dialog2.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+    }
+
+    public void ShowDialog3()
+    {
+        if (dialog3 != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                dialog3.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+    }
+
+    public void ShowDialogMouse()
+    {
+        if (dialogMouse != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                dialogMouse.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+    }
+
+    public void ShowDialogRetort()
+    {
+        if (dialogRetort != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                dialogRetort.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
+    }
+
+    public void ShowDialogScales()
+    {
+        if (dialogScales != null)
+            UnifiedInfoSystem.Instance.ShowDialogue(
+                dialogScales.shortAnnotation.ToArray(), "encyclopedia", "explain", force: true);
     }
 }

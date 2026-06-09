@@ -7,6 +7,7 @@ public class InteractableSwitch : MonoBehaviour
     [Header("Свет")]
     [SerializeField] private int lightmapSetIndex = -1;
     [SerializeField] private List<Light> lightsToToggle;
+    [SerializeField] private AudioClip SolvedClip;
 
     [Header("Взаимодействие")]
     [SerializeField] private float interactionDistance = 3f;
@@ -15,7 +16,6 @@ public class InteractableSwitch : MonoBehaviour
     private InputSystem3D input;
     private LightmapSwitcher lightmapSwitcher;
     private PickupableObject currentHeldObject;
-    private bool isHolding = false;
     private bool isActive = false;
 
     private void Awake()
@@ -29,9 +29,9 @@ public class InteractableSwitch : MonoBehaviour
         lightmapSwitcher = FindObjectOfType<LightmapSwitcher>();
 
         if (lightmapSwitcher == null)
-        {
-            Debug.LogWarning(" LightmapSwitcher не найден на сцене!");
-        }
+            Debug.LogError($"[{gameObject.name}] LightmapSwitcher НЕ НАЙДЕН!");
+        else
+            Debug.Log($"[{gameObject.name}] LightmapSwitcher найден: {lightmapSwitcher.name}");
     }
 
     private void OnEnable()
@@ -48,6 +48,57 @@ public class InteractableSwitch : MonoBehaviour
         input.Disable();
     }
 
+    private void Update()
+    {
+        UpdateHint();
+    }
+
+    private void UpdateHint()
+    {
+        if (InteractionHint.Instance == null) return;
+
+
+        // Рейкаст
+        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactionDistance))
+        {
+            // Зелье
+            if (hit.transform.CompareTag("Potion"))
+            {
+                InteractionHint.Instance.ShowDrink();
+                return;
+            }
+
+            // Свиток
+            ScrollPickup scroll = hit.transform.GetComponent<ScrollPickup>();
+            if (scroll != null)
+            {
+                InteractionHint.Instance.ShowRead();
+                return;
+            }
+
+            // Подбираемый предмет
+            PickupableObject pickupable = hit.transform.GetComponent<PickupableObject>();
+            if (pickupable != null)
+            {
+                InteractionHint.Instance.ShowPickup();
+                return;
+            }
+
+            // Выключатель
+            if (hit.transform.CompareTag("PC"))
+            {
+                InteractionHint.Instance.ShowInteract();
+                return;
+            }
+        }
+
+        // Ничего не нашли
+        InteractionHint.Instance.Hide();
+    }
+
     private void OnInteractPressed(InputAction.CallbackContext context)
     {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
@@ -55,7 +106,7 @@ public class InteractableSwitch : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionDistance))
         {
-            // Проверяем, не зелье ли это
+            // Зелье
             if (hit.transform.CompareTag("Potion"))
             {
                 PotionBottle potion = hit.transform.GetComponent<PotionBottle>();
@@ -66,7 +117,15 @@ public class InteractableSwitch : MonoBehaviour
                 }
             }
 
-            // Проверяем, можно ли поднять предмет
+            // Свиток
+            ScrollPickup scroll = hit.transform.GetComponent<ScrollPickup>();
+            if (scroll != null && currentHeldObject == null)
+            {
+                scroll.OpenScroll();
+                return;
+            }
+
+            // Подбираемый предмет
             PickupableObject pickupable = hit.transform.GetComponent<PickupableObject>();
             if (pickupable != null && currentHeldObject == null)
             {
@@ -77,14 +136,18 @@ public class InteractableSwitch : MonoBehaviour
 
                 pickupable.PickUp(holder.transform);
                 currentHeldObject = pickupable;
-                isHolding = true;
                 return;
             }
 
-            // Если это выключатель
-            if (hit.transform == transform)
+            // Выключатель
+            if (hit.transform.CompareTag("PC"))
             {
-                Toggle();
+                InteractableSwitch sw = hit.transform.GetComponent<InteractableSwitch>();
+                if (sw != null)
+                {
+                    sw.Toggle();
+                }
+                return;
             }
         }
     }
@@ -95,70 +158,26 @@ public class InteractableSwitch : MonoBehaviour
         {
             currentHeldObject.Drop();
             currentHeldObject = null;
-            isHolding = false;
         }
     }
 
-    private void Toggle()
+    public void Toggle()
     {
         isActive = !isActive;
 
-        // Переключаем lightmap
+        if (SolvedClip != null)
+            AudioSource.PlayClipAtPoint(SolvedClip, transform.position);
+
         if (lightmapSwitcher != null && lightmapSetIndex >= 0)
         {
             if (isActive)
                 lightmapSwitcher.LoadLightmapSet(lightmapSetIndex);
-            else
-                lightmapSwitcher.LoadLightmapSet(0);
         }
 
-        // Переключаем дополнительные realtime источники
         foreach (Light light in lightsToToggle)
         {
             if (light != null)
                 light.enabled = isActive;
-        }
-    }
-
-    private void OnGUI()
-    {
-        if (playerCamera == null) return;
-
-        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, interactionDistance))
-        {
-            // Подсказка для зелья
-            if (hit.transform.CompareTag("Potion") && currentHeldObject == null)
-            {
-                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 20, 200, 30),
-                         "Нажмите E чтобы выпить");
-                return;
-            }
-
-            // Показываем подсказку для предметов
-            PickupableObject pickupable = hit.transform.GetComponent<PickupableObject>();
-            if (pickupable != null && currentHeldObject == null)
-            {
-                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 20, 200, 30),
-                         "Удерживайте E чтобы нести");
-                return;
-            }
-
-            // Показываем подсказку для выключателя
-            if (hit.transform == transform && currentHeldObject == null)
-            {
-                GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 20, 200, 30),
-                         "Нажмите E для взаимодействия");
-            }
-        }
-
-        // Показываем подсказку, если держим предмет
-        if (currentHeldObject != null)
-        {
-            GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 + 20, 200, 30),
-                     "Отпустите E чтобы бросить");
         }
     }
 }

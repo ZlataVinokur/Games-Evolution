@@ -78,7 +78,7 @@ public class UnifiedInfoSystem : MonoBehaviour
         bool skipPressed = Input.GetMouseButtonDown(1) ||
                            Input.GetKeyDown(KeyCode.Return) ||
                            Input.GetKeyDown(KeyCode.KeypadEnter) ||
-                           Input.GetKeyDown(KeyCode.Space);
+                           Input.GetKeyDown(KeyCode.KeypadEnter);
 
         if (skipPressed)
         {

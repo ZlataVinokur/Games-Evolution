@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class LadderDropTrigger : MonoBehaviour
 {
-    [SerializeField] private GameObject hiddenLadder; // заранее размещённая лестница-мост
+    [SerializeField] private GameObject hiddenLadder;
+    [SerializeField] private AudioClip SolvedClip;
+    [SerializeField] private GameEvents gameEvents;
+
+
 
     private void Start()
     {
@@ -20,8 +24,14 @@ public class LadderDropTrigger : MonoBehaviour
         // Удаляем лестницу в руках
         Destroy(pickup.gameObject);
 
+        if (SolvedClip != null)
+            AudioSource.PlayClipAtPoint(SolvedClip, transform.position);
+
         // Показываем мост
         if (hiddenLadder != null)
             hiddenLadder.SetActive(true);
+
+        if (gameEvents != null)
+            gameEvents.TriggerPhysicsFact();
     }
 }
