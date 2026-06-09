@@ -3,14 +3,13 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 public class PixelPlatformerController : PlayerController_2
 {
     [Header("Движение")]
     public float moveSpeed = 5f;
-    public float jumpForce = 12f;
-    //public int extraJumps = 1;          // количество дополнительных прыжков (двойной прыжок = 1)
-    //private int currentExtraJumps;      // текущее количество доступных доп. прыжков
+    public float jumpForce = 14f;
     public Transform groundCheck;
     public LayerMask groundLayer;
 
@@ -29,16 +28,22 @@ public class PixelPlatformerController : PlayerController_2
     [Header("Оружие")]
     public GameObject bulletPrefab;
     public Transform firePoint;
-    public float weaponUnlockHeight = 20f;
     private bool hasWeapon = false;
 
     [Header("Враги и прогресс")]
     private int enemiesKilled = 0;
     public int neededKills = 10;
-    public float requiredHeight = 150f;      // необходимая высота для победы
-    private bool victoryConditionMet = false; // чтобы не вызывать победу несколько раз
-    public GameObject portalPrefab;           // опционально, если нужен портал (пока не используется)
-    private Vector3 portalPosition = new Vector3(12f, 30f, 0f);
+    public float requiredHeight = 150f;
+    private bool victoryConditionMet = false;
+
+    [Header("Чекпоинты")]
+    public float checkpointInterval = 10f;
+    private List<float> checkpoints = new List<float>();
+    private int currentCheckpointIndex = 0;
+    public float deathFallYOffset = 5f;
+    private float lastFallDamageTime = -999f;
+    public float fallDamageCooldown = 1f;
+    private float fallDamageBlockTimer = 0f;
 
     [Header("Бонусы")]
     public GameObject healthBonusPrefab;
@@ -60,27 +65,27 @@ public class PixelPlatformerController : PlayerController_2
     public AudioClip shieldBonusSound;
     public AudioClip weaponGetSound;
     public AudioClip winSound;
-    public AudioClip killSound;   // опционально
+    public AudioClip killSound;
 
     private Rigidbody2D rb;
     private bool isGrounded;
     private bool facingRight = true;
     private bool isDead = false;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
 
-    // Флаги для статей
     private bool firstJumpDone = false;
     private bool weaponUnlockedAndArticleShown = false;
     private bool healthBonusTaken = false;
     private bool shieldBonusTaken = false;
-
-    public int CurrentHealth => currentHealth;
-    public int EnemiesKilled => enemiesKilled;
+    private bool isStartInvincible = true;
+    private float startInvincibleDuration = 2f;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         if (rb == null) rb = gameObject.AddComponent<Rigidbody2D>();
-        rb.gravityScale = 2.5f;
+        rb.gravityScale = 2.2f;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
@@ -91,9 +96,9 @@ public class PixelPlatformerController : PlayerController_2
         UpdateHealthUI();
         UpdateKillsUI();
 
-        //currentExtraJumps = extraJumps;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null) originalColor = spriteRenderer.color;
 
-        // AudioSource, если не назначен
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
         if (audioSource == null && (jumpSound != null || damageSound != null))
@@ -115,6 +120,21 @@ public class PixelPlatformerController : PlayerController_2
             mainCamera = Camera.main;
             UpdateBounds();
         }
+
+        checkpoints.Clear();
+        checkpoints.Add(transform.position.y);
+        currentCheckpointIndex = 0;
+
+        StartCoroutine(StartInvincibility());
+    }
+
+    IEnumerator StartInvincibility()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(startInvincibleDuration);
+        if (!isStartInvincible) yield break;
+        isInvincible = false;
+        isStartInvincible = false;
     }
 
     public override void HandleInput()
@@ -128,25 +148,15 @@ public class PixelPlatformerController : PlayerController_2
         if (move > 0 && !facingRight) Flip();
         else if (move < 0 && facingRight) Flip();
 
-        // Новая проверка земли через Raycast (более надёжно)
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1.1f, groundLayer);
         isGrounded = hit.collider != null;
-        Debug.DrawRay(transform.position, Vector2.down * 1.1f, Color.green);
 
-        //// Сброс дополнительных прыжков при касании земли
-        //if (isGrounded)
-        //{
-        //    currentExtraJumps = extraJumps;
-        //}
-
-        // Прыжок (на Space, W, UpArrow)
         if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (isGrounded)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 PlaySound(jumpSound);
-                //StartCoroutine(JumpSquashAndStretch());
 
                 if (!firstJumpDone)
                 {
@@ -154,36 +164,15 @@ public class PixelPlatformerController : PlayerController_2
                     UnifiedInfoSystem.Instance?.UnlockArticle("platformer_jump");
                 }
             }
-            //else if (currentExtraJumps > 0)
-            //{
-            //    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            //    currentExtraJumps--;
-            //    PlaySound(jumpSound);
-            //    StartCoroutine(JumpSquashAndStretch());
-            //}
         }
     }
 
-    //// Эффект сжатия и растяжения при прыжке
-    //IEnumerator JumpSquashAndStretch()
-    //{
-    //    Vector3 originalScale = transform.localScale;
-    //    // Сжатие по Y, растяжение по X
-    //    transform.localScale = new Vector3(originalScale.x * 1.2f, originalScale.y * 0.8f, originalScale.z);
-    //    yield return new WaitForSeconds(0.1f);
-    //    transform.localScale = originalScale;
-    //    // Небольшое растяжение в верхней точке
-    //    yield return new WaitForSeconds(0.1f);
-    //    transform.localScale = new Vector3(originalScale.x * 0.9f, originalScale.y * 1.1f, originalScale.z);
-    //    yield return new WaitForSeconds(0.1f);
-    //    transform.localScale = originalScale;
-    //}
-
     void Update()
     {
-        HandleInput();
         if (IsInputBlocked()) return;
         if (isDead) return;
+
+        HandleInput();
 
         if (enableEdgeTeleport) CheckEdgeTeleport();
 
@@ -192,15 +181,81 @@ public class PixelPlatformerController : PlayerController_2
 
         if (hasWeapon && Input.GetButtonDown("Fire1")) Shoot();
 
-        if (!hasWeapon && transform.position.y >= weaponUnlockHeight)
-            UnlockWeapon();
+        UpdateCheckpoints();
+        CheckFallDamage();
 
-        // Проверка победы: убито достаточно врагов И достигнута нужная высота
         if (!victoryConditionMet && enemiesKilled >= neededKills && transform.position.y >= requiredHeight)
         {
             victoryConditionMet = true;
             PlaySound(winSound);
             GameManager.Instance?.ShowWin();
+        }
+    }
+
+    void UpdateCheckpoints()
+    {
+        float currentY = transform.position.y;
+        int newIndex = Mathf.FloorToInt(currentY / checkpointInterval);
+        if (newIndex > currentCheckpointIndex)
+        {
+            for (int i = currentCheckpointIndex + 1; i <= newIndex; i++)
+            {
+                float cpY = i * checkpointInterval;
+                if (!checkpoints.Contains(cpY))
+                {
+                    checkpoints.Add(cpY);
+                    // Можно оставить для отладки
+                    // Debug.Log($"[Чекпоинт] Добавлен на высоте {cpY}");
+                }
+            }
+            currentCheckpointIndex = newIndex;
+        }
+    }
+
+    void CheckFallDamage()
+    {
+        if (fallDamageBlockTimer > 0f)
+        {
+            fallDamageBlockTimer -= Time.deltaTime;
+            return;
+        }
+        if (checkpoints.Count == 0) return;
+        if (isInvincible || isDead) return;
+
+        // Урон только при падении вниз (вертикальная скорость отрицательна)
+        if (rb.linearVelocity.y >= 0f) return;
+
+        float currentCheckpointY = checkpoints[currentCheckpointIndex];
+        float threshold = currentCheckpointY - deathFallYOffset;
+
+        // Дополнительная защита: если игрок выше чекпоинта, то падения нет
+        if (transform.position.y > currentCheckpointY) return;
+
+        if (transform.position.y < threshold && Time.time >= lastFallDamageTime + fallDamageCooldown)
+        {
+            Debug.Log($"[Падение] Урон! Высота {transform.position.y:F2} ниже порога {threshold:F2}");
+            TakeDamage(1);
+            lastFallDamageTime = Time.time;
+            TeleportToCheckpoint();
+        }
+    }
+
+    void TeleportToCheckpoint()
+    {
+        if (checkpoints.Count == 0) return;
+        float targetY = checkpoints[currentCheckpointIndex] + 1f; // чуть выше чекпоинта
+        Vector3 pos = transform.position;
+        pos.y = targetY;
+        transform.position = pos;
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+        fallDamageBlockTimer = 0.5f;
+        StartCoroutine(InvincibilityFrames());
+
+        // Поиск ближайшей платформы под ногами, чтобы не провалиться
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 2f, groundLayer);
+        if (hit.collider != null)
+        {
+            transform.position = new Vector3(transform.position.x, hit.point.y + 0.5f, transform.position.z);
         }
     }
 
@@ -241,23 +296,6 @@ public class PixelPlatformerController : PlayerController_2
         bullet.GetComponent<Bullet_2>().Initialize(direction);
     }
 
-    void UnlockWeapon()
-    {
-        hasWeapon = true;
-        PlaySound(weaponGetSound);
-        if (!weaponUnlockedAndArticleShown)
-        {
-            weaponUnlockedAndArticleShown = true;
-            UnifiedInfoSystem.Instance?.UnlockArticle("platformer_weapon");
-        }
-        if (UnifiedInfoSystem.Instance != null)
-        {
-            string[] fact = { "В 1985 году в игре Super Mario Bros. появилась возможность стрелять. А в 1987-м Contra сделала стрельбу главной механикой. Теперь и ты вооружён!" };
-            UnifiedInfoSystem.Instance.ShowDialogue(fact, "encyclopedia", "happy");
-        }
-        Debug.Log("Оружие получено!");
-    }
-
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Portal") && victoryConditionMet)
@@ -269,6 +307,7 @@ public class PixelPlatformerController : PlayerController_2
             Heal(1);
             Destroy(other.gameObject);
             PlaySound(healthBonusSound);
+            StartCoroutine(FlashColor(Color.green, 0.3f));
             if (!healthBonusTaken)
             {
                 healthBonusTaken = true;
@@ -282,6 +321,7 @@ public class PixelPlatformerController : PlayerController_2
             StartCoroutine(ApplyShield());
             Destroy(other.gameObject);
             PlaySound(shieldBonusSound);
+            StartCoroutine(FlashColor(Color.cyan, 0.3f));
             if (!shieldBonusTaken)
             {
                 shieldBonusTaken = true;
@@ -289,6 +329,25 @@ public class PixelPlatformerController : PlayerController_2
             }
             if (UnifiedInfoSystem.Instance != null)
                 UnifiedInfoSystem.Instance.ShowTimedMessage("Щит активирован! Временно неуязвим", 2f);
+        }
+        else if (other.CompareTag("WeaponPickup"))
+        {
+            hasWeapon = true;
+            Destroy(other.gameObject);
+            PlaySound(weaponGetSound);
+            StartCoroutine(FlashColor(Color.yellow, 0.3f));
+            if (!weaponUnlockedAndArticleShown)
+            {
+                weaponUnlockedAndArticleShown = true;
+                UnifiedInfoSystem.Instance?.UnlockArticle("platformer_weapon");
+            }
+            VerticalPlatformGenerator gen = FindObjectOfType<VerticalPlatformGenerator>();
+            if (gen != null) gen.OnWeaponCollected();
+            if (UnifiedInfoSystem.Instance != null)
+            {
+                string[] fact = { "Теперь у тебя есть оружие! Стреляй левой кнопкой мыши." };
+                UnifiedInfoSystem.Instance.ShowDialogue(fact, "encyclopedia", "happy");
+            }
         }
     }
 
@@ -307,7 +366,7 @@ public class PixelPlatformerController : PlayerController_2
                     rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.6f);
                 }
             }
-            else if (!isInvincible)
+            else if (!isInvincible && !isDead)
             {
                 TakeDamage(1);
             }
@@ -316,12 +375,27 @@ public class PixelPlatformerController : PlayerController_2
 
     public void TakeDamage(int amount)
     {
-        if (isInvincible) return;
+        if (isInvincible || isDead) return;
         currentHealth -= amount;
         UpdateHealthUI();
         PlaySound(damageSound);
+        StartCoroutine(FlashColor(Color.red, 0.2f));
         StartCoroutine(InvincibilityFrames());
         if (currentHealth <= 0) Die();
+    }
+
+    IEnumerator FlashColor(Color color, float duration)
+    {
+        if (spriteRenderer == null) yield break;
+        float elapsed = 0;
+        Color original = spriteRenderer.color;
+        while (elapsed < duration)
+        {
+            spriteRenderer.color = Color.Lerp(original, color, Mathf.PingPong(elapsed * 4f, 1f));
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        spriteRenderer.color = original;
     }
 
     IEnumerator InvincibilityFrames()
@@ -376,7 +450,6 @@ public class PixelPlatformerController : PlayerController_2
 
     public void CompleteLevel()
     {
-        GameManager.Instance?.CompleteLevel("platformer");
         GameManager.Instance?.ShowWin();
     }
 
@@ -402,7 +475,6 @@ public class PixelPlatformerController : PlayerController_2
         else if (enemiesKilled == neededKills)
         {
             UnifiedInfoSystem.Instance?.UnlockArticle("platformer_portal");
-            // Дополнительный диалог не нужен, аннотация из статьи покажется автоматически
         }
         else if (enemiesKilled % 2 == 0 && UnifiedInfoSystem.Instance != null)
         {

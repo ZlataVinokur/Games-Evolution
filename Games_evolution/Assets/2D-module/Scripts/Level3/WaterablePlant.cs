@@ -28,8 +28,15 @@ public class WaterablePlant : MonoBehaviour
         }
     }
 
+    private static bool energyArticleShown = false;
+
     void Water()
     {
+        if (!energyArticleShown)
+        {
+            energyArticleShown = true;
+            UnifiedInfoSystem.Instance?.UnlockArticle("rpg_energy");
+        }
         isWatered = true;
         if (grownSprite != null && sr != null) sr.sprite = grownSprite;
         if (waterSound != null) AudioSource.PlayClipAtPoint(waterSound, transform.position);

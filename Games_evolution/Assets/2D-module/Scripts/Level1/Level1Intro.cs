@@ -11,8 +11,8 @@ public class Level1Intro : MonoBehaviour
 
     void Start()
     {
-        UnifiedInfoSystem.Instance.ShowDialogue(introLines, "neutral");
-        // Сразу открываем вводную статью о жанре
+        UnifiedInfoSystem.Instance.ShowDialogue(introLines, "encyclopedia", "neutral");
+        // Открываем вводную статью о жанре (принудительно, без проверки на первое взаимодействие)
         UnifiedInfoSystem.Instance?.UnlockArticle("article_pointandclick");
     }
 }

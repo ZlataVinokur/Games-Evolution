@@ -6,10 +6,18 @@ public class PickupItem : MonoBehaviour
     public Sprite itemIcon;
     private bool playerInRange = false;
 
+    private static bool logicArticleShown = false;
+
     void Update()
     {
         if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
+            if (!logicArticleShown && (itemType == "кассета" || itemType == "хард-драйв" || itemType == "диск"))
+            {
+                logicArticleShown = true;
+                UnifiedInfoSystem.Instance?.UnlockArticle("rpg_logic");
+            }
+
             InventoryManager2.Instance.AddItem(itemType, itemIcon);
             Destroy(gameObject);
 

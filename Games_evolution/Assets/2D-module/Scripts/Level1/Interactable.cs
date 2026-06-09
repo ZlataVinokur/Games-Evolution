@@ -30,14 +30,17 @@ public class Interactable : MonoBehaviour
     [Header("Неудачное применение предмета")]
     public string[] failDialogue = new string[] { "Ой, не подходит... Надо поискать куда ещё это можно применить." };
 
-    [Header("Статья справочника")]
-    public string articleTriggerId;          // будет разблокирована после успешного действия
+    [Header("Статья справочника (открывается при ПЕРВОМ взаимодействии ЛЮБОГО типа)")]
+    public string articleOnFirstInteractId;        // ID статьи, которая откроется один раз
 
     [Header("Прочее")]
     public string flagToSetOnAction;
 
     [Header("Диалог")]
-    public Speaker speaker = Speaker.Encyclopedia;   // кто говорит (по умолчанию Справочник)
+    public Speaker speaker = Speaker.Encyclopedia;
+
+    // Внутренний флаг, чтобы статья открывалась только один раз
+    private bool firstInteractionDone = false;
 
     // ---------- КУРСОР ----------
     void OnMouseEnter()
@@ -58,6 +61,9 @@ public class Interactable : MonoBehaviour
     // ---------- ЛЕВАЯ КНОПКА ----------
     void OnMouseDown()
     {
+        // ПЕРВОЕ ВЗАИМОДЕЙСТВИЕ (для любого клика)
+        TryFirstInteraction();
+
         if (InventoryManager.Instance != null && InventoryManager.Instance.selectedItem != null)
         {
             ItemData selected = InventoryManager.Instance.selectedItem;
@@ -68,7 +74,7 @@ public class Interactable : MonoBehaviour
             }
             else
             {
-                UnifiedInfoSystem.Instance.ShowDialogue(failDialogue, "curious");
+                UnifiedInfoSystem.Instance.ShowDialogue(failDialogue, "encyclopedia", "curious");
             }
         }
         else
@@ -83,10 +89,7 @@ public class Interactable : MonoBehaviour
         if ((capabilities & InteractionCapabilities.Use) != 0)
         {
             if (PerformAction())
-            {
-                TryUnlockArticle();
                 return;
-            }
         }
 
         if ((capabilities & InteractionCapabilities.PickUp) != 0)
@@ -101,10 +104,13 @@ public class Interactable : MonoBehaviour
 
     public virtual void Inspect()
     {
+        // При осмотре тоже открываем статью (если ещё не открыли)
+        TryFirstInteraction();
+
         if ((capabilities & InteractionCapabilities.Look) != 0 && dialogueOnLook.Length > 0)
-            UnifiedInfoSystem.Instance.ShowDialogue(dialogueOnLook, "neutral");
+            UnifiedInfoSystem.Instance.ShowDialogue(dialogueOnLook, speaker == Speaker.Player ? "player" : "encyclopedia", "neutral");
         else
-            UnifiedInfoSystem.Instance.ShowDialogue(new[] { "Ничего примечательного." }, "neutral");
+            UnifiedInfoSystem.Instance.ShowDialogue(new[] { "Ничего примечательного." }, "encyclopedia", "neutral");
     }
 
     protected virtual void UseItem(ItemData item)
@@ -114,7 +120,6 @@ public class Interactable : MonoBehaviour
             if (PerformAction())
             {
                 InventoryManager.Instance?.RemoveItem(item.itemId);
-                TryUnlockArticle();
             }
         }
     }
@@ -126,10 +131,14 @@ public class Interactable : MonoBehaviour
         return true;
     }
 
-    private void TryUnlockArticle()
+    // --- НОВЫЙ МЕТОД ДЛЯ ОТКРЫТИЯ СТАТЬИ ПРИ ПЕРВОМ ВЗАИМОДЕЙСТВИИ ---
+    private void TryFirstInteraction()
     {
-        if (!string.IsNullOrEmpty(articleTriggerId))
-            UnifiedInfoSystem.Instance?.UnlockArticle(articleTriggerId);
+        if (firstInteractionDone) return;
+        if (string.IsNullOrEmpty(articleOnFirstInteractId)) return;
+
+        firstInteractionDone = true;
+        UnifiedInfoSystem.Instance?.UnlockArticle(articleOnFirstInteractId);
     }
 
     public CursorType GetCursorType()

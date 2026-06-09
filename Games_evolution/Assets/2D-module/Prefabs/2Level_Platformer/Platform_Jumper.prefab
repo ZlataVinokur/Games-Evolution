@@ -83,7 +83,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1887783778, guid: 89cc4cc504cd8344f812859cd4eab1ee, type: 3}
   m_Color: {r: 1, g: 0.6539728, b: 0.627451, a: 1}
@@ -172,7 +172,7 @@ PlatformEffector2D:
   m_SurfaceArc: 1
   m_UseSideFriction: 0
   m_UseSideBounce: 0
-  m_SideArc: 1
+  m_SideArc: 0.1
 --- !u!1 &6801791303457521397
 GameObject:
   m_ObjectHideFlags: 0

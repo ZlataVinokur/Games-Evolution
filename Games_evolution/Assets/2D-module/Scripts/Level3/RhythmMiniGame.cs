@@ -15,8 +15,15 @@ public class RhythmMiniGame : MonoBehaviour
 
     void Start() => visualHint = GetComponent<SpriteRenderer>();
 
+    private bool articleShown = false;
+
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (!articleShown && other.CompareTag("Player"))
+        {
+            articleShown = true;
+            UnifiedInfoSystem.Instance?.UnlockArticle("rpg_rhythm");
+        }
         if (isCompleted || !other.CompareTag("Player")) return;
         if (RPGLevelManager.Instance != null && RPGLevelManager.Instance.metersActivated[0]) return;
 

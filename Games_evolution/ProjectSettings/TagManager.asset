@@ -29,6 +29,7 @@ TagManager:
   - DeadZone
   - FxTemporaire
   - PC
+  - WeaponPickup
   layers:
   - Default
   - TransparentFX
