@@ -37,7 +37,7 @@ public class ScalesTrigger : MonoBehaviour
 
         // Диалог
         if (gameEvents != null)
-            gameEvents.TriggerMovementFact();
+            gameEvents.TriggerInteractionFact();
     }
 
     private System.Collections.IEnumerator PlayGearSoundDelayed(float delay)

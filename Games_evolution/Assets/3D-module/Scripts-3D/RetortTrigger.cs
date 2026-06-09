@@ -58,7 +58,7 @@ public class RetortTrigger : MonoBehaviour
             StartCoroutine(ShowPotionDelayed(5f));
 
         if (gameEvents != null)
-            gameEvents.TriggerLightFact();
+            gameEvents.TriggerDialogRetort();
     }
 
     private IEnumerator ColorPulseRoutine()

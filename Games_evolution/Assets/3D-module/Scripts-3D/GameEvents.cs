@@ -16,81 +16,85 @@ public class GameEvents : MonoBehaviour
         GameManager.Instance.LoadQuizForCurrentModule(8);
     }
 
+    // Факты
     public void TriggerMovementFact()
     {
-        if (encyclopedia != null && encyclopedia.movementArticle != null)
-        {
-            UnifiedInfoSystem.Instance.ShowDialogue(
-                encyclopedia.movementArticle.shortAnnotation.ToArray(),
-                "encyclopedia",
-                "explain",
-                force: true
-            );
-        }
+        encyclopedia?.ShowMovementFact();
+    }
+
+    public void TriggerFreeCameraFact()
+    {
+        encyclopedia?.ShowFreeCameraFact();
+    }
+
+    public void TriggerInteractionFact()
+    {
+        encyclopedia?.ShowInteractionFact();
     }
 
     public void TriggerLightFact()
     {
-        if (encyclopedia != null && encyclopedia.lightArticle != null)
-        {
-            UnifiedInfoSystem.Instance.ShowDialogue(
-                encyclopedia.lightArticle.shortAnnotation.ToArray(),
-                "encyclopedia",
-                "happy",
-                force: true
-            );
-        }
+        encyclopedia?.ShowLightFact();
     }
 
     public void TriggerLightFact2()
     {
-        if (encyclopedia != null && encyclopedia.lightArticle2 != null)
-        {
-            UnifiedInfoSystem.Instance.ShowDialogue(
-                encyclopedia.lightArticle2.shortAnnotation.ToArray(),
-                "encyclopedia",
-                "happy",
-                force: true
-            );
-        }
+        encyclopedia?.ShowLightFact2();
     }
 
-    public void TriggerCameraFact()
+    public void TriggerTPCameraFact()
     {
-        if (encyclopedia != null && encyclopedia.cameraArticle != null)
-        {
-            UnifiedInfoSystem.Instance.ShowDialogue(
-                encyclopedia.cameraArticle.shortAnnotation.ToArray(),
-                "encyclopedia",
-                "explain",
-                force: true
-            );
-        }
+        encyclopedia?.ShowTPCameraFact();
     }
 
     public void TriggerPlatformerFact()
     {
-        if (encyclopedia != null && encyclopedia.platformerArticle != null)
-        {
-            UnifiedInfoSystem.Instance.ShowDialogue(
-                encyclopedia.platformerArticle.shortAnnotation.ToArray(),
-                "encyclopedia",
-                "explain",
-                force: true
-            );
-        }
+        encyclopedia?.ShowPlatformerFact();
+    }
+
+    public void TriggerAnimationFact()
+    {
+        encyclopedia?.ShowAnimationFact();
+    }
+
+    public void TriggerPhysicsFact()
+    {
+        encyclopedia?.ShowPhysicsFact();
     }
 
     public void TriggerEndFact()
     {
-        if (encyclopedia != null && encyclopedia.endArticle != null)
-        {
-            UnifiedInfoSystem.Instance.ShowDialogue(
-                encyclopedia.endArticle.shortAnnotation.ToArray(),
-                "encyclopedia",
-                "explain",
-                force: true
-            );
-        }
+        encyclopedia?.ShowEndFact();
+    }
+
+    // Диалоги
+    public void TriggerDialog1()
+    {
+        encyclopedia?.ShowDialog1();
+    }
+
+    public void TriggerDialog2()
+    {
+        encyclopedia?.ShowDialog2();
+    }
+
+    public void TriggerDialog3()
+    {
+        encyclopedia?.ShowDialog3();
+    }
+
+    public void TriggerDialogMouse()
+    {
+        encyclopedia?.ShowDialogMouse();
+    }
+
+    public void TriggerDialogRetort()
+    {
+        encyclopedia?.ShowDialogRetort();
+    }
+
+    public void TriggerDialogScales()
+    {
+        encyclopedia?.ShowDialogScales();
     }
 }

@@ -232,10 +232,15 @@ Transform:
   - {fileID: 1709387623}
   - {fileID: 107324470}
   - {fileID: 338687500}
+  - {fileID: 620507343}
   - {fileID: 1961940738}
+  - {fileID: 753379870}
+  - {fileID: 1476101254}
+  - {fileID: 1381099005}
   - {fileID: 1125761555}
   - {fileID: 1316578714}
   - {fileID: 1608097834}
+  - {fileID: 78742612}
   - {fileID: 1492184876}
   - {fileID: 1025035636}
   - {fileID: 1944301816}
@@ -621,6 +626,10 @@ PrefabInstance:
       value: Ladder_01 (4)
       objectReference: {fileID: 0}
     - target: {fileID: 119458, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 119458, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -675,6 +684,22 @@ PrefabInstance:
     - target: {fileID: 419458, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 5.902
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522292, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Size.x
+      value: 0.59162605
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522292, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Size.z
+      value: 0.14108637
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522292, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Center.x
+      value: -0.000000726395
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522292, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Center.z
+      value: 0.040263724
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1363,6 +1388,89 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+--- !u!1 &78742611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 78742612}
+  - component: {fileID: 78742614}
+  - component: {fileID: 78742613}
+  m_Layer: 0
+  m_Name: AnimFactTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &78742612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78742611}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.48440796, z: -0, w: 0.8748423}
+  m_LocalPosition: {x: -2.96, y: -0.04, z: -3.77}
+  m_LocalScale: {x: 1.0913337, y: 0.6138535, z: 1.9026313}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5509873}
+  m_LocalEulerAnglesHint: {x: 0, y: 57.947, z: 0}
+--- !u!65 &78742613
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78742611}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &78742614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78742611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3467fcacd8e3eba45b1d6ab560390aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerEvent
+  playerTag: Player
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1205263507}
+        m_TargetAssemblyTypeName: GameEvents, Assembly-CSharp
+        m_MethodName: TriggerAnimationFact
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerOnce: 1
 --- !u!1001 &80328422
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1809,7 +1917,7 @@ Transform:
   m_GameObject: {fileID: 107324467}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.5220003, y: 9.674999, z: -10.896}
+  m_LocalPosition: {x: 5.5220003, y: 10.214998, z: -10.896}
   m_LocalScale: {x: 1.6223769, y: 0.6138535, z: 1.0913339}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1918,6 +2026,10 @@ PrefabInstance:
       value: Ladder_01 (5)
       objectReference: {fileID: 0}
     - target: {fileID: 119458, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 119458, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -1972,6 +2084,26 @@ PrefabInstance:
     - target: {fileID: 419458, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 5.902
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522292, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Size.x
+      value: 0.5981162
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522292, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Size.z
+      value: 0.15232193
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522292, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Center.x
+      value: -0.003246089
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522292, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Center.y
+      value: 0.9382883
+      objectReference: {fileID: 0}
+    - target: {fileID: 6522292, guid: 871313d097424a8da9d90dc4db5a48ba, type: 3}
+      propertyPath: m_Center.z
+      value: 0.036033813
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4144,11 +4276,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EncyclopediaOnMechanics
   movementArticle: {fileID: 11400000, guid: 72a321a915b19954ca6f95b9d3808319, type: 2}
+  freeCameraArticle: {fileID: 11400000, guid: e5b18a75a1f3a0f448e95afea65952f6, type: 2}
+  interactionArticle: {fileID: 11400000, guid: c9d6b87f43271eb4596874afbb5dbe0b, type: 2}
   lightArticle: {fileID: 11400000, guid: 837b545ae0e9fd0498652e2084046129, type: 2}
   lightArticle2: {fileID: 11400000, guid: 7aeec17d317169d40b89201d8672d168, type: 2}
-  cameraArticle: {fileID: 11400000, guid: e5b18a75a1f3a0f448e95afea65952f6, type: 2}
+  tpCameraArticle: {fileID: 11400000, guid: ae0e9ee198154c4499af130c68c76c44, type: 2}
   platformerArticle: {fileID: 11400000, guid: fdbcd88dd0d74454e8cca5929f235ce7, type: 2}
+  animationArticle: {fileID: 11400000, guid: 7b80f8c44518c084cbd233c7e5f5046f, type: 2}
+  physicsArticle: {fileID: 11400000, guid: 5e4a5c516d2908f41a819f594bc1f80a, type: 2}
   endArticle: {fileID: 11400000, guid: 69dc22baef506ae4f9a22241de820cf6, type: 2}
+  dialog1: {fileID: 11400000, guid: 19ec1522a4966084b9387d97b1f7290b, type: 2}
+  dialog2: {fileID: 11400000, guid: 62586adcada52da4d9d6d18d503e4eef, type: 2}
+  dialog3: {fileID: 11400000, guid: 14a384d90e0d13b4c852c8446cdede84, type: 2}
+  dialogMouse: {fileID: 11400000, guid: 0fba1eefa90f72642b629845e1a8580e, type: 2}
+  dialogRetort: {fileID: 11400000, guid: 390cc1a6d5727a64cb1305973a29b3d0, type: 2}
+  dialogScales: {fileID: 11400000, guid: 0b9618de96a99ae418a4e54b5d60dbe4, type: 2}
 --- !u!4 &234658356
 Transform:
   m_ObjectHideFlags: 0
@@ -5040,7 +5182,7 @@ GameObject:
   - component: {fileID: 338687499}
   - component: {fileID: 338687498}
   m_Layer: 0
-  m_Name: MoveFactTrigger
+  m_Name: Dialog1Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5085,7 +5227,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1205263507}
         m_TargetAssemblyTypeName: GameEvents, Assembly-CSharp
-        m_MethodName: TriggerMovementFact
+        m_MethodName: TriggerDialog1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5105,7 +5247,7 @@ Transform:
   m_GameObject: {fileID: 338687497}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.552214, z: -0, w: 0.8337024}
-  m_LocalPosition: {x: 11.6380005, y: -13.964, z: -0.17500019}
+  m_LocalPosition: {x: 13.13, y: -15.39, z: 2.35}
   m_LocalScale: {x: 1.0913339, y: 0.6138535, z: 1.9026315}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14861,6 +15003,89 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 615986605}
   m_CullTransparentMesh: 1
+--- !u!1 &620507342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 620507343}
+  - component: {fileID: 620507345}
+  - component: {fileID: 620507344}
+  m_Layer: 0
+  m_Name: 'DialogScalesTrigger '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &620507343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620507342}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.5992592, z: -0, w: 0.8005551}
+  m_LocalPosition: {x: 9.66, y: -16.321, z: 7.18}
+  m_LocalScale: {x: 1.0913339, y: 0.6138535, z: 1.9026315}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5509873}
+  m_LocalEulerAnglesHint: {x: 0, y: -73.634, z: 0}
+--- !u!65 &620507344
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620507342}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &620507345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620507342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3467fcacd8e3eba45b1d6ab560390aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerEvent
+  playerTag: Player
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1205263507}
+        m_TargetAssemblyTypeName: GameEvents, Assembly-CSharp
+        m_MethodName: TriggerDialogScales
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerOnce: 1
 --- !u!1 &634922642
 GameObject:
   m_ObjectHideFlags: 0
@@ -14930,32 +15155,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ea73e9489588c4988315bced6906bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollPickup
-  scrollText: "\xAB\u0422\u0440\u0435\u0442\u044C\u0435 \u0438\u0437\u043C\u0435\u0440\u0435\u043D\u0438\u0435
-    \u0432 \u0438\u0433\u0440\u0430\u0445 \u2014 \u044D\u0442\u043E \u043D\u0435
-    \u043F\u0440\u043E\u0441\u0442\u043E \u043A\u0440\u0430\u0441\u0438\u0432\u043E.
-    \u042D\u0442\u043E \u043D\u043E\u0432\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431
-    \u043C\u044B\u0448\u043B\u0435\u043D\u0438\u044F. \u0412 2D \u0442\u044B \u0434\u0432\u0438\u0436\u0435\u0448\u044C\u0441\u044F
-    \u043F\u043E \u043E\u0441\u044F\u043C X \u0438 Y \u2014 \u0432\u043B\u0435\u0432\u043E-\u0432\u043F\u0440\u0430\u0432\u043E,
-    \u0432\u0432\u0435\u0440\u0445-\u0432\u043D\u0438\u0437. \u0412 3D \u043F\u043E\u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F
-    \u0433\u043B\u0443\u0431\u0438\u043D\u0430 \u2014 \u043E\u0441\u044C Z.\r\n\r\n\u041F\u0435\u0440\u0432\u044B\u0435
-    3D-\u0438\u0433\u0440\u044B \u0441\u0442\u043E\u043B\u043A\u043D\u0443\u043B\u0438\u0441\u044C
-    \u0441 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u043E\u0439: \u043A\u0430\u043A
-    \u0438\u0433\u0440\u043E\u043A\u0443 \u043F\u043E\u043D\u044F\u0442\u044C, \u0433\u0434\u0435
-    \u043E\u043D \u043D\u0430\u0445\u043E\u0434\u0438\u0442\u0441\u044F \u0432 \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u0435?
-    \u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0438 \u043F\u0440\u0438\u0434\u0443\u043C\u0430\u043B\u0438
-    \u0442\u0435\u043D\u0435\u0439, \u043E\u0441\u0432\u0435\u0449\u0435\u043D\u0438\u0435,
-    \u0442\u0435\u043A\u0441\u0442\u0443\u0440\u044B \u0441 \u043F\u0435\u0440\u0441\u043F\u0435\u043A\u0442\u0438\u0432\u043E\u0439
-    \u2014 \u0432\u0441\u0451, \u0447\u0442\u043E\u0431\u044B \u043C\u043E\u0437\u0433
-    \u0447\u0443\u0432\u0441\u0442\u0432\u043E\u0432\u0430\u043B \u043E\u0431\u044A\u0451\u043C.\r\n\r\n\u0417\u0434\u0435\u0441\u044C,
-    \u0432 \u044D\u0442\u043E\u0439 \u0431\u0430\u0448\u043D\u0435, \u0441\u0432\u0435\u0442
-    \u2014 \u0442\u0432\u043E\u0439 \u043F\u0440\u043E\u0432\u043E\u0434\u043D\u0438\u043A.
-    \u041D\u0435 \u0432\u0441\u0451 \u0432\u0438\u0434\u043D\u043E \u0441\u0440\u0430\u0437\u0443.
-    \u0418\u0441\u0441\u043B\u0435\u0434\u0443\u0439 \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u043E,
-    \u0437\u0430\u0433\u043B\u044F\u0434\u044B\u0432\u0430\u0439 \u0437\u0430 \u0443\u0433\u043B\u044B,
-    \u0441\u043C\u043E\u0442\u0440\u0438 \u0432\u0432\u0435\u0440\u0445 \u0438 \u0432\u043D\u0438\u0437.
-    \u0418 \u043F\u043E\u043C\u043D\u0438: \u0432 3D \u0442\u043E, \u0447\u0442\u043E
-    \u0442\u044B \u043D\u0435 \u0432\u0438\u0434\u0438\u0448\u044C, \u0432\u0441\u0451
-    \u0440\u0430\u0432\u043D\u043E \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442.\xBB"
+  scrollText: "\u041F\u0435\u0440\u0432\u044B\u0435 3D-\u0438\u0433\u0440\u044B \u0432\u044B\u0433\u043B\u044F\u0434\u0435\u043B\u0438
+    \u0443\u0433\u043B\u043E\u0432\u0430\u0442\u043E, \u0430 \u0442\u0435\u043A\u0441\u0442\u0443\u0440\u044B
+    \u0431\u044B\u043B\u0438 \u0440\u0430\u0437\u043C\u044B\u0442\u044B\u043C\u0438.
+    \u0420\u0430\u0437\u0440\u0435\u0448\u0435\u043D\u0438\u0435 64x64 \u043F\u0438\u043A\u0441\u0435\u043B\u044F
+    \u0441\u0447\u0438\u0442\u0430\u043B\u043E\u0441\u044C \u043D\u043E\u0440\u043C\u0430\u043B\u044C\u043D\u044B\u043C
+    \u2014 \u043D\u0430\u043B\u043E\u0436\u0438\u043B \u043D\u0430 \u044F\u0449\u0438\u043A,
+    \u0438 \u0433\u043E\u0442\u043E\u0432\u043E. \u0421\u0435\u0433\u043E\u0434\u043D\u044F
+    \u0432\u0441\u0451 \u0438\u043D\u0430\u0447\u0435: \u0442\u0435\u043A\u0441\u0442\u0443\u0440\u044B
+    \u043C\u043E\u0433\u0443\u0442 \u0431\u044B\u0442\u044C \u043E\u0433\u0440\u043E\u043C\u043D\u044B\u043C\u0438,
+    \u0430 \u043C\u0430\u0442\u0435\u0440\u0438\u0430\u043B\u044B \u2014 \u043E\u0442\u0440\u0430\u0436\u0430\u0442\u044C
+    \u0441\u0432\u0435\u0442, \u0438\u043C\u0438\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C
+    \u0442\u043A\u0430\u043D\u044C, \u043C\u0435\u0442\u0430\u043B\u043B, \u0434\u0435\u0440\u0435\u0432\u043E.\r\n\r\n\u041D\u043E
+    \u0437\u043D\u0430\u0435\u0448\u044C, \u0447\u0442\u043E \u0438\u043D\u0442\u0435\u0440\u0435\u0441\u043D\u043E?
+    \u0414\u0430\u0436\u0435 \u0441 \u043F\u0440\u043E\u0441\u0442\u044B\u043C\u0438
+    \u0442\u0435\u043A\u0441\u0442\u0443\u0440\u0430\u043C\u0438 \u043C\u043E\u0436\u043D\u043E
+    \u0441\u043E\u0437\u0434\u0430\u0442\u044C \u0430\u0442\u043C\u043E\u0441\u0444\u0435\u0440\u0443,
+    \u0435\u0441\u043B\u0438 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E
+    \u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C \u0441\u043E \u0441\u0432\u0435\u0442\u043E\u043C
+    \u0438 \u0442\u0435\u043D\u044F\u043C\u0438. \u041A\u0441\u0442\u0430\u0442\u0438,
+    \u0441\u0432\u0435\u0442 \u0431\u044B\u0432\u0430\u0435\u0442 \u0440\u0430\u0437\u043D\u044B\u043C:
+    \u0442\u043E\u0442, \u0447\u0442\u043E \u043E\u0442 \u043E\u0433\u043D\u044F
+    \u2014 \u0442\u0451\u043F\u043B\u044B\u0439 \u0438 \u0436\u0438\u0432\u043E\u0439.
+    \u041E\u043D \u043C\u043E\u0436\u0435\u0442 \u043D\u0435 \u0442\u043E\u043B\u044C\u043A\u043E
+    \u043E\u0441\u0432\u0435\u0449\u0430\u0442\u044C, \u043D\u043E \u0438... \u043D\u0430\u0433\u0440\u0435\u0432\u0430\u0442\u044C.
+    \u041F\u043E\u0441\u043C\u043E\u0442\u0440\u0438 \u043D\u0430 \u0440\u0435\u0442\u043E\u0440\u0442\u0443.
+    \u041C\u043E\u0436\u0435\u0442, \u0435\u0439 \u043D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442
+    \u0442\u0435\u043F\u043B\u0430?"
   scrollPanel: {fileID: 1388674789}
   scrollTextUI: {fileID: 942052520}
 --- !u!23 &634922646
@@ -16790,7 +17016,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d5340dfef6d2bb04293491f0d4324428, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20.78807
+      value: 21.32807
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d5340dfef6d2bb04293491f0d4324428, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17160,6 +17386,89 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 424932, guid: 0f9a358951884939a03ac8f1035237f7, type: 3}
   m_PrefabInstance: {fileID: 1645427166}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &753379869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 753379870}
+  - component: {fileID: 753379872}
+  - component: {fileID: 753379871}
+  m_Layer: 0
+  m_Name: Dialog2Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &753379870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753379869}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.5795422, z: -0, w: 0.8149423}
+  m_LocalPosition: {x: 0.75, y: -8.695, z: -14.22}
+  m_LocalScale: {x: 1.0913339, y: 0.6138535, z: 4.3292475}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5509873}
+  m_LocalEulerAnglesHint: {x: 0, y: -70.837, z: 0}
+--- !u!65 &753379871
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753379869}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &753379872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753379869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3467fcacd8e3eba45b1d6ab560390aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerEvent
+  playerTag: Player
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1205263507}
+        m_TargetAssemblyTypeName: GameEvents, Assembly-CSharp
+        m_MethodName: TriggerDialog2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerOnce: 1
 --- !u!1001 &755229108
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19300,7 +19609,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5f33fd66ae951274d85a629152408699, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.74597
+      value: -7.81
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5f33fd66ae951274d85a629152408699, type: 3}
       propertyPath: m_LocalRotation.w
@@ -20451,7 +20760,7 @@ Transform:
   m_GameObject: {fileID: 984131947}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -9.331479, y: 17.34, z: 7.97076}
+  m_LocalPosition: {x: -9.331479, y: 17.88, z: 7.97076}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33975,32 +34284,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ea73e9489588c4988315bced6906bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollPickup
-  scrollText: "\xAB\u0422\u0440\u0435\u0442\u044C\u0435 \u0438\u0437\u043C\u0435\u0440\u0435\u043D\u0438\u0435
-    \u0432 \u0438\u0433\u0440\u0430\u0445 \u2014 \u044D\u0442\u043E \u043D\u0435
-    \u043F\u0440\u043E\u0441\u0442\u043E \u043A\u0440\u0430\u0441\u0438\u0432\u043E.
-    \u042D\u0442\u043E \u043D\u043E\u0432\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431
-    \u043C\u044B\u0448\u043B\u0435\u043D\u0438\u044F. \u0412 2D \u0442\u044B \u0434\u0432\u0438\u0436\u0435\u0448\u044C\u0441\u044F
-    \u043F\u043E \u043E\u0441\u044F\u043C X \u0438 Y \u2014 \u0432\u043B\u0435\u0432\u043E-\u0432\u043F\u0440\u0430\u0432\u043E,
-    \u0432\u0432\u0435\u0440\u0445-\u0432\u043D\u0438\u0437. \u0412 3D \u043F\u043E\u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F
-    \u0433\u043B\u0443\u0431\u0438\u043D\u0430 \u2014 \u043E\u0441\u044C Z.\r\n\r\n\u041F\u0435\u0440\u0432\u044B\u0435
-    3D-\u0438\u0433\u0440\u044B \u0441\u0442\u043E\u043B\u043A\u043D\u0443\u043B\u0438\u0441\u044C
-    \u0441 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u043E\u0439: \u043A\u0430\u043A
-    \u0438\u0433\u0440\u043E\u043A\u0443 \u043F\u043E\u043D\u044F\u0442\u044C, \u0433\u0434\u0435
-    \u043E\u043D \u043D\u0430\u0445\u043E\u0434\u0438\u0442\u0441\u044F \u0432 \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u0435?
-    \u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0438 \u043F\u0440\u0438\u0434\u0443\u043C\u0430\u043B\u0438
-    \u0442\u0435\u043D\u0435\u0439, \u043E\u0441\u0432\u0435\u0449\u0435\u043D\u0438\u0435,
-    \u0442\u0435\u043A\u0441\u0442\u0443\u0440\u044B \u0441 \u043F\u0435\u0440\u0441\u043F\u0435\u043A\u0442\u0438\u0432\u043E\u0439
-    \u2014 \u0432\u0441\u0451, \u0447\u0442\u043E\u0431\u044B \u043C\u043E\u0437\u0433
-    \u0447\u0443\u0432\u0441\u0442\u0432\u043E\u0432\u0430\u043B \u043E\u0431\u044A\u0451\u043C.\r\n\r\n\u0417\u0434\u0435\u0441\u044C,
-    \u0432 \u044D\u0442\u043E\u0439 \u0431\u0430\u0448\u043D\u0435, \u0441\u0432\u0435\u0442
-    \u2014 \u0442\u0432\u043E\u0439 \u043F\u0440\u043E\u0432\u043E\u0434\u043D\u0438\u043A.
-    \u041D\u0435 \u0432\u0441\u0451 \u0432\u0438\u0434\u043D\u043E \u0441\u0440\u0430\u0437\u0443.
-    \u0418\u0441\u0441\u043B\u0435\u0434\u0443\u0439 \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u043E,
-    \u0437\u0430\u0433\u043B\u044F\u0434\u044B\u0432\u0430\u0439 \u0437\u0430 \u0443\u0433\u043B\u044B,
-    \u0441\u043C\u043E\u0442\u0440\u0438 \u0432\u0432\u0435\u0440\u0445 \u0438 \u0432\u043D\u0438\u0437.
-    \u0418 \u043F\u043E\u043C\u043D\u0438: \u0432 3D \u0442\u043E, \u0447\u0442\u043E
-    \u0442\u044B \u043D\u0435 \u0432\u0438\u0434\u0438\u0448\u044C, \u0432\u0441\u0451
-    \u0440\u0430\u0432\u043D\u043E \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442.\xBB"
+  scrollText: "\u041F\u0435\u0440\u0432\u044B\u0435 \u0442\u0440\u0451\u0445\u043C\u0435\u0440\u043D\u044B\u0435
+    \u0438\u0433\u0440\u044B \u0443\u043F\u0440\u0430\u0432\u043B\u044F\u043B\u0438\u0441\u044C
+    \u0441 \u043A\u043B\u0430\u0432\u0438\u0430\u0442\u0443\u0440\u044B: \u0441\u0442\u0440\u0435\u043B\u043A\u0430\u043C\u0438
+    \u0445\u043E\u0434\u0438\u043B\u0438, \u0430 \u043C\u044B\u0448\u044C\u044E \u0446\u0435\u043B\u0438\u043B\u0438\u0441\u044C.
+    \u0414\u0436\u043E\u0439\u0441\u0442\u0438\u043A\u0438 \u0442\u043E\u0433\u0434\u0430
+    \u0431\u044B\u043B\u0438 \u0440\u0435\u0434\u043A\u043E\u0441\u0442\u044C\u044E.
+    \u041D\u043E \u0441\u043E \u0432\u0440\u0435\u043C\u0435\u043D\u0435\u043C \u0433\u0435\u0439\u043C\u043F\u0430\u0434\u044B
+    \u0441 \u0430\u043D\u0430\u043B\u043E\u0433\u043E\u0432\u044B\u043C\u0438 \u0441\u0442\u0438\u043A\u0430\u043C\u0438
+    \u0441\u0442\u0430\u043B\u0438 \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043E\u043C
+    \u2014 \u043E\u043D\u0438 \u0434\u0430\u0432\u0430\u043B\u0438 \u043F\u043B\u0430\u0432\u043D\u043E\u0435
+    \u0434\u0432\u0438\u0436\u0435\u043D\u0438\u0435 \u0432\u043C\u0435\u0441\u0442\u043E
+    \u0440\u0435\u0437\u043A\u043E\u0433\u043E \"\u043D\u0430\u0436\u0430\u043B \u2014
+    \u043F\u043E\u0448\u0451\u043B\".\r\n\r\n\u0418\u043D\u0442\u0435\u0440\u0435\u0441\u043D\u043E,
+    \u0447\u0442\u043E \u0432 \u0440\u0430\u0437\u043D\u044B\u0445 \u0436\u0430\u043D\u0440\u0430\u0445
+    \u043F\u0440\u0438\u0436\u0438\u043B\u0438\u0441\u044C \u0440\u0430\u0437\u043D\u044B\u0435
+    \u0441\u0445\u0435\u043C\u044B: \u043A\u043B\u0430\u0432\u0438\u0430\u0442\u0443\u0440\u0430
+    \u0438 \u043C\u044B\u0448\u044C \u0434\u043B\u044F \u0448\u0443\u0442\u0435\u0440\u043E\u0432,
+    \u0433\u0435\u0439\u043C\u043F\u0430\u0434 \u0434\u043B\u044F \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0435\u0440\u043E\u0432
+    \u0438 \u0444\u0430\u0439\u0442\u0438\u043D\u0433\u043E\u0432. \u0410 \u043A\u0442\u043E-\u0442\u043E
+    \u0434\u043E \u0441\u0438\u0445 \u043F\u043E\u0440 \u043F\u0440\u043E\u0445\u043E\u0434\u0438\u0442
+    Dark Souls \u043D\u0430 \u043A\u043B\u0430\u0432\u0438\u0430\u0442\u0443\u0440\u0435
+    \u0438 \u0443\u0442\u0432\u0435\u0440\u0436\u0434\u0430\u0435\u0442, \u0447\u0442\u043E
+    \u044D\u0442\u043E \u0443\u0434\u043E\u0431\u043D\u043E. \u0422\u044B \u0441\u0435\u0433\u043E\u0434\u043D\u044F
+    \u043F\u043E\u043F\u0440\u043E\u0431\u043E\u0432\u0430\u043B\u0430 \u0438 \u0442\u043E,
+    \u0438 \u0434\u0440\u0443\u0433\u043E\u0435 \u2014 \u0438 \u0432\u0435\u0441\u044B
+    \u0432\u044B\u0440\u043E\u0432\u043D\u044F\u043B\u0430, \u0438 \u0434\u043E \u0432\u0435\u0440\u0445\u0430
+    \u0434\u043E\u0431\u0440\u0430\u043B\u0430\u0441\u044C. \u041D\u0435\u043F\u043B\u043E\u0445\u043E
+    \u0434\u043B\u044F \u0442\u043E\u0439, \u043A\u0442\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u043B\u0430
+    \u043A\u0430\u043A \u0431\u0435\u043B\u044B\u0439 \u043A\u0432\u0430\u0434\u0440\u0430\u0442,
+    \u043F\u0440\u0430\u0432\u0434\u0430?"
   scrollPanel: {fileID: 1388674789}
   scrollTextUI: {fileID: 942052520}
 --- !u!23 &1238304897
@@ -34739,7 +35052,7 @@ Transform:
   m_GameObject: {fileID: 1283094358}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.1710098, y: -2.1229997, z: 13.525865}
+  m_LocalPosition: {x: 1.8410099, y: -2.06, z: 11.9548645}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40402,7 +40715,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1205263507}
         m_TargetAssemblyTypeName: GameEvents, Assembly-CSharp
-        m_MethodName: TriggerCameraFact
+        m_MethodName: TriggerTPCameraFact
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -41210,6 +41523,89 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1342221186}
   m_CullTransparentMesh: 1
+--- !u!1 &1381099004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1381099005}
+  - component: {fileID: 1381099007}
+  - component: {fileID: 1381099006}
+  m_Layer: 0
+  m_Name: Dialog3Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1381099005
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381099004}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.4107113, z: -0, w: 0.91176546}
+  m_LocalPosition: {x: 12.94, y: -11.87, z: -14.27}
+  m_LocalScale: {x: 2.681189, y: 0.6138535, z: 2.2468274}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5509873}
+  m_LocalEulerAnglesHint: {x: 0, y: -48.499, z: 0}
+--- !u!65 &1381099006
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381099004}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1381099007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381099004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3467fcacd8e3eba45b1d6ab560390aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerEvent
+  playerTag: Player
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1205263507}
+        m_TargetAssemblyTypeName: GameEvents, Assembly-CSharp
+        m_MethodName: TriggerDialog3
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerOnce: 1
 --- !u!4 &1382173804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5824670795371433374, guid: f6fd568b816c64943a44efc3add3a881, type: 3}
@@ -42814,6 +43210,89 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 471690, guid: b1dddcd355c246b6b4f0139d24727cc3, type: 3}
   m_PrefabInstance: {fileID: 1554610371}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1476101253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1476101254}
+  - component: {fileID: 1476101256}
+  - component: {fileID: 1476101255}
+  m_Layer: 0
+  m_Name: DialogMouseTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1476101254
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476101253}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.22097777, z: -0, w: 0.9752789}
+  m_LocalPosition: {x: 6.93, y: -11.31, z: -7.54}
+  m_LocalScale: {x: 2.1457806, y: 0.6138535, z: 1.6061507}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5509873}
+  m_LocalEulerAnglesHint: {x: 0, y: -25.533, z: 0}
+--- !u!65 &1476101255
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476101253}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1476101256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476101253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3467fcacd8e3eba45b1d6ab560390aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerEvent
+  playerTag: Player
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1205263507}
+        m_TargetAssemblyTypeName: GameEvents, Assembly-CSharp
+        m_MethodName: TriggerDialogMouse
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerOnce: 1
 --- !u!1 &1478460207
 GameObject:
   m_ObjectHideFlags: 0
@@ -47873,32 +48352,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ea73e9489588c4988315bced6906bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollPickup
-  scrollText: "\xAB\u0422\u0440\u0435\u0442\u044C\u0435 \u0438\u0437\u043C\u0435\u0440\u0435\u043D\u0438\u0435
-    \u0432 \u0438\u0433\u0440\u0430\u0445 \u2014 \u044D\u0442\u043E \u043D\u0435
-    \u043F\u0440\u043E\u0441\u0442\u043E \u043A\u0440\u0430\u0441\u0438\u0432\u043E.
-    \u042D\u0442\u043E \u043D\u043E\u0432\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431
-    \u043C\u044B\u0448\u043B\u0435\u043D\u0438\u044F. \u0412 2D \u0442\u044B \u0434\u0432\u0438\u0436\u0435\u0448\u044C\u0441\u044F
-    \u043F\u043E \u043E\u0441\u044F\u043C X \u0438 Y \u2014 \u0432\u043B\u0435\u0432\u043E-\u0432\u043F\u0440\u0430\u0432\u043E,
-    \u0432\u0432\u0435\u0440\u0445-\u0432\u043D\u0438\u0437. \u0412 3D \u043F\u043E\u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F
-    \u0433\u043B\u0443\u0431\u0438\u043D\u0430 \u2014 \u043E\u0441\u044C Z.\r\n\r\n\u041F\u0435\u0440\u0432\u044B\u0435
-    3D-\u0438\u0433\u0440\u044B \u0441\u0442\u043E\u043B\u043A\u043D\u0443\u043B\u0438\u0441\u044C
-    \u0441 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u043E\u0439: \u043A\u0430\u043A
-    \u0438\u0433\u0440\u043E\u043A\u0443 \u043F\u043E\u043D\u044F\u0442\u044C, \u0433\u0434\u0435
-    \u043E\u043D \u043D\u0430\u0445\u043E\u0434\u0438\u0442\u0441\u044F \u0432 \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u0435?
-    \u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0438 \u043F\u0440\u0438\u0434\u0443\u043C\u0430\u043B\u0438
-    \u0442\u0435\u043D\u0435\u0439, \u043E\u0441\u0432\u0435\u0449\u0435\u043D\u0438\u0435,
-    \u0442\u0435\u043A\u0441\u0442\u0443\u0440\u044B \u0441 \u043F\u0435\u0440\u0441\u043F\u0435\u043A\u0442\u0438\u0432\u043E\u0439
-    \u2014 \u0432\u0441\u0451, \u0447\u0442\u043E\u0431\u044B \u043C\u043E\u0437\u0433
-    \u0447\u0443\u0432\u0441\u0442\u0432\u043E\u0432\u0430\u043B \u043E\u0431\u044A\u0451\u043C.\r\n\r\n\u0417\u0434\u0435\u0441\u044C,
-    \u0432 \u044D\u0442\u043E\u0439 \u0431\u0430\u0448\u043D\u0435, \u0441\u0432\u0435\u0442
-    \u2014 \u0442\u0432\u043E\u0439 \u043F\u0440\u043E\u0432\u043E\u0434\u043D\u0438\u043A.
-    \u041D\u0435 \u0432\u0441\u0451 \u0432\u0438\u0434\u043D\u043E \u0441\u0440\u0430\u0437\u0443.
-    \u0418\u0441\u0441\u043B\u0435\u0434\u0443\u0439 \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u043E,
-    \u0437\u0430\u0433\u043B\u044F\u0434\u044B\u0432\u0430\u0439 \u0437\u0430 \u0443\u0433\u043B\u044B,
-    \u0441\u043C\u043E\u0442\u0440\u0438 \u0432\u0432\u0435\u0440\u0445 \u0438 \u0432\u043D\u0438\u0437.
-    \u0418 \u043F\u043E\u043C\u043D\u0438: \u0432 3D \u0442\u043E, \u0447\u0442\u043E
-    \u0442\u044B \u043D\u0435 \u0432\u0438\u0434\u0438\u0448\u044C, \u0432\u0441\u0451
-    \u0440\u0430\u0432\u043D\u043E \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442.\xBB"
+  scrollText: "\u0412 \u0434\u0432\u0443\u0445\u043C\u0435\u0440\u043D\u044B\u0445
+    \u0438\u0433\u0440\u0430\u0445 \u0437\u0432\u0443\u043A \u0431\u044B\u043B \u043F\u043B\u043E\u0441\u043A\u0438\u043C:
+    \u043E\u043D \u043B\u0438\u0431\u043E \u0438\u0433\u0440\u0430\u043B, \u043B\u0438\u0431\u043E
+    \u043D\u0435\u0442. \u0412 3D \u043F\u043E\u044F\u0432\u0438\u043B\u043E\u0441\u044C
+    \u043E\u0431\u044A\u0451\u043C\u043D\u043E\u0435 \u0437\u0432\u0443\u0447\u0430\u043D\u0438\u0435
+    \u2014 \u0437\u0432\u0443\u043A \u043C\u043E\u0436\u0435\u0442 \u0431\u044B\u0442\u044C
+    \u0441\u043B\u0435\u0432\u0430, \u0441\u043F\u0440\u0430\u0432\u0430, \u0441\u0432\u0435\u0440\u0445\u0443,
+    \u0441\u0437\u0430\u0434\u0438, \u043F\u0440\u0438\u0431\u043B\u0438\u0436\u0430\u0442\u044C\u0441\u044F
+    \u0438 \u0443\u0434\u0430\u043B\u044F\u0442\u044C\u0441\u044F. \u042D\u0442\u043E
+    \u0438\u0437\u043C\u0435\u043D\u0438\u043B\u043E \u0445\u043E\u0440\u0440\u043E\u0440\u044B
+    \u043D\u0430\u0432\u0441\u0435\u0433\u0434\u0430: \u0442\u0435\u043F\u0435\u0440\u044C
+    \u0432\u0440\u0430\u0433 \u043C\u043E\u0433 \u043F\u043E\u0434\u043A\u0440\u0430\u0441\u0442\u044C\u0441\u044F
+    \u0441\u043E \u0441\u043F\u0438\u043D\u044B, \u0438 \u0442\u044B \u0441\u043B\u044B\u0448\u0430\u043B
+    \u044D\u0442\u043E.\r\n\r\n\u041A\u0441\u0442\u0430\u0442\u0438, \u043E \u0437\u0432\u0443\u043A\u0430\u0445...
+    \u0442\u044B \u043D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u0441\u043B\u044B\u0448\u0438\u0448\u044C?
+    \u041A\u0430\u0436\u0435\u0442\u0441\u044F, \u0433\u0434\u0435-\u0442\u043E \u0437\u0434\u0435\u0441\u044C
+    \u0435\u0441\u0442\u044C \u0447\u0442\u043E-\u0442\u043E \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u043E\u0435
+    \u0438 \u043F\u043E\u0442\u0435\u0440\u044F\u043D\u043D\u043E\u0435. \u0412 \u0442\u0440\u0451\u0445\u043C\u0435\u0440\u043D\u043E\u043C
+    \u043C\u0438\u0440\u0435 \u0437\u0432\u0443\u043A \u2014 \u044D\u0442\u043E \u043D\u0435
+    \u043F\u0440\u043E\u0441\u0442\u043E \u0430\u0442\u043C\u043E\u0441\u0444\u0435\u0440\u0430,
+    \u044D\u0442\u043E \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442.
+    \u0421\u043B\u0435\u0434\u0443\u0439 \u0437\u0430 \u043D\u0438\u043C, \u0438
+    \u043E\u043D \u043F\u0440\u0438\u0432\u0435\u0434\u0451\u0442 \u0442\u0435\u0431\u044F
+    \u043A \u0446\u0435\u043B\u0438. \u041E\u0441\u043E\u0431\u0435\u043D\u043D\u043E
+    \u0435\u0441\u043B\u0438 \u0446\u0435\u043B\u044C \u043F\u0438\u0449\u0438\u0442,
+    \u043A\u0430\u043A \u043C\u044B\u0448\u044C."
   scrollPanel: {fileID: 1388674789}
   scrollTextUI: {fileID: 942052520}
 --- !u!23 &1482632495
@@ -54749,8 +55228,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602619514}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25100565, y: -0.0000000062306547, z: 0.0000000016156536, w: 0.96798563}
-  m_LocalPosition: {x: 0.77, y: -1.0229998, z: 10.901}
+  m_LocalRotation: {x: 0.25100568, y: -0.0000000051040865, z: 0.0000000013235266, w: 0.96798563}
+  m_LocalPosition: {x: 1.44, y: -0.96000004, z: 9.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -55054,8 +55533,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1604913371}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25100565, y: -0.0000000066066335, z: 0.0000000030655911, w: 0.96798563}
-  m_LocalPosition: {x: 0.77, y: -1.0229998, z: 10.901}
+  m_LocalRotation: {x: 0.25100568, y: -0.000000005104086, z: 0.0000000013235265, w: 0.96798563}
+  m_LocalPosition: {x: 1.44, y: -0.96000004, z: 9.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -55177,7 +55656,7 @@ Transform:
   m_GameObject: {fileID: 1608097831}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.48440796, z: -0, w: 0.8748423}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 11, y: 0.43, z: -4.7}
   m_LocalScale: {x: 1.0913337, y: 0.6138535, z: 1.9026313}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -61039,7 +61518,7 @@ Transform:
   m_GameObject: {fileID: 1709387620}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.012, y: -16.264, z: -0.16599941}
+  m_LocalPosition: {x: 6.51, y: 10.979999, z: -7.74}
   m_LocalScale: {x: 1.0913339, y: 0.6138535, z: 1.0913339}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -62429,32 +62908,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ea73e9489588c4988315bced6906bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollPickup
-  scrollText: "\xAB\u0422\u0440\u0435\u0442\u044C\u0435 \u0438\u0437\u043C\u0435\u0440\u0435\u043D\u0438\u0435
-    \u0432 \u0438\u0433\u0440\u0430\u0445 \u2014 \u044D\u0442\u043E \u043D\u0435
-    \u043F\u0440\u043E\u0441\u0442\u043E \u043A\u0440\u0430\u0441\u0438\u0432\u043E.
-    \u042D\u0442\u043E \u043D\u043E\u0432\u044B\u0439 \u0441\u043F\u043E\u0441\u043E\u0431
-    \u043C\u044B\u0448\u043B\u0435\u043D\u0438\u044F. \u0412 2D \u0442\u044B \u0434\u0432\u0438\u0436\u0435\u0448\u044C\u0441\u044F
-    \u043F\u043E \u043E\u0441\u044F\u043C X \u0438 Y \u2014 \u0432\u043B\u0435\u0432\u043E-\u0432\u043F\u0440\u0430\u0432\u043E,
-    \u0432\u0432\u0435\u0440\u0445-\u0432\u043D\u0438\u0437. \u0412 3D \u043F\u043E\u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F
-    \u0433\u043B\u0443\u0431\u0438\u043D\u0430 \u2014 \u043E\u0441\u044C Z.\r\n\r\n\u041F\u0435\u0440\u0432\u044B\u0435
-    3D-\u0438\u0433\u0440\u044B \u0441\u0442\u043E\u043B\u043A\u043D\u0443\u043B\u0438\u0441\u044C
-    \u0441 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u043E\u0439: \u043A\u0430\u043A
-    \u0438\u0433\u0440\u043E\u043A\u0443 \u043F\u043E\u043D\u044F\u0442\u044C, \u0433\u0434\u0435
-    \u043E\u043D \u043D\u0430\u0445\u043E\u0434\u0438\u0442\u0441\u044F \u0432 \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u0435?
-    \u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0438 \u043F\u0440\u0438\u0434\u0443\u043C\u0430\u043B\u0438
-    \u0442\u0435\u043D\u0435\u0439, \u043E\u0441\u0432\u0435\u0449\u0435\u043D\u0438\u0435,
-    \u0442\u0435\u043A\u0441\u0442\u0443\u0440\u044B \u0441 \u043F\u0435\u0440\u0441\u043F\u0435\u043A\u0442\u0438\u0432\u043E\u0439
-    \u2014 \u0432\u0441\u0451, \u0447\u0442\u043E\u0431\u044B \u043C\u043E\u0437\u0433
-    \u0447\u0443\u0432\u0441\u0442\u0432\u043E\u0432\u0430\u043B \u043E\u0431\u044A\u0451\u043C.\r\n\r\n\u0417\u0434\u0435\u0441\u044C,
-    \u0432 \u044D\u0442\u043E\u0439 \u0431\u0430\u0448\u043D\u0435, \u0441\u0432\u0435\u0442
-    \u2014 \u0442\u0432\u043E\u0439 \u043F\u0440\u043E\u0432\u043E\u0434\u043D\u0438\u043A.
-    \u041D\u0435 \u0432\u0441\u0451 \u0432\u0438\u0434\u043D\u043E \u0441\u0440\u0430\u0437\u0443.
-    \u0418\u0441\u0441\u043B\u0435\u0434\u0443\u0439 \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u043E,
-    \u0437\u0430\u0433\u043B\u044F\u0434\u044B\u0432\u0430\u0439 \u0437\u0430 \u0443\u0433\u043B\u044B,
-    \u0441\u043C\u043E\u0442\u0440\u0438 \u0432\u0432\u0435\u0440\u0445 \u0438 \u0432\u043D\u0438\u0437.
-    \u0418 \u043F\u043E\u043C\u043D\u0438: \u0432 3D \u0442\u043E, \u0447\u0442\u043E
-    \u0442\u044B \u043D\u0435 \u0432\u0438\u0434\u0438\u0448\u044C, \u0432\u0441\u0451
-    \u0440\u0430\u0432\u043D\u043E \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442.\xBB"
+  scrollText: "\u041A\u043E\u0433\u0434\u0430 \u041C\u0430\u0440\u0438\u043E \u043F\u0435\u0440\u0435\u0435\u0445\u0430\u043B
+    \u0432 3D, Nintendo \u0441\u0442\u043E\u043B\u043A\u043D\u0443\u043B\u0430\u0441\u044C
+    \u0441 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u043E\u0439: \u0438\u0433\u0440\u043E\u043A\u0438
+    \u043F\u043E\u0441\u0442\u043E\u044F\u043D\u043D\u043E \u043F\u0440\u043E\u043C\u0430\u0445\u0438\u0432\u0430\u043B\u0438\u0441\u044C
+    \u043C\u0438\u043C\u043E \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C. \u0412
+    2D \u043C\u044B \u043E\u0446\u0435\u043D\u0438\u0432\u0430\u043B\u0438 \u0440\u0430\u0441\u0441\u0442\u043E\u044F\u043D\u0438\u0435
+    \u043F\u043E \u0433\u043E\u0440\u0438\u0437\u043E\u043D\u0442\u0430\u043B\u0438
+    \u0438 \u0432\u0435\u0440\u0442\u0438\u043A\u0430\u043B\u0438, \u0430 \u0442\u0435\u043F\u0435\u0440\u044C
+    \u0434\u043E\u0431\u0430\u0432\u0438\u043B\u0430\u0441\u044C \u0433\u043B\u0443\u0431\u0438\u043D\u0430.
+    \u0420\u0435\u0448\u0435\u043D\u0438\u0435? \u0422\u0435\u043D\u044C \u043F\u043E\u0434
+    \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0435\u043C. \u041F\u0440\u043E\u0441\u0442\u0430\u044F
+    \u0447\u0451\u0440\u043D\u0430\u044F \u0442\u043E\u0447\u043A\u0430 \u043D\u0430
+    \u0437\u0435\u043C\u043B\u0435 \u043F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u043B\u0430,
+    \u043A\u0443\u0434\u0430 \u0442\u044B \u043F\u0440\u0438\u0437\u0435\u043C\u043B\u0438\u0448\u044C\u0441\u044F.\r\n\r\n\u0421
+    \u0442\u0435\u0445 \u043F\u043E\u0440 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0435\u0440\u044B
+    \u0432 3D \u043E\u0431\u0437\u0430\u0432\u0435\u043B\u0438\u0441\u044C \u0446\u0435\u043B\u044B\u043C
+    \u0430\u0440\u0441\u0435\u043D\u0430\u043B\u043E\u043C \u0442\u0440\u044E\u043A\u043E\u0432:
+    \u043C\u0430\u0433\u043D\u0438\u0442\u043D\u044B\u0435 \u043A\u0440\u0430\u044F
+    \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C, \u0434\u0432\u043E\u0439\u043D\u044B\u0435
+    \u043F\u0440\u044B\u0436\u043A\u0438, \u0437\u0430\u043C\u0435\u0434\u043B\u0435\u043D\u0438\u0435
+    \u0432\u0440\u0435\u043C\u0435\u043D\u0438. \u041D\u043E \u0433\u043B\u0430\u0432\u043D\u043E\u0435
+    \u043F\u0440\u0430\u0432\u0438\u043B\u043E \u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C
+    \u043F\u0440\u0435\u0436\u043D\u0438\u043C: \u0441\u043C\u043E\u0442\u0440\u0438
+    \u0432\u043D\u0438\u0437. \u0422\u0432\u043E\u044F \u0442\u0435\u043D\u044C \u2014
+    \u043B\u0443\u0447\u0448\u0438\u0439 \u0434\u0440\u0443\u0433. \u0410 \u0435\u0449\u0451
+    \u043B\u0443\u0447\u0448\u0438\u0439 \u0434\u0440\u0443\u0433 \u2014 \u044D\u0442\u043E
+    \u043B\u0435\u0441\u0442\u043D\u0438\u0446\u0430, \u043A\u043E\u0442\u043E\u0440\u0443\u044E
+    \u043C\u043E\u0436\u043D\u043E \u043F\u043E\u043B\u043E\u0436\u0438\u0442\u044C
+    \u043A\u0443\u0434\u0430 \u043D\u0430\u0434\u043E. \u0415\u0441\u043B\u0438,
+    \u043A\u043E\u043D\u0435\u0447\u043D\u043E, \u0445\u0432\u0430\u0442\u0438\u0442
+    \u0441\u0438\u043B \u0435\u0451 \u043F\u043E\u0434\u043D\u044F\u0442\u044C."
   scrollPanel: {fileID: 1388674789}
   scrollTextUI: {fileID: 942052520}
 --- !u!23 &1769399271
@@ -65476,6 +65960,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LadderDropTrigger
   hiddenLadder: {fileID: 1095721548}
   SolvedClip: {fileID: 8300000, guid: 21fa6e335881cbc4e81f55ca6ff225d1, type: 3}
+  gameEvents: {fileID: 1205263507}
 --- !u!65 &1944301818
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -71635,18 +72120,28 @@ MonoBehaviour:
   introDialogue:
   - "\u041F\u0440\u0438\u0432\u0435\u0442! \u041C\u044B \u0432 \u043C\u043E\u0435\u0439
     \u043C\u0430\u0441\u0442\u0435\u0440\u0441\u043A\u043E\u0439... \u0432 \u0442\u0440\u0435\u0445\u043C\u0435\u0440\u043D\u043E\u043C
-    \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u0435."
-  - "\u0422\u044B \u043C\u043E\u0436\u0435\u0448\u044C \u0441\u0432\u043E\u0431\u043E\u0434\u043D\u043E
-    \u0434\u0432\u0438\u0433\u0430\u0442\u044C\u0441\u044F \u0432 \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u0435
-    \u043D\u0430 [WASD], \u043F\u043E\u043F\u0440\u043E\u0431\u0443\u0439."
+    \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u0435. "
+  - "\u041F\u043E\u043A\u0440\u0443\u0442\u0438 \u043A\u0430\u043C\u0435\u0440\u0443
+    \u043C\u044B\u0448\u044C\u044E \u2014 \u0432\u0438\u0434\u0438\u0448\u044C? \u0422\u044B
+    \u043C\u043E\u0436\u0435\u0448\u044C \u043E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C
+    \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u043E \u0441\u043E
+    \u0432\u0441\u0435\u0445 \u0441\u0442\u043E\u0440\u043E\u043D. \u0412 \u0442\u0440\u0451\u0445\u043C\u0435\u0440\u043D\u044B\u0445
+    \u0438\u0433\u0440\u0430\u0445 \u044D\u0442\u043E \u0441\u0442\u0430\u043B\u043E
+    \u043D\u0430\u0441\u0442\u043E\u044F\u0449\u0438\u043C \u043F\u0440\u043E\u0440\u044B\u0432\u043E\u043C:
+    \u0442\u0435\u043F\u0435\u0440\u044C \u0442\u0430\u0439\u043D\u0430 \u043C\u043E\u0436\u0435\u0442
+    \u043F\u0440\u044F\u0442\u0430\u0442\u044C\u0441\u044F \u043D\u0435 \u0442\u043E\u043B\u044C\u043A\u043E
+    \u0441\u043F\u0440\u0430\u0432\u0430 \u0438\u043B\u0438 \u0441\u043B\u0435\u0432\u0430,
+    \u043D\u043E \u0434\u0430\u0436\u0435 \u0437\u0430 \u0442\u0432\u043E\u0435\u0439
+    \u0441\u043F\u0438\u043D\u043E\u0439!"
   - "\u041F\u0440\u0430\u0432\u0434\u0430, \u0442\u0443\u0442 \u043A\u0430\u043A-\u0442\u043E
-    \u043C\u0440\u0430\u0447\u043D\u043E. \u041D\u0430\u0439\u0434\u0438 \u043D\u0430
-    \u0441\u0442\u043E\u043B\u0435 \u043F\u043E\u0434\u0441\u0432\u0435\u0447\u043D\u0438\u043A
-    \u2014 \u0441 \u043D\u0438\u043C \u0431\u0443\u0434\u0435\u0442 \u0443\u044E\u0442\u043D\u0435\u0435,
-    \u0434\u0430 \u0438 \u043C\u043E\u0439 \u0441\u0442\u0430\u0440\u044B\u0439 \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440
-    \u0433\u0434\u0435-\u0442\u043E \u0440\u044F\u0434\u043E\u043C, \u0442\u043E\u043B\u044C\u043A\u043E
-    \u043F\u043E\u0434\u043D\u044F\u0442\u044C\u0441\u044F \u043F\u043E \u043B\u0435\u0441\u0442\u043D\u0438\u0446\u0435..
-    \u0438 \u0435\u0449\u0435 \u043F\u043E \u043E\u0434\u043D\u043E\u0439."
+    \u043C\u0440\u0430\u0447\u043D\u043E. \n\u041A \u0441\u0447\u0430\u0441\u0442\u044C\u044E,
+    \u0437\u0434\u0435\u0441\u044C, \u0432 \u0442\u0440\u0451\u0445\u043C\u0435\u0440\u043D\u043E\u043C
+    \u043F\u0440\u043E\u0441\u0442\u0440\u0430\u043D\u0441\u0442\u0432\u0435, \u0442\u044B
+    \u0441\u0432\u043E\u0431\u043E\u0434\u043D\u0430 \u0438\u0434\u0442\u0438 \u043A\u0443\u0434\u0430
+    \u0443\u0433\u043E\u0434\u043D\u043E. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439
+    \u043F\u043E\u0434\u043E\u0439\u0442\u0438 \u043A \u0441\u0442\u043E\u043B\u0443
+    \u0441\u043E \u0441\u0432\u0435\u0447\u043E\u0439, \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u044F
+    [WASD]."
 --- !u!1 &2081681767
 GameObject:
   m_ObjectHideFlags: 0
@@ -73084,15 +73579,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2817542284119666539, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.77
+      value: 1.44
       objectReference: {fileID: 0}
     - target: {fileID: 2817542284119666539, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.523
+      value: -4.46
       objectReference: {fileID: 0}
     - target: {fileID: 2817542284119666539, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.401
+      value: 11.83
       objectReference: {fileID: 0}
     - target: {fileID: 2817542284119666539, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -73130,6 +73625,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1602619516}
+    - target: {fileID: 9125686130769263570, guid: d79c6cdbe7f3a1e41a49f2c7dee57f8a, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -73264,7 +73763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1457076bec44c4745a9593257258e895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FallDetector
-  fallThreshold: 3
+  fallThreshold: 4
   groundY: -8
   minYForFall: 11
 --- !u!1660057539 &9223372036854775807

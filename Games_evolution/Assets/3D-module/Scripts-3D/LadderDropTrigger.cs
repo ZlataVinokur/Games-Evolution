@@ -4,6 +4,8 @@ public class LadderDropTrigger : MonoBehaviour
 {
     [SerializeField] private GameObject hiddenLadder;
     [SerializeField] private AudioClip SolvedClip;
+    [SerializeField] private GameEvents gameEvents;
+
 
 
     private void Start()
@@ -28,5 +30,8 @@ public class LadderDropTrigger : MonoBehaviour
         // Показываем мост
         if (hiddenLadder != null)
             hiddenLadder.SetActive(true);
+
+        if (gameEvents != null)
+            gameEvents.TriggerPhysicsFact();
     }
 }
